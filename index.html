@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Sawer | Comunidad de Roblox</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0f172a; /* Fondo principal muy oscuro */
+            color: #f8fafc;
+        }
+        /* Personalización de la barra de desplazamiento */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b91c1c; }
+        
+        .glow-red { text-shadow: 0 0 10px rgba(220, 38, 38, 0.5); }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- HERO SECTION -->
+    <header class="relative border-b border-red-600 bg-gray-900 overflow-hidden">
+        <!-- Efecto de fondo -->
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-gray-900 to-gray-900"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+            <!-- Logo -->
+            <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498453632348196985/Inquisitor.png?ex=69f13731&is=69efe5b1&hm=246460870f316b49a0e7e41f8284cb67ce6c4b95c8e8af99cdd7533baac253a8&" alt="Logo Proyecto Sawer" class="w-48 h-48 object-contain mb-6 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
+            
+            <h1 class="text-5xl font-extrabold text-white tracking-tight sm:text-7xl mb-4 glow-red">
+                Proyecto <span class="text-red-600">Sawer</span>
+            </h1>
+            
+            <div class="inline-block bg-red-600/20 border border-red-500 text-red-400 font-bold px-4 py-1 rounded-full mb-6">
+                🏆 +30.000 Robux Donados
+            </div>
+            
+            <p class="mt-2 text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+                Una comunidad de Roblox sin fines de lucro donde tu habilidad en nuestros minijuegos se recompensa con donaciones de Robux reales. ¡Accesible, dinámico y divertido!
+            </p>
+
+            <!-- Botones Principales -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center w-full max-w-2xl">
+                <!-- Botón Jugar -->
+                <a href="https://www.roblox.com/es/games/81516918611971/Proyecto-Sawer" target="_blank" class="flex items-center justify-center w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition-transform transform hover:scale-105 shadow-lg shadow-red-600/30">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M5.5 2C3.56 2 2 3.56 2 5.5v13C2 20.44 3.56 22 5.5 22h13c1.94 0 3.5-1.56 3.5-3.5v-13C22 3.56 20.44 2 18.5 2h-13zM12 7.5l4.5 4.5-4.5 4.5V7.5z"/></svg>
+                    Jugar en Roblox
+                </a>
+                
+                <!-- Botón Discord -->
+                <a href="https://discord.gg/qPshzM5x3m" target="_blank" class="flex items-center justify-center w-full sm:w-auto bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-3 px-8 rounded-lg transition-transform transform hover:scale-105 shadow-lg shadow-[#5865F2]/30">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
+                    Unirse al Discord
+                </a>
+
+                <!-- Botón Grupo -->
+                <a href="https://www.roblox.com/es/communities/35669186/PROYECTO-SAWER#!/about" target="_blank" class="flex items-center justify-center w-full sm:w-auto bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-bold py-3 px-8 rounded-lg transition-colors shadow-lg">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    Grupo (+1000 Miembros)
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        
+        <!-- Nuestra Esencia -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b-2 border-red-600 pb-2 inline-block">Nuestra Esencia</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg hover:border-red-500 transition-colors">
+                    <h3 class="text-xl font-bold text-red-500 mb-3">Nuestra Misión</h3>
+                    <p class="text-gray-300">Ayudar a las personas a conseguir Robux de forma accesible y dinámica dentro de nuestros minijuegos y comunidad, fortaleciendo los lazos entre jugadores.</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg hover:border-red-500 transition-colors">
+                    <h3 class="text-xl font-bold text-red-500 mb-3">Nuestra Visión</h3>
+                    <p class="text-gray-300">Mantenernos como una comunidad sociable, amigable y unida, operando bajo una jerarquía dinámica que impulsa el crecimiento de las personas otorgando diversas oportunidades.</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg hover:border-red-500 transition-colors">
+                    <h3 class="text-xl font-bold text-red-500 mb-3">Nuestra Historia</h3>
+                    <p class="text-gray-300">Fundada en febrero de 2025 por <strong>SawFuntime</strong>. Inspirado en el "Juego del Calamar", buscó una alternativa dinámica para donar Robuxs, alejándose del modelo pasivo de "PLS DONATE" y premiando la participación.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Jugabilidad -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b-2 border-red-600 pb-2 inline-block">¿Cómo se Juega? (Las Rondas)</h2>
+            <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 shadow-lg">
+                <p class="text-gray-300 mb-6 text-lg">Las llamadas "rondas" son los momentos donde se ejecutan los juegos, administradas siempre por un <strong>Host</strong> (Administrador o Líder). Se dividen en dos categorías principales:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-gray-900 p-5 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-white text-lg mb-2">Rondas A (Novatos)</h4>
+                        <p class="text-gray-400">Exclusivas para jugadores nuevos sin experiencia previa, o para aquellos que nunca han alcanzado una victoria. Competencia justa entre aprendices.</p>
+                    </div>
+                    <div class="bg-gray-900 p-5 rounded-lg border-l-4 border-red-500">
+                        <h4 class="font-bold text-white text-lg mb-2">Rondas B (Veteranos)</h4>
+                        <p class="text-gray-400">Todos están permitidos. Generalmente aprovechadas por veteranos y jugadores con múltiples victorias. La competencia es intensa y de alto nivel.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4">Estructura del Juego</h4>
+                <ul class="space-y-3 text-gray-300 list-none">
+                    <li class="flex items-start"><span class="text-red-500 mr-2 font-bold">1.</span> Consta de <strong>15 minijuegos</strong> + <strong>3 rondas extras</strong>.</li>
+                    <li class="flex items-start"><span class="text-red-500 mr-2 font-bold">2.</span> Los minijuegos otorgan puntos según dificultad: Fáciles (1 pt), Medios (2 pts) y Difíciles (3 pts).</li>
+                    <li class="flex items-start"><span class="text-red-500 mr-2 font-bold">3.</span> Tras los 15 juegos iniciales, los jugadores <strong>votan</strong> qué minijuegos repetir para las 3 rondas finales. ¡Ideal para remontar!</li>
+                    <li class="flex items-start"><span class="text-red-500 mr-2 font-bold">4.</span> Al finalizar, se hace el conteo de puntos y se anuncia al gran ganador de la ronda.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Economía y Objetos -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b-2 border-red-600 pb-2 inline-block">Economía y Coleccionables</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Textos -->
+                <div>
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold text-red-400 mb-3 flex items-center">
+                            <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498468468226527262/image.png?ex=69f14503&is=69eff383&hm=91f7033fcc38ef93fb368a4cf4172b83dc53ab4a516c1d811e5674a83bad8a43&" alt="SawCoin" class="w-8 h-8 mr-2 rounded-full">
+                            La Moneda: SawCoins
+                        </h3>
+                        <p class="text-gray-300">
+                            Obtenidas jugando minijuegos, en máquinas arcade, mystery boxes, victorias o simplemente por estar en el juego (5 SawCoins cada 5 min). Se usan para comprar coleccionables puramente estéticos (no hay Pay to Win).
+                        </p>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-white mb-2">Ítems y Categorías</h3>
+                        <p class="text-gray-400 mb-4">Los ítems se dividen en rarezas: <span class="text-gray-300 font-semibold">Comunes</span> (estética base), <span class="text-blue-400 font-semibold">Extraños</span> (llamativos) y <span class="text-purple-400 font-semibold">Únicos</span> (cualidades exclusivas).</p>
+                        
+                        <h3 class="text-xl font-bold text-white mb-2">Mystery Boxes</h3>
+                        <p class="text-gray-400 mb-4">Cajas sorpresa que pueden contener ítems de cualquier rareza, más SawCoins y experiencia (XP).</p>
+                        
+                        <h3 class="text-xl font-bold text-white mb-2">Skins y Ventajas de Sistema</h3>
+                        <p class="text-gray-400">Puedes comprar apariencias o utilidades como silenciar las radios o hacer que tu voto valga doble en las rondas finales.</p>
+                    </div>
+                </div>
+
+                <!-- Imágenes -->
+                <div class="space-y-6">
+                    <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                        <h4 class="text-sm text-gray-400 mb-2 font-bold uppercase tracking-wider text-center">Colección de Objetos</h4>
+                        <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498467113629782107/image.png?ex=69f143c0&is=69eff240&hm=d208d3fb75ca4c971d78bdf235a31f44a299d8997b000364e1c7686998a278af&" alt="Objetos de Sawer" class="w-full rounded-lg shadow-inner">
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                        <h4 class="text-sm text-gray-400 mb-2 font-bold uppercase tracking-wider text-center">Mystery Boxes</h4>
+                        <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498468232787398729/image.png?ex=69f144ca&is=69eff34a&hm=46a08a8860b8bd7a0fd11a6ee360b775bb1e18eec474b7821a88939d6a5b17ea&" alt="Mystery Boxes" class="w-full rounded-lg shadow-inner">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alternativas y Pase de Batalla -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b-2 border-red-600 pb-2 inline-block">Más formas de ganar</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <h3 class="text-2xl font-bold text-red-500 mb-3">Pase de Temporada</h3>
+                    <p class="text-gray-300 mb-4">Contamos con un sistema de Pase de Batalla que se avanza usando XP. <strong>Es igual para todos</strong>, sin ventajas de pago. Ofrece recompensas mensuales temáticas, ítems y Mystery Boxes asociadas al evento del mes.</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">SIN MINIJuegos</div>
+                    <h3 class="text-2xl font-bold text-red-500 mb-3">La Zona Arcade (Diamantes)</h3>
+                    <p class="text-gray-300 mb-4">¿No logras ganar una ronda? ¡No te rindas! Juega en la zona Arcade para ganar Tickets. Usa los tickets en la Ruleta Grande para intentar conseguir <strong>Diamantes</strong>.</p>
+                    <p class="text-gray-400 text-sm">Si recolectas <strong>7 Diamantes</strong>, recibirás una donación equivalente a una ronda promedio sin haber tenido que ganar un minijuego.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reglas y Discord -->
+        <section class="mb-10">
+            <div class="bg-gray-900 rounded-xl p-8 border border-red-600/50 shadow-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold text-white mb-4">El Corazón del Proyecto</h2>
+                        <p class="text-gray-300 mb-4">El servidor de Discord es vital. Aquí los Hosts anuncian el inicio exacto de las rondas, se publican actualizaciones y se toman decisiones democráticas con la comunidad.</p>
+                        
+                        <h3 class="text-xl font-bold text-red-400 mt-6 mb-2">¿Cómo funcionan las Donaciones?</h3>
+                        <p class="text-gray-400 text-sm mb-4">Al ganar, el host te solicitará unirte a un juego de donaciones (como PLS DONATE) con un pase creado por el valor de tu premio. El líder (SawFuntime) se unirá para efectuar la donación. Ten en cuenta que si el líder está indispuesto, podrías tener que esperar.</p>
+                        
+                        <h3 class="text-xl font-bold text-red-400 mt-6 mb-2">¿Cuál es el límite?</h3>
+                        <p class="text-white text-lg font-bold bg-red-600/20 inline-block px-3 py-1 rounded">¡NO HAY LÍMITE!</p>
+                        <p class="text-gray-400 text-sm mt-2">Puedes participar y ganar tantas veces como quieras, acumulando Robux sin restricciones.</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498469521550479542/image.png?ex=69f145fe&is=69eff47e&hm=c318d199504dd6e55949669bb3509247e9fe613a2caf65be1f4b3698f20b8d2e&" alt="Anuncio de Ronda en Discord" class="w-full rounded-lg shadow-lg border border-gray-700 mb-6 transform -rotate-1 hover:rotate-0 transition-transform">
+                        
+                        <a href="https://discord.gg/qPshzM5x3m" target="_blank" class="inline-flex items-center justify-center bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-4 px-10 rounded-xl transition-transform transform hover:scale-105 shadow-[0_0_20px_rgba(88,101,242,0.4)] text-lg">
+                            <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
+                            ¡Únete a la Comunidad!
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-gray-800 bg-gray-900 mt-12">
+        <div class="max-w-7xl mx-auto px-4 py-8 text-center flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center justify-center mb-4 md:mb-0">
+                <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498453632348196985/Inquisitor.png?ex=69f13731&is=69efe5b1&hm=246460870f316b49a0e7e41f8284cb67ce6c4b95c8e8af99cdd7533baac253a8&" alt="Logo mini" class="w-8 h-8 mr-3">
+                <p class="text-gray-400 font-bold">Proyecto Sawer</p>
+            </div>
+            <div class="text-gray-500 text-sm">
+                Fundado por SawFuntime &copy; 2025-2026. Todos los derechos reservados.<br>
+                <span class="text-xs opacity-50">Alojado gratuitamente en GitHub Pages</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
