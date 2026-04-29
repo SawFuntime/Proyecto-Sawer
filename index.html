@@ -361,7 +361,7 @@
     <!-- ========================================== -->
     
     <!-- Script para la Interfaz (Abrir/Cerrar ventanas) -->
-    <script>
+  <script>
         const modal = document.getElementById('auth-modal');
         const formLogin = document.getElementById('form-login');
         const formRegister = document.getElementById('form-register');
@@ -372,7 +372,7 @@
         function openModal(type) {
             modal.classList.remove('hidden');
             switchTab(type);
-            errorText.classList.add('hidden'); // Limpiar errores
+            errorText.classList.add('hidden');
         }
 
         function closeModal() {
@@ -399,12 +399,10 @@
         }
     </script>
 
-    <!-- Script de Firebase (Conexión real) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-        // Tu configuración real de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
             authDomain: "proyecto-sawer.firebaseapp.com",
@@ -418,19 +416,17 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Referencias a los elementos HTML
         const errorText = document.getElementById('auth-error');
         const authButtons = document.getElementById('auth-buttons');
         const userProfile = document.getElementById('user-profile');
         const userDisplayName = document.getElementById('user-display-name');
 
-        // FUNCION: Mostrar errores en pantalla
         function showError(msg) {
             errorText.innerText = msg;
             errorText.classList.remove('hidden');
         }
 
-        // FUNCION: Registrar Cuenta
+        // REGISTRO CON VERIFICACIÓN
         document.getElementById('btn-reg-submit').addEventListener('click', async () => {
             const username = document.getElementById('reg-username').value;
             const email = document.getElementById('reg-email').value;
@@ -439,23 +435,25 @@
             if(!username || !email || !password) return showError("Por favor, llena todos los campos.");
 
             try {
-                // 1. Crear el usuario en Firebase
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                
-                // 2. Guardar el nombre de Roblox en su perfil de Firebase
                 await updateProfile(userCredential.user, { displayName: username });
                 
+                // Enviar correo de verificación
+                await sendEmailVerification(userCredential.user);
+                
+                // Forzamos el cierre de sesión para que no entren sin verificar
+                await signOut(auth);
+                
                 closeModal();
-                alert("¡Cuenta creada con éxito! Bienvenido a Proyecto Sawer.");
+                alert("¡Cuenta creada! Te hemos enviado un correo de verificación. Por favor, revísalo para poder activar tu cuenta.");
             } catch (error) {
-                console.error(error.code);
                 if(error.code === 'auth/email-already-in-use') showError("Este correo ya está registrado.");
                 else if(error.code === 'auth/weak-password') showError("La contraseña debe tener al menos 6 caracteres.");
                 else showError("Error al registrarse. Intenta de nuevo.");
             }
         });
 
-        // FUNCION: Iniciar Sesión
+        // LOGIN CON CHEQUEO DE VERIFICACIÓN
         document.getElementById('btn-login-submit').addEventListener('click', async () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
@@ -463,27 +461,31 @@
             if(!email || !password) return showError("Ingresa tu correo y contraseña.");
 
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-                closeModal();
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                if (!user.emailVerified) {
+                    await signOut(auth);
+                    showError("Debes verificar tu correo antes de entrar. Revisa tu bandeja de entrada.");
+                } else {
+                    closeModal();
+                }
             } catch (error) {
                 showError("Correo o contraseña incorrectos.");
             }
         });
 
-        // FUNCION: Cerrar Sesión (Hacerla global para el botón HTML)
         window.logout = async () => {
             await signOut(auth);
         }
 
-        // DETECTAR ESTADO DEL USUARIO (Si está logueado o no)
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Usuario logueado: Ocultar botones de login, mostrar nombre
+            // Solo mostramos el perfil si el usuario existe Y está verificado
+            if (user && user.emailVerified) {
                 authButtons.classList.add('hidden');
                 userProfile.classList.remove('hidden');
                 userDisplayName.innerText = `Hola, ${user.displayName || 'Jugador'}`;
             } else {
-                // Nadie logueado: Mostrar botones, ocultar perfil
                 authButtons.classList.remove('hidden');
                 userProfile.classList.add('hidden');
             }
