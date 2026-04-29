@@ -262,6 +262,24 @@
             </div>
         </div>
     </footer>
+<script type="module">
+      // Importar la herramienta principal de Firebase
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 
+      // Tu configuración secreta (La llave de tu proyecto)
+      const firebaseConfig = {
+        apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
+        authDomain: "proyecto-sawer.firebaseapp.com",
+        projectId: "proyecto-sawer",
+        storageBucket: "proyecto-sawer.firebasestorage.app",
+        messagingSenderId: "770496172923",
+        appId: "1:770496172923:web:79782a0ddbdca6561e23de",
+        measurementId: "G-XX2DH8WCJM"
+      };
+
+      // Inicializar Firebase
+      const app = initializeApp(firebaseConfig);
+      console.log("¡Conexión a Firebase de Proyecto Sawer exitosa!");
+    </script>
 </body>
 </html>
