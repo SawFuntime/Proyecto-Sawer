@@ -59,22 +59,32 @@
                     <span class="font-black text-xl tracking-widest uppercase text-white">Sawer</span>
                 </div>
 
-                <!-- Derecha: Botones Auth -->
-                <div id="auth-buttons" class="flex items-center gap-4">
-                    <button onclick="openModal('login')" class="text-zinc-300 hover:text-white font-bold text-sm uppercase tracking-wider transition-colors hidden sm:block">
-                        Iniciar Sesión
+                <!-- Derecha: Botones Auth y Perfil -->
+                <div class="flex items-center gap-4">
+                    
+                    <!-- Botones Auth (Ocultos si está logueado) -->
+                    <div id="auth-buttons" class="flex items-center gap-4">
+                        <button onclick="openModal('login')" class="text-zinc-300 hover:text-white font-bold text-sm uppercase tracking-wider transition-colors hidden sm:block">
+                            Iniciar Sesión
+                        </button>
+                        <button onclick="openModal('register')" class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-5 rounded-md transition-all shadow-lg shadow-red-900/30 text-sm uppercase tracking-wider">
+                            Registrarse
+                        </button>
+                    </div>
+                    
+                    <!-- Perfil Logueado (Oculto por defecto) -->
+                    <div id="user-profile" class="hidden flex items-center gap-4">
+                        <span id="user-display-name" class="text-zinc-300 font-bold text-sm uppercase tracking-wider hidden sm:block"></span>
+                        <button onclick="logout()" class="text-red-500 hover:text-red-400 font-bold text-sm uppercase tracking-wider transition-colors border border-red-900/50 px-3 py-1 rounded-md bg-red-950/30">
+                            Salir
+                        </button>
+                    </div>
+
+                    <!-- Botón de Perfil (Siempre visible, con la imagen en blanco) -->
+                    <button onclick="handleProfileClick()" class="p-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 rounded-md transition-colors ml-2 shadow-md group">
+                        <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1499233839296417882/6522516.png?ex=69f40dd1&is=69f2bc51&hm=c19d6037a5167ba00fabd434294dd338fb0ff9d0666afb410bf46bfc3b89be65&" alt="Perfil" class="w-5 h-5 brightness-0 invert opacity-70 group-hover:opacity-100 transition-opacity">
                     </button>
-                    <button onclick="openModal('register')" class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-5 rounded-md transition-all shadow-lg shadow-red-900/30 text-sm uppercase tracking-wider">
-                        Registrarse
-                    </button>
-                </div>
-                
-                <!-- Perfil Logueado (Oculto por defecto) -->
-                <div id="user-profile" class="hidden flex items-center gap-4">
-                    <span id="user-display-name" class="text-zinc-300 font-bold text-sm uppercase tracking-wider"></span>
-                    <button onclick="logout()" class="text-red-500 hover:text-red-400 font-bold text-sm uppercase tracking-wider transition-colors border border-red-900/50 px-3 py-1 rounded-md bg-red-950/30">
-                        Salir
-                    </button>
+
                 </div>
             </div>
         </div>
@@ -403,7 +413,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        // IMPORTAMOS FIRESTORE (La Base de Datos)
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         // Tu configuración real de Firebase
@@ -419,13 +428,16 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app); // Inicializamos la Base de Datos
+        const db = getFirestore(app);
 
         // Referencias a los elementos HTML
         const errorText = document.getElementById('auth-error');
         const authButtons = document.getElementById('auth-buttons');
         const userProfile = document.getElementById('user-profile');
         const userDisplayName = document.getElementById('user-display-name');
+
+        // Variable para saber si el usuario está conectado
+        let currentUser = null;
 
         // FUNCION: Mostrar errores en pantalla
         function showError(msg) {
@@ -441,31 +453,30 @@
 
             if(!username || !email || !password) return showError("Por favor, llena todos los campos.");
 
-            // Convertimos el nombre a minúsculas para buscar en la base de datos sin importar las mayúsculas
             const usernameLower = username.toLowerCase();
             const userDocRef = doc(db, "usernames", usernameLower);
 
             try {
-                // 1. REVISAR SI EL NOMBRE YA EXISTE EN LA BASE DE DATOS
+                // 1. REVISAR SI EL NOMBRE YA EXISTE
                 const docSnap = await getDoc(userDocRef);
                 if (docSnap.exists()) {
                     return showError("Ese nombre de usuario ya está en uso. Por favor, elige otro.");
                 }
 
-                // 2. Si no existe, procedemos a crear el usuario en Authentication
+                // 2. Crear usuario
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
-                // 3. Guardar el nombre de Roblox en su perfil visual
+                // 3. Guardar nombre visual
                 await updateProfile(user, { displayName: username });
 
-                // 4. GUARDAR EL NOMBRE EN LA BASE DE DATOS (Para que nadie más lo tome)
+                // 4. GUARDAR EL NOMBRE EN LA BASE DE DATOS
                 await setDoc(userDocRef, {
                     uid: user.uid,
                     originalName: username
                 });
                 
-                // 5. Enviar correo de verificación y cerrar sesión forzosamente
+                // 5. Enviar verificación
                 await sendEmailVerification(user);
                 await signOut(auth);
                 
@@ -502,20 +513,29 @@
             }
         });
 
-        // FUNCION: Cerrar Sesión (Hacerla global para el botón HTML)
+        // FUNCION: Cerrar Sesión
         window.logout = async () => {
             await signOut(auth);
         }
 
-        // DETECTAR ESTADO DEL USUARIO (Si está logueado o no)
+        // FUNCION: Clic en el icono de perfil
+        window.handleProfileClick = () => {
+            if (currentUser) {
+                alert("¡Redirigiendo a tu página de perfil personal! (Pronto implementaremos esta página)");
+            } else {
+                alert("Debes registrarte o iniciar sesión para acceder a tu perfil de Proyecto Sawer.");
+            }
+        };
+
+        // DETECTAR ESTADO DEL USUARIO
         onAuthStateChanged(auth, (user) => {
             if (user && user.emailVerified) {
-                // Usuario logueado y verificado
+                currentUser = user;
                 authButtons.classList.add('hidden');
                 userProfile.classList.remove('hidden');
                 userDisplayName.innerText = `Hola, ${user.displayName || 'Jugador'}`;
             } else {
-                // Nadie logueado (o no verificado)
+                currentUser = null;
                 authButtons.classList.remove('hidden');
                 userProfile.classList.add('hidden');
             }
