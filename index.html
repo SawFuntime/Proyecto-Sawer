@@ -352,7 +352,8 @@
                 
                 <!-- RECUADRO DE FOTO DE PERFIL -->
                 <div class="w-full aspect-square bg-zinc-900 rounded-lg flex items-center justify-center relative shadow-inner overflow-hidden border-2 border-zinc-800 group">
-                    <img id="profile-image-display" src="" alt="Foto de perfil" class="w-full h-full object-cover hidden">
+                    <!-- Añadido el efecto de zoom (group-hover:scale-110 transition-transform duration-500) -->
+                    <img id="profile-image-display" src="" alt="Foto de perfil" class="w-full h-full object-cover hidden group-hover:scale-110 transition-transform duration-500">
                     <span id="profile-image-placeholder" class="text-zinc-500 font-bold uppercase tracking-widest text-xs text-center px-4">Espacio para Foto de Perfil</span>
                     <input type="file" id="profile-pic-upload" class="hidden" accept="image/*">
                     <button onclick="document.getElementById('profile-pic-upload').click()" class="absolute top-2 right-2 bg-black/60 hover:bg-red-600 p-2 rounded-md transition-all duration-300 opacity-50 hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 backdrop-blur-sm border border-white/10 shadow-lg">
@@ -595,7 +596,8 @@
                     const img = new Image();
                     img.onload = async function() {
                         const canvas = document.createElement('canvas');
-                        const MAX_SIZE = 200;
+                        // ¡AUMENTADO A 800 PARA CALIDAD FULL HD!
+                        const MAX_SIZE = 800;
                         canvas.width = MAX_SIZE; canvas.height = MAX_SIZE;
                         const ctx = canvas.getContext('2d');
                         const size = Math.min(img.width, img.height);
@@ -603,7 +605,8 @@
                         const startY = (img.height - size) / 2;
                         ctx.drawImage(img, startX, startY, size, size, 0, 0, MAX_SIZE, MAX_SIZE);
 
-                        const base64Image = canvas.toDataURL('image/jpeg', 0.8);
+                        // ¡CALIDAD AL 90% (0.9) EN LUGAR DE 80% PARA MAYOR NITIDEZ!
+                        const base64Image = canvas.toDataURL('image/jpeg', 0.9);
                         
                         document.getElementById('profile-image-display').src = base64Image;
                         document.getElementById('profile-image-display').classList.remove('hidden');
