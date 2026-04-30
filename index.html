@@ -406,18 +406,40 @@
 
                     <!-- BLOQUE 2: ESTADÍSTICAS (SE MUESTRA CUANDO SÍ ESTÁ VINCULADO) -->
                     <div id="stats-container" class="hidden">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                            <div class="bg-zinc-950 border border-zinc-800 p-6 rounded-lg text-center">
-                                <p class="text-zinc-500 text-xs uppercase tracking-widest font-bold mb-1">Victorias Totales</p>
-                                <p id="stat-wins" class="text-3xl font-black text-white">0</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+                            <!-- Victorias -->
+                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
+                                <span class="text-3xl mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">🏆</span>
+                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">Victorias</p>
+                                <p id="stat-wins" class="text-2xl font-black text-white">0</p>
                             </div>
-                            <div class="bg-zinc-950 border border-zinc-800 p-6 rounded-lg text-center">
-                                <p class="text-zinc-500 text-xs uppercase tracking-widest font-bold mb-1">SawCoins</p>
-                                <p id="stat-sawcoins" class="text-3xl font-black text-yellow-500">0</p>
+                            
+                            <!-- Récord de Puntos -->
+                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
+                                <span class="text-3xl mb-2 drop-shadow-[0_0_8px_rgba(255,215,0,0.4)]">⭐</span>
+                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">Récord Puntos</p>
+                                <p id="stat-record" class="text-2xl font-black text-white">0</p>
                             </div>
-                            <div class="bg-zinc-950 border border-zinc-800 p-6 rounded-lg text-center">
-                                <p class="text-zinc-500 text-xs uppercase tracking-widest font-bold mb-1">Rango / Nivel</p>
-                                <p id="stat-level" class="text-3xl font-black text-blue-400">Novato</p>
+                            
+                            <!-- SawCoins -->
+                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
+                                <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498468468226527262/image.png?ex=69f14503&is=69eff383&hm=91f7033fcc38ef93fb368a4cf4172b83dc53ab4a516c1d811e5674a83bad8a43&" alt="SawCoin" class="w-8 h-8 mb-2 shadow-[0_0_10px_rgba(255,215,0,0.3)] rounded-full">
+                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">SawCoins</p>
+                                <p id="stat-sawcoins" class="text-2xl font-black text-yellow-500">0</p>
+                            </div>
+
+                            <!-- Diamantes -->
+                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
+                                <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1499427701897953421/ChatGPT_Image_30_abr_2026_11_08_03.png?ex=69f4c25e&is=69f370de&hm=953f199f04848b72c6153dd18f6651e9cb44c76b353bf6ea1b9f538e4a6db6f9&" alt="Diamante" class="w-8 h-8 mb-2 drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] object-contain">
+                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">Diamantes</p>
+                                <p id="stat-diamantes" class="text-2xl font-black text-blue-400">0</p>
+                            </div>
+
+                            <!-- Items -->
+                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
+                                <span class="text-3xl mb-2 drop-shadow-[0_0_8px_rgba(168,85,247,0.4)]">📦</span>
+                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">Objetos</p>
+                                <p id="stat-items" class="text-2xl font-black text-purple-400">0</p>
                             </div>
                         </div>
                     </div>
@@ -602,7 +624,7 @@
                     robloxUserId: null,
                     linkCode: null,
                     photoURL: null,
-                    stats: { wins: 0, sawCoins: 0, level: "Novato" } // Estadísticas base
+                    stats: { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: 0 } // Estadísticas base
                 });
                 
                 await sendEmailVerification(user);
@@ -725,8 +747,10 @@
                             // Pintar las stats
                             if(data.stats) {
                                 document.getElementById('stat-wins').innerText = data.stats.wins || 0;
+                                document.getElementById('stat-record').innerText = data.stats.recordPuntos || 0;
                                 document.getElementById('stat-sawcoins').innerText = data.stats.sawCoins || 0;
-                                document.getElementById('stat-level').innerText = data.stats.level || "Novato";
+                                document.getElementById('stat-diamantes').innerText = data.stats.diamantes || 0;
+                                document.getElementById('stat-items').innerText = data.stats.items || 0;
                             }
                         } else {
                             // SI NO ESTÁ VINCULADO: Mostrar advertencia
