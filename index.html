@@ -543,24 +543,6 @@
             activeBtn.className = "profile-tab-btn bg-red-700 text-white border border-red-600 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm shadow-md flex items-center justify-between group";
             activeBtn.querySelector('svg').className = "w-4 h-4 text-white opacity-100 transition-opacity";
         }
-
-        // NUEVO: FUNCIONALIDAD PARA LA FOTO DE PERFIL VISUAL
-        document.getElementById('profile-pic-upload').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imgDisplay = document.getElementById('profile-image-display');
-                    const placeholder = document.getElementById('profile-image-placeholder');
-                    
-                    // Reemplazar la fuente de la imagen con la seleccionada
-                    imgDisplay.src = e.target.result;
-                    imgDisplay.classList.remove('hidden');
-                    placeholder.classList.add('hidden');
-                }
-                reader.readAsDataURL(file); // Leer la foto y convertirla en una URL temporal
-            }
-        });
     </script>
 
     <!-- ========================================== -->
@@ -667,6 +649,53 @@
             switchMainView('home'); 
         }
 
+        // NUEVO: GUARDAR FOTO DE PERFIL EN LA BASE DE DATOS (Sin usar Storage)
+        document.getElementById('profile-pic-upload').addEventListener('change', async function(event) {
+            const file = event.target.files[0];
+            if (file && currentUser) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = async function() {
+                        // 1. Comprimir la imagen usando un Canvas enano (Ahorra muchísimo espacio)
+                        const canvas = document.createElement('canvas');
+                        const MAX_SIZE = 200; // 200x200 píxeles es perfecto para perfil
+                        canvas.width = MAX_SIZE;
+                        canvas.height = MAX_SIZE;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Recortar la imagen para que quede perfectamente cuadrada
+                        const size = Math.min(img.width, img.height);
+                        const startX = (img.width - size) / 2;
+                        const startY = (img.height - size) / 2;
+                        ctx.drawImage(img, startX, startY, size, size, 0, 0, MAX_SIZE, MAX_SIZE);
+
+                        // 2. Convertir la imagen comprimida a texto
+                        const base64Image = canvas.toDataURL('image/jpeg', 0.8);
+
+                        // 3. Mostrarla visualmente al instante
+                        const imgDisplay = document.getElementById('profile-image-display');
+                        const placeholder = document.getElementById('profile-image-placeholder');
+                        imgDisplay.src = base64Image;
+                        imgDisplay.classList.remove('hidden');
+                        placeholder.classList.add('hidden');
+
+                        // 4. Guardar el texto de la imagen en nuestra Base de Datos Firestore
+                        try {
+                            const userRef = doc(db, "users", currentUser.uid);
+                            // Usamos merge: true para no borrar otros datos que guardemos a futuro (ej. SawCoins)
+                            await setDoc(userRef, { photoURL: base64Image }, { merge: true });
+                        } catch (error) {
+                            console.error("Error guardando foto:", error);
+                            alert("Hubo un error al guardar la foto.");
+                        }
+                    }
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
         // CLIC EN EL ICONO DE PERFIL (La personita blanca)
         window.handleProfileClick = () => {
             if (currentUser) {
@@ -693,6 +722,25 @@
                 
                 // Actualizar el nombre grande en la nueva página de Perfil
                 profileViewUsername.innerText = nameToDisplay;
+
+                // NUEVO: RECUPERAR LA FOTO DE PERFIL DESDE LA BASE DE DATOS
+                const userRef = doc(db, "users", user.uid);
+                getDoc(userRef).then((docSnap) => {
+                    const imgDisplay = document.getElementById('profile-image-display');
+                    const placeholder = document.getElementById('profile-image-placeholder');
+                    
+                    // Si el documento existe y tiene una foto guardada...
+                    if (docSnap.exists() && docSnap.data().photoURL) {
+                        imgDisplay.src = docSnap.data().photoURL;
+                        imgDisplay.classList.remove('hidden');
+                        placeholder.classList.add('hidden');
+                    } else {
+                        // Si es nuevo y no tiene foto, mostrar el texto de placeholder
+                        imgDisplay.classList.add('hidden');
+                        placeholder.classList.remove('hidden');
+                    }
+                });
+
             } else {
                 currentUser = null;
                 
@@ -700,8 +748,10 @@
                 authButtons.classList.remove('hidden');
                 userProfile.classList.add('hidden');
                 
-                // Limpiar nombre en la página de perfil
+                // Limpiar nombre y foto en la página de perfil al cerrar sesión
                 profileViewUsername.innerText = "CARGANDO...";
+                document.getElementById('profile-image-display').classList.add('hidden');
+                document.getElementById('profile-image-placeholder').classList.remove('hidden');
             }
         });
     </script>
