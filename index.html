@@ -350,9 +350,22 @@
             <!-- COLUMNA IZQUIERDA (Avatar y Botones) -->
             <div class="w-full md:w-1/4 flex flex-col gap-4">
                 
-                <!-- Recuadro Blanco para la futura foto -->
-                <div class="w-full aspect-square bg-zinc-200 rounded-lg flex items-center justify-center relative shadow-inner overflow-hidden border-2 border-zinc-800">
-                    <span class="text-zinc-500 font-bold uppercase tracking-widest text-xs text-center px-4">Espacio para Foto de Perfil</span>
+                <!-- RECUADRO DE FOTO DE PERFIL CON BOTÓN DE EDITAR -->
+                <div class="w-full aspect-square bg-zinc-900 rounded-lg flex items-center justify-center relative shadow-inner overflow-hidden border-2 border-zinc-800 group">
+                    
+                    <!-- La imagen elegida (oculta al principio) -->
+                    <img id="profile-image-display" src="" alt="Foto de perfil" class="w-full h-full object-cover hidden">
+                    
+                    <!-- El texto de "Espacio para Foto" -->
+                    <span id="profile-image-placeholder" class="text-zinc-500 font-bold uppercase tracking-widest text-xs text-center px-4">Espacio para Foto de Perfil</span>
+                    
+                    <!-- Etiqueta invisible que abre los archivos de tu PC -->
+                    <input type="file" id="profile-pic-upload" class="hidden" accept="image/*">
+                    
+                    <!-- Botón Flotante para Editar (Aparece al pasar el ratón) -->
+                    <button onclick="document.getElementById('profile-pic-upload').click()" class="absolute top-2 right-2 bg-black/60 hover:bg-red-600 p-2 rounded-md transition-all duration-300 opacity-50 hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 backdrop-blur-sm border border-white/10 shadow-lg">
+                        <img src="https://cdn.discordapp.com/attachments/1364842026121822241/1499276690784911420/286-2861653_edit-profile-icon-icon.png?ex=69f435ba&is=69f2e43a&hm=8c0e0067c3d33bc7fa40b12cb04a5d7678438708563a0869318dfff76f8a5d26&" alt="Editar foto" class="w-4 h-4 brightness-0 invert">
+                    </button>
                 </div>
                 
                 <!-- Nombre de Usuario Dinámico -->
@@ -530,6 +543,24 @@
             activeBtn.className = "profile-tab-btn bg-red-700 text-white border border-red-600 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm shadow-md flex items-center justify-between group";
             activeBtn.querySelector('svg').className = "w-4 h-4 text-white opacity-100 transition-opacity";
         }
+
+        // NUEVO: FUNCIONALIDAD PARA LA FOTO DE PERFIL VISUAL
+        document.getElementById('profile-pic-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgDisplay = document.getElementById('profile-image-display');
+                    const placeholder = document.getElementById('profile-image-placeholder');
+                    
+                    // Reemplazar la fuente de la imagen con la seleccionada
+                    imgDisplay.src = e.target.result;
+                    imgDisplay.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                }
+                reader.readAsDataURL(file); // Leer la foto y convertirla en una URL temporal
+            }
+        });
     </script>
 
     <!-- ========================================== -->
