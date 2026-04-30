@@ -361,7 +361,7 @@
     <!-- ========================================== -->
     
     <!-- Script para la Interfaz (Abrir/Cerrar ventanas) -->
-  <script>
+    <script>
         const modal = document.getElementById('auth-modal');
         const formLogin = document.getElementById('form-login');
         const formRegister = document.getElementById('form-register');
@@ -372,7 +372,7 @@
         function openModal(type) {
             modal.classList.remove('hidden');
             switchTab(type);
-            errorText.classList.add('hidden');
+            errorText.classList.add('hidden'); // Limpiar errores
         }
 
         function closeModal() {
@@ -399,10 +399,14 @@
         }
     </script>
 
+    <!-- Script de Firebase (Conexión real) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        // IMPORTAMOS FIRESTORE (La Base de Datos)
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+        // Tu configuración real de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
             authDomain: "proyecto-sawer.firebaseapp.com",
@@ -415,45 +419,67 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app); // Inicializamos la Base de Datos
 
+        // Referencias a los elementos HTML
         const errorText = document.getElementById('auth-error');
         const authButtons = document.getElementById('auth-buttons');
         const userProfile = document.getElementById('user-profile');
         const userDisplayName = document.getElementById('user-display-name');
 
+        // FUNCION: Mostrar errores en pantalla
         function showError(msg) {
             errorText.innerText = msg;
             errorText.classList.remove('hidden');
         }
 
-        // REGISTRO CON VERIFICACIÓN
+        // FUNCION: Registrar Cuenta
         document.getElementById('btn-reg-submit').addEventListener('click', async () => {
-            const username = document.getElementById('reg-username').value;
-            const email = document.getElementById('reg-email').value;
+            const username = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value;
 
             if(!username || !email || !password) return showError("Por favor, llena todos los campos.");
 
+            // Convertimos el nombre a minúsculas para buscar en la base de datos sin importar las mayúsculas
+            const usernameLower = username.toLowerCase();
+            const userDocRef = doc(db, "usernames", usernameLower);
+
             try {
+                // 1. REVISAR SI EL NOMBRE YA EXISTE EN LA BASE DE DATOS
+                const docSnap = await getDoc(userDocRef);
+                if (docSnap.exists()) {
+                    return showError("Ese nombre de usuario ya está en uso. Por favor, elige otro.");
+                }
+
+                // 2. Si no existe, procedemos a crear el usuario en Authentication
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                await updateProfile(userCredential.user, { displayName: username });
+                const user = userCredential.user;
                 
-                // Enviar correo de verificación
-                await sendEmailVerification(userCredential.user);
+                // 3. Guardar el nombre de Roblox en su perfil visual
+                await updateProfile(user, { displayName: username });
+
+                // 4. GUARDAR EL NOMBRE EN LA BASE DE DATOS (Para que nadie más lo tome)
+                await setDoc(userDocRef, {
+                    uid: user.uid,
+                    originalName: username
+                });
                 
-                // Forzamos el cierre de sesión para que no entren sin verificar
+                // 5. Enviar correo de verificación y cerrar sesión forzosamente
+                await sendEmailVerification(user);
                 await signOut(auth);
                 
                 closeModal();
                 alert("¡Cuenta creada! Te hemos enviado un correo de verificación. Por favor, revísalo para poder activar tu cuenta.");
             } catch (error) {
+                console.error(error.code);
                 if(error.code === 'auth/email-already-in-use') showError("Este correo ya está registrado.");
                 else if(error.code === 'auth/weak-password') showError("La contraseña debe tener al menos 6 caracteres.");
                 else showError("Error al registrarse. Intenta de nuevo.");
             }
         });
 
-        // LOGIN CON CHEQUEO DE VERIFICACIÓN
+        // FUNCION: Iniciar Sesión
         document.getElementById('btn-login-submit').addEventListener('click', async () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
@@ -464,6 +490,7 @@
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
+                // Revisar si el correo está verificado
                 if (!user.emailVerified) {
                     await signOut(auth);
                     showError("Debes verificar tu correo antes de entrar. Revisa tu bandeja de entrada.");
@@ -475,17 +502,20 @@
             }
         });
 
+        // FUNCION: Cerrar Sesión (Hacerla global para el botón HTML)
         window.logout = async () => {
             await signOut(auth);
         }
 
+        // DETECTAR ESTADO DEL USUARIO (Si está logueado o no)
         onAuthStateChanged(auth, (user) => {
-            // Solo mostramos el perfil si el usuario existe Y está verificado
             if (user && user.emailVerified) {
+                // Usuario logueado y verificado
                 authButtons.classList.add('hidden');
                 userProfile.classList.remove('hidden');
                 userDisplayName.innerText = `Hola, ${user.displayName || 'Jugador'}`;
             } else {
+                // Nadie logueado (o no verificado)
                 authButtons.classList.remove('hidden');
                 userProfile.classList.add('hidden');
             }
