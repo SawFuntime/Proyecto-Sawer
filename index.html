@@ -488,12 +488,75 @@
 
                 <!-- CONTENIDO: AYUDA E INFORMACIÓN -->
                 <div id="content-ayuda" class="profile-content hidden animate-fade-in">
+                    <!-- TÍTULO Y LÍNEA ROJA -->
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Centro de Ayuda</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
 
-                    <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-6 text-center">
-                        <p class="text-zinc-400 text-lg">Estás en la sección: <strong class="text-green-500">AYUDA E INFORMACIÓN</strong>.</p>
-                        <p class="text-zinc-500 text-sm mt-2">Próximamente: Preguntas frecuentes y contacto con el equipo de soporte de Sawer.</p>
+                    <!-- BANNER DE CONTACTO DIRECTO -->
+                    <div class="bg-red-950/20 border border-red-800/50 rounded-lg p-6 mb-10 flex flex-col sm:flex-row items-center justify-between shadow-lg">
+                        <div class="flex items-center gap-4 mb-4 sm:mb-0 text-center sm:text-left">
+                            <div class="bg-red-900/40 p-3 rounded-full text-red-500 hidden sm:block">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white uppercase tracking-wider">Soporte Directo</h3>
+                                <p class="text-zinc-400 text-sm">¿Tienes un problema con tu cuenta o tus recompensas?</p>
+                            </div>
+                        </div>
+                        <a href="mailto:proyectosawermain@gmail.com" class="bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md transition-colors uppercase tracking-widest text-sm shadow-md whitespace-nowrap">
+                            Contactar por Correo
+                        </a>
+                    </div>
+
+                    <!-- PREGUNTAS FRECUENTES -->
+                    <h3 class="text-xl font-bold text-zinc-300 mb-6 uppercase tracking-widest border-l-4 border-red-600 pl-3">Preguntas Frecuentes (FAQ)</h3>
+                    
+                    <div class="space-y-4">
+                        
+                        <!-- Pregunta 1 -->
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
+                            <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ¿Cómo y cuándo recibo mis Robux si gano?
+                            </h4>
+                            <p class="text-zinc-400 text-sm leading-relaxed">
+                                Tras finalizar y ganar una ronda oficial, el Host te indicará que te unas a un juego de donaciones designado (como <strong class="text-zinc-200">PLS DONATE</strong> u otros). Allí, un administrador oficial comprará tu gamepass o ropa por el valor del premio. Recuerda que Roblox retiene un 30% de las ventas.
+                            </p>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
+                            <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ¿Puedo comprar SawCoins con dinero real?
+                            </h4>
+                            <p class="text-zinc-400 text-sm leading-relaxed">
+                                <strong class="text-zinc-200">¡Absolutamente NO!</strong> Proyecto Sawer es una comunidad estrictamente <em class="text-zinc-300">Free-to-Play</em>. Las SawCoins solo se pueden obtener por mérito propio: ganando minijuegos, encontrándolas en Mystery Boxes, o simplemente jugando de forma activa en nuestro servidor de Roblox.
+                            </p>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
+                            <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Me cambié el nombre en Roblox, ¿perderé mis stats?
+                            </h4>
+                            <p class="text-zinc-400 text-sm leading-relaxed">
+                                <strong class="text-green-400">No perderás nada.</strong> Nuestro sistema web vincula tu cuenta utilizando tu "UserId" (un número interno de Roblox que nunca cambia), no tu nombre de usuario. Si te cambias el nombre, tus Victorias y SawCoins seguirán intactas en tu perfil.
+                            </p>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
+                            <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ¿Cómo vinculo mi cuenta correctamente?
+                            </h4>
+                            <p class="text-zinc-400 text-sm leading-relaxed">
+                                Ve a la pestaña <strong class="text-zinc-200">Información</strong> en esta página y genera un código de vinculación. Luego entra a Proyecto Sawer en Roblox, dirígete al panel de vinculación en el Lobby y escribe ese código. La página web se actualizará automáticamente y tus stats aparecerán.
+                            </p>
+                        </div>
+
                     </div>
                 </div>
 
