@@ -407,64 +407,54 @@
                         </div>
                     </div>
 
-                    <!-- BLOQUE 2: ESTADÍSTICAS (SE MUESTRA CUANDO SÍ ESTÁ VINCULADO) -->
-                    <div id="stats-container" class="hidden flex flex-col gap-6">
+                    <!-- BLOQUE 2: ESTADÍSTICAS EN FORMATO ÓVALOS APILADOS -->
+                    <div id="stats-container" class="hidden flex flex-col gap-4">
                         
-                        <!-- FILA 1: LAS 5 CAJAS DE ESTADÍSTICAS -->
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                            <!-- Victorias -->
-                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
-                                <span class="text-3xl mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">🏆</span>
-                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">Victorias</p>
-                                <p id="stat-wins" class="text-2xl font-black text-white">0</p>
+                        <!-- Victorias -->
+                        <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
+                            <div class="flex items-center gap-4">
+                                <span class="text-3xl drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform">🏆</span>
+                                <p class="text-zinc-300 font-bold uppercase tracking-widest text-sm sm:text-base">Victorias Totales</p>
                             </div>
-                            
-                            <!-- Récord de Puntos -->
-                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
-                                <span class="text-3xl mb-2 drop-shadow-[0_0_8px_rgba(255,215,0,0.4)]">⭐</span>
-                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">Récord Puntos</p>
-                                <p id="stat-record" class="text-2xl font-black text-white">0</p>
-                            </div>
-                            
-                            <!-- SawCoins -->
-                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
-                                <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498468468226527262/image.png?ex=69f14503&is=69eff383&hm=91f7033fcc38ef93fb368a4cf4172b83dc53ab4a516c1d811e5674a83bad8a43&" alt="SawCoin" class="w-8 h-8 mb-2 shadow-[0_0_10px_rgba(255,215,0,0.3)] rounded-full">
-                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">SawCoins</p>
-                                <p id="stat-sawcoins" class="text-2xl font-black text-yellow-500">0</p>
-                            </div>
-
-                            <!-- Diamantes -->
-                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
-                                <!-- Nota: Añadí un onerror por si el enlace de Discord caduca de nuevo -->
-                                <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1499427701897953421/ChatGPT_Image_30_abr_2026_11_08_03.png?ex=69f4c25e&is=69f370de&hm=953f199f04848b72c6153dd18f6651e9cb44c76b353bf6ea1b9f538e4a6db6f9&" onerror="this.src='https://cdn-icons-png.flaticon.com/512/732/732220.png'" alt="Diamante" class="w-8 h-8 mb-2 drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] object-contain">
-                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">Diamantes</p>
-                                <p id="stat-diamantes" class="text-2xl font-black text-blue-400">0</p>
-                            </div>
-
-                            <!-- Items -->
-                            <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-center flex flex-col items-center justify-center hover:border-zinc-600 transition-colors shadow-md">
-                                <span class="text-3xl mb-2 drop-shadow-[0_0_8px_rgba(168,85,247,0.4)]">📦</span>
-                                <p class="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">Objetos</p>
-                                <p id="stat-items" class="text-2xl font-black text-purple-400">0</p>
-                            </div>
+                            <p id="stat-wins" class="text-3xl font-black text-white">0</p>
                         </div>
 
-                        <!-- FILAS INFERIORES: RECUADROS HORIZONTALES (PLACEHOLDERS) -->
-                        <div class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-6 flex flex-col justify-center items-center hover:border-zinc-600 transition-colors shadow-md min-h-[100px] border-dashed">
-                            <p class="text-zinc-600 text-sm font-bold uppercase tracking-widest text-center">[ Espacio para Historial o Inventario ]</p>
-                        </div>
-                        
-                        <div class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-6 flex flex-col justify-center items-center hover:border-zinc-600 transition-colors shadow-md min-h-[100px] border-dashed">
-                            <p class="text-zinc-600 text-sm font-bold uppercase tracking-widest text-center">[ Espacio para Logros o Emblemas ]</p>
-                        </div>
-
-                        <div class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-6 flex flex-col justify-center items-center hover:border-zinc-600 transition-colors shadow-md min-h-[100px] border-dashed">
-                            <p class="text-zinc-600 text-sm font-bold uppercase tracking-widest text-center">[ Espacio para Estadísticas Avanzadas ]</p>
+                        <!-- Récord de Puntos -->
+                        <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
+                            <div class="flex items-center gap-4">
+                                <span class="text-3xl drop-shadow-[0_0_8px_rgba(255,215,0,0.4)] group-hover:scale-110 transition-transform">⭐</span>
+                                <p class="text-zinc-300 font-bold uppercase tracking-widest text-sm sm:text-base">Récord de Puntos</p>
+                            </div>
+                            <p id="stat-record" class="text-3xl font-black text-white">0</p>
                         </div>
 
-                        <div class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-6 flex flex-col justify-center items-center hover:border-zinc-600 transition-colors shadow-md min-h-[100px] border-dashed">
-                            <p class="text-zinc-600 text-sm font-bold uppercase tracking-widest text-center">[ Espacio Adicional ]</p>
+                        <!-- SawCoins -->
+                        <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
+                            <div class="flex items-center gap-4">
+                                <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498468468226527262/image.png?ex=69f14503&is=69eff383&hm=91f7033fcc38ef93fb368a4cf4172b83dc53ab4a516c1d811e5674a83bad8a43&" alt="SawCoin" class="w-8 h-8 shadow-[0_0_10px_rgba(255,215,0,0.3)] rounded-full group-hover:scale-110 transition-transform">
+                                <p class="text-zinc-300 font-bold uppercase tracking-widest text-sm sm:text-base">SawCoins</p>
+                            </div>
+                            <p id="stat-sawcoins" class="text-3xl font-black text-yellow-500">0</p>
                         </div>
+
+                        <!-- Diamantes -->
+                        <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
+                            <div class="flex items-center gap-4">
+                                <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1499427701897953421/ChatGPT_Image_30_abr_2026_11_08_03.png?ex=69f4c25e&is=69f370de&hm=953f199f04848b72c6153dd18f6651e9cb44c76b353bf6ea1b9f538e4a6db6f9&" onerror="this.src='https://cdn-icons-png.flaticon.com/512/732/732220.png'" alt="Diamante" class="w-8 h-8 drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] object-contain group-hover:scale-110 transition-transform">
+                                <p class="text-zinc-300 font-bold uppercase tracking-widest text-sm sm:text-base">Diamantes</p>
+                            </div>
+                            <p id="stat-diamantes" class="text-3xl font-black text-blue-400">0</p>
+                        </div>
+
+                        <!-- Items -->
+                        <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
+                            <div class="flex items-center gap-4">
+                                <span class="text-3xl drop-shadow-[0_0_8px_rgba(168,85,247,0.4)] group-hover:scale-110 transition-transform">📦</span>
+                                <p class="text-zinc-300 font-bold uppercase tracking-widest text-sm sm:text-base">Objetos</p>
+                            </div>
+                            <p id="stat-items" class="text-3xl font-black text-purple-400">0</p>
+                        </div>
+
                     </div>
                 </div>
 
