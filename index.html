@@ -856,26 +856,35 @@
                     };
                 });
 
-                // 2. Buscamos usuarios en Firebase que ya estén vinculados y tengan victorias
-                const q = query(collection(db, "users"), where("stats.wins", ">", 0));
-                const querySnapshot = await getDocs(q);
-                
-                // 3. Sobrescribir/Agregar con datos reales de Firebase
-                querySnapshot.forEach((doc) => { 
-                    const data = doc.data();
-                    const idNum = Number(data.robloxUserId);
+                // 2. Buscamos usuarios en Firebase de forma SEGURA (envuelto en su propio try-catch)
+                // Usamos una búsqueda simple para evitar el error de "Índices faltantes" en Firebase
+                try {
+                    const querySnapshot = await getDocs(collection(db, "users"));
                     
-                    if (idNum) {
-                        mapaGanadores[idNum] = {
-                            id: idNum,
-                            puntos: data.stats.recordPuntos || 0,
-                            victorias: data.stats.wins || 0,
-                            nombre: data.robloxUsername || "Usuario",
-                            avatarUrl: "https://via.placeholder.com/150/1f1f22/52525b?text=...",
-                            needsProxy: true // SIEMPRE sacamos de Roblox, ignoramos foto manual vieja
-                        };
-                    }
-                });
+                    querySnapshot.forEach((doc) => { 
+                        const data = doc.data();
+                        const idNum = Number(data.robloxUserId);
+                        
+                        if (idNum) {
+                            const hasRealWins = data.stats && data.stats.wins > 0;
+                            const isBaseWinner = mapaGanadores[idNum] !== undefined;
+
+                            // Si tiene victorias reales, o si ya estaba en tu lista de 34, actualizamos sus datos
+                            if (hasRealWins || isBaseWinner) {
+                                mapaGanadores[idNum] = {
+                                    id: idNum,
+                                    puntos: data.stats?.recordPuntos || 0,
+                                    victorias: data.stats?.wins || 0,
+                                    nombre: data.robloxUsername || "Usuario",
+                                    avatarUrl: "https://via.placeholder.com/150/1f1f22/52525b?text=...",
+                                    needsProxy: true // SIEMPRE sacamos de Roblox, ignoramos foto manual vieja
+                                };
+                            }
+                        }
+                    });
+                } catch (fbError) {
+                    console.warn("Firebase bloqueó la lectura o falló. Mostrando solo la lista base de 34 jugadores.", fbError);
+                }
 
                 // 4. Convertir a Lista y ordenar por puntos (el que tiene más va arriba)
                 let listaFinal = Object.values(mapaGanadores);
@@ -912,9 +921,9 @@
                 container.innerHTML = htmlContent;
 
                 // ===============================================
-                // NUEVO: CREAR EL TOP 3 DE PUNTOS (COLUMNA IZQUIERDA)
+                // CREAR EL TOP 3 DE PUNTOS (COLUMNA IZQUIERDA)
                 // ===============================================
-                const topPuntosList = listaFinal.slice(0, 3); // Cortamos los 3 primeros (ya vienen ordenados por puntos)
+                const topPuntosList = listaFinal.slice(0, 3); // Cortamos los 3 primeros
                 let htmlTopPuntos = '';
                 topPuntosList.forEach((jugador, index) => {
                     let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
@@ -932,9 +941,9 @@
                 document.getElementById('lista-top-puntos').innerHTML = htmlTopPuntos;
 
                 // ===============================================
-                // NUEVO: CREAR EL TOP 3 DE VICTORIAS (COLUMNA DERECHA)
+                // CREAR EL TOP 3 DE VICTORIAS (COLUMNA DERECHA)
                 // ===============================================
-                // Hacemos una copia de la lista, la ordenamos por VICTORIAS de mayor a menor, y cortamos los 3 primeros
+                // Hacemos una copia, ordenamos por VICTORIAS, y cortamos los 3 primeros
                 const topVictoriasList = [...listaFinal].sort((a, b) => b.victorias - a.victorias).slice(0, 3);
                 let htmlTopVictorias = '';
                 topVictoriasList.forEach((jugador, index) => {
@@ -954,17 +963,15 @@
 
                 firebaseGanadoresLoaded = true;
 
-                // 5. Cargar Fotos y Nombres faltantes vía RoProxy (Actualiza el Centro y los Tops al mismo tiempo)
+                // CARGAR FOTOS Y NOMBRES DESDE ROPROXY
                 if (idsToFetchProxy.length > 0) {
                     const batchIds = idsToFetchProxy.join(',');
                     
-                    // Descargar Fotos
                     fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${batchIds}&size=150x150&format=Png&isCircular=false`)
                         .then(res => res.json())
                         .then(json => {
                             if (json && json.data) {
                                 json.data.forEach(item => {
-                                    // Actualizamos la foto en la lista central, y en los Tops si el jugador está ahí
                                     const imgMain = document.getElementById(`fb-avatar-${item.targetId}`);
                                     const imgTopPt = document.getElementById(`top-pt-avatar-${item.targetId}`);
                                     const imgTopWin = document.getElementById(`top-win-avatar-${item.targetId}`);
@@ -979,7 +986,6 @@
                         })
                         .catch(err => console.error("Error obteniendo avatares batch:", err));
 
-                    // Descargar Nombres de Roblox
                     fetch(`https://users.roproxy.com/v1/users`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -1001,7 +1007,6 @@
                         }
                     })
                     .catch(err => {
-                        // Respaldo de emergencia
                         idsToFetchProxy.forEach(id => {
                             fetch(`https://users.roproxy.com/v1/users/${id}`)
                             .then(r=>r.json()).then(d=>{
@@ -1018,8 +1023,8 @@
                 }
 
             } catch (error) {
-                console.error("Error cargando ganadores desde Firebase:", error);
-                container.innerHTML = '<div class="text-center text-red-500 py-10 font-bold">Ocurrió un error cargando el Salón de la Fama. Intenta refrescar la página.</div>';
+                console.error("Error fatal procesando ganadores:", error);
+                container.innerHTML = '<div class="text-center text-red-500 py-10 font-bold">Ocurrió un error crítico cargando el Salón de la Fama.</div>';
             }
         }
 
