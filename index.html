@@ -70,7 +70,7 @@
                     <button onclick="switchMainView('home'); window.scrollTo(0,0)" class="text-zinc-400 hover:text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors">
                         Inicio
                     </button>
-                    <!-- BOTÓN DE GANADORES FORZADO A MOSTRARSE -->
+                    <!-- BOTÓN DE GANADORES -->
                     <button onclick="switchMainView('ganadores'); window.scrollTo(0,0)" class="text-zinc-400 hover:text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors">
                         Ganadores
                     </button>
@@ -506,7 +506,7 @@
                         <button onclick="openContactModal()" class="bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md transition-colors uppercase tracking-widest text-sm shadow-md whitespace-nowrap">Contactar por Correo</button>
                     </div>
 
-                    <!-- PREGUNTAS FRECUENTES (Restauradas) -->
+                    <!-- PREGUNTAS FRECUENTES -->
                     <h3 class="text-xl font-bold text-zinc-300 mb-6 uppercase tracking-widest border-l-4 border-red-600 pl-3">Preguntas Frecuentes (FAQ)</h3>
                     
                     <div class="space-y-4">
@@ -938,11 +938,11 @@
 
                 firebaseGanadoresLoaded = true;
 
-                // CARGAR FOTOS Y NOMBRES (Método a prueba de Spam)
+                // CARGAR FOTOS Y NOMBRES (Método a prueba de Spam y Mayúsculas)
                 if (idsToFetchProxy.length > 0) {
                     const batchIds = idsToFetchProxy.join(',');
                     
-                    // FOTOS BATCH (Soporta múltiples ids de una sola vez)
+                    // FOTOS BATCH 
                     fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${batchIds}&size=150x150&format=Png&isCircular=false`)
                         .then(res => res.json())
                         .then(json => {
@@ -962,7 +962,7 @@
                         })
                         .catch(err => console.error("Error obteniendo avatares batch:", err));
 
-                    // NOMBRES INDIVIDUALES ESPACIADOS (Evita Error 429 de RoProxy)
+                    // NOMBRES INDIVIDUALES ESPACIADOS (Solución al error CARGANDO...)
                     const cargarNombresSeguro = async () => {
                         for (let id of idsToFetchProxy) {
                             try {
@@ -975,9 +975,10 @@
                                     const nameTopPt = document.getElementById(`top-pt-name-${id}`);
                                     const nameTopWin = document.getElementById(`top-win-name-${id}`);
                                     
-                                    if (nameMain && nameMain.innerText === "Cargando...") nameMain.innerText = realName;
-                                    if (nameTopPt && nameTopPt.innerText === "Cargando...") nameTopPt.innerText = realName;
-                                    if (nameTopWin && nameTopWin.innerText === "Cargando...") nameTopWin.innerText = realName;
+                                    // SOBRESCRIBE INCONDICIONALMENTE (Evita el bug de las mayúsculas de CSS)
+                                    if (nameMain) nameMain.innerText = realName;
+                                    if (nameTopPt) nameTopPt.innerText = realName;
+                                    if (nameTopWin) nameTopWin.innerText = realName;
                                 }
                                 await new Promise(resolve => setTimeout(resolve, 150));
                             } catch(e) {
