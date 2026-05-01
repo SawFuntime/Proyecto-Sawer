@@ -701,68 +701,78 @@
             }
         }
 
-        // TABLA DE GANADORES MANUAL (EXTRAÍDA DE TU ARCHIVO)
-        // Puedes agregar más usuarios copiando y pegando una línea y cambiando los datos.
-        const listaDeGanadores = [
-            { nombre: "Dylan_galaxy", id: "4073781567", puntos: 520, wins: 12 },
-            { nombre: "Mylen_s", id: "738828119", puntos: 480, wins: 10 },
-            { nombre: "SweetiVwasa", id: "142285336", puntos: 415, wins: 8 },
-            { nombre: "Arii_skokxni", id: "5816264398", puntos: 390, wins: 7 },
-            { nombre: "Julian_beta", id: "497516558", puntos: 310, wins: 5 },
-            { nombre: "SawNah", id: "55623054", puntos: 280, wins: 4 },
-            { nombre: "alessgamer316", id: "245053503", puntos: 250, wins: 4 },
-            { nombre: "SlytherKing6", id: "7901769", puntos: 210, wins: 3 },
-            { nombre: "Lester", id: "3111950425", puntos: 195, wins: 3 },
-            { nombre: "valen-", id: "3603664", puntos: 180, wins: 2 },
-            { nombre: "XxAlex_xX", id: "2685389296", puntos: 150, wins: 2 },
-            { nombre: "fabiancardozo", id: "318923211", puntos: 120, wins: 1 },
-            { nombre: "Tu_platanita1", id: "451324487", puntos: 100, wins: 1 },
-            { nombre: "Esnayder13", id: "288949404", puntos: 95, wins: 1 },
-            { nombre: "memo_realgoat", id: "9178790", puntos: 80, wins: 1 }
+        // TABLA DE GANADORES VÍA IDS (CON ROPROXY)
+        const ganadoresIds = [
+            7049214801, 5536728046, 2352992715, 5094964987, 1233458248,
+            4964215946, 313164315, 9018128264, 7762713951, 1946257681,
+            8293424144, 8932138090, 5041524215, 8325501632, 2481102460,
+            7718554873, 8329533026, 4351713663, 406896192, 4200079355,
+            5841703647, 3218640765, 1081289606, 385139490, 7388281197,
+            3093182823, 564550854, 1903226113, 8112497518, 1887125485,
+            692028670, 2663039457, 2491787908, 343918794
         ];
 
         function cargarGanadores() {
             const container = document.getElementById('lista-ganadores');
             container.innerHTML = ''; // Limpiar lista
             
-            listaDeGanadores.forEach(jugador => {
+            ganadoresIds.forEach(id => {
+                // Generar puntos aleatorios entre 8 y 13
+                const puntosAleatorios = Math.floor(Math.random() * (13 - 8 + 1)) + 8;
+                const victorias = 1;
+
                 const card = document.createElement('div');
                 card.className = "bg-zinc-950 border border-zinc-800 rounded-lg p-3 flex items-center justify-between hover:border-red-600/50 transition-colors";
                 
-                // Usamos un ID único para la imagen para actualizarla luego
-                const imgId = "avatar-" + jugador.id;
-                
                 card.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <img id="${imgId}" src="https://via.placeholder.com/150/1f1f22/52525b?text=..." alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-zinc-700">
+                        <img id="avatar-ganador-${id}" src="https://via.placeholder.com/150/1f1f22/52525b?text=..." alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-zinc-700">
                         <div>
-                            <p class="text-white font-bold uppercase tracking-wider text-sm">${jugador.nombre}</p>
-                            <p class="text-zinc-500 text-xs">ID: ${jugador.id}</p>
+                            <p id="name-ganador-${id}" class="text-white font-bold uppercase tracking-wider text-sm">Cargando...</p>
+                            <p class="text-zinc-500 text-xs">ID: ${id}</p>
                         </div>
                     </div>
                     <div class="flex gap-4 text-center">
                         <div>
-                            <p class="text-yellow-500 font-black text-lg leading-none">${jugador.puntos}</p>
+                            <p class="text-yellow-500 font-black text-lg leading-none">${puntosAleatorios}</p>
                             <p class="text-zinc-500 text-[10px] uppercase tracking-widest">Puntos</p>
                         </div>
                         <div>
-                            <p class="text-white font-black text-lg leading-none">${jugador.wins}</p>
+                            <p class="text-white font-black text-lg leading-none">${victorias}</p>
                             <p class="text-zinc-500 text-[10px] uppercase tracking-widest">Wins</p>
                         </div>
                     </div>
                 `;
                 container.appendChild(card);
-                
-                // Cargar la imagen vía RoProxy asíncronamente
-                fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${jugador.id}&size=150x150&format=Png&isCircular=false`)
-                    .then(res => res.json())
-                    .then(json => {
-                        if (json && json.data && json.data.length > 0) {
-                            document.getElementById(imgId).src = json.data[0].imageUrl;
+
+                // Obtener el Nombre del jugador desde RoProxy
+                fetch(`https://users.roproxy.com/v1/users/${id}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data && (data.displayName || data.name)) {
+                            document.getElementById(`name-ganador-${id}`).innerText = data.displayName || data.name;
+                        } else {
+                            document.getElementById(`name-ganador-${id}`).innerText = "Usuario Roblox";
                         }
                     })
-                    .catch(err => console.error("Error cargando avatar de", jugador.nombre));
+                    .catch(err => console.error("Error obteniendo nombre:", err));
             });
+
+            // Obtener TODOS los avatares en 1 sola llamada súper rápida (Batch)
+            const batchIds = ganadoresIds.join(',');
+            fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${batchIds}&size=150x150&format=Png&isCircular=false`)
+                .then(res => res.json())
+                .then(json => {
+                    if (json && json.data) {
+                        json.data.forEach(item => {
+                            const imgEl = document.getElementById(`avatar-ganador-${item.targetId}`);
+                            if (imgEl && item.imageUrl) {
+                                imgEl.src = item.imageUrl;
+                            }
+                        });
+                    }
+                })
+                .catch(err => console.error("Error obteniendo avatares:", err));
         }
 
         function switchMainView(viewName) {
