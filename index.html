@@ -62,7 +62,6 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 
-                <!-- Izquierda: Logo, Nombre y Botón Inicio -->
                 <div class="flex items-center gap-8">
                     <div class="flex items-center gap-3 cursor-pointer" onclick="switchMainView('home'); window.scrollTo(0,0)">
                         <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498453632348196985/Inquisitor.png?ex=69f13731&is=69efe5b1&hm=246460870f316b49a0e7e41f8284cb67ce6c4b95c8e8af99cdd7533baac253a8&" alt="Logo mini" class="w-10 h-10 object-contain drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]">
@@ -73,7 +72,6 @@
                     </button>
                 </div>
 
-                <!-- Derecha: Botones Auth y Perfil -->
                 <div class="flex items-center gap-4">
                     <div id="auth-buttons" class="flex items-center gap-4">
                         <button onclick="openModal('login')" class="text-zinc-300 hover:text-white font-bold text-sm uppercase tracking-wider transition-colors hidden sm:block">Iniciar Sesión</button>
@@ -85,8 +83,10 @@
                         <button onclick="logout()" class="text-red-500 hover:text-red-400 font-bold text-sm uppercase tracking-wider transition-colors border border-red-900/50 px-3 py-1 rounded-md bg-red-950/30">Salir</button>
                     </div>
 
-                    <button onclick="handleProfileClick()" class="p-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 rounded-md transition-colors ml-2 shadow-md group">
-                        <svg class="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    <button onclick="handleProfileClick()" class="p-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 rounded-md transition-colors ml-2 shadow-md group flex items-center justify-center">
+                        <!-- Añadimos IDs al SVG default y una nueva etiqueta img para la foto personalizada -->
+                        <svg id="nav-profile-icon-default" class="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <img id="nav-profile-icon-custom" src="" alt="Perfil Navbar" class="w-6 h-6 rounded-full object-cover hidden border border-zinc-600">
                     </button>
                 </div>
             </div>
@@ -140,7 +140,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- VENTANA EMERGENTE DE CONTACTO -->
+    <!-- NUEVO: VENTANA EMERGENTE DE CONTACTO -->
     <!-- ========================================== -->
     <div id="contact-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
         <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-8 max-w-sm w-full mx-4 relative shadow-[0_0_40px_rgba(220,38,38,0.15)] text-center">
@@ -177,7 +177,7 @@
 
 
     <!-- ========================================================================= -->
-    <!-- VISTA 1: PÁGINA DE INICIO (CONTENIDO ORIGINAL COMPLETO) -->
+    <!-- VISTA 1: PÁGINA DE INICIO -->
     <!-- ========================================================================= -->
     <div id="view-home" class="block">
         
@@ -186,8 +186,10 @@
             <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-950/30 via-zinc-950 to-zinc-950"></div>
             
             <div class="relative max-w-7xl mx-auto px-4 py-24 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+                <!-- Animación de Zoom in para el logo -->
                 <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498453632348196985/Inquisitor.png?ex=69f13731&is=69efe5b1&hm=246460870f316b49a0e7e41f8284cb67ce6c4b95c8e8af99cdd7533baac253a8&" alt="Logo Proyecto Sawer" class="w-56 h-56 object-contain mb-6 drop-shadow-[0_0_15px_rgba(220,38,38,0.4)]" data-aos="zoom-in" data-aos-duration="1000">
                 
+                <!-- Animación Fade up para el título -->
                 <h1 class="text-6xl font-black text-white tracking-tighter sm:text-7xl mb-4 glow-red uppercase" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
                     Proyecto <span class="text-red-500">Sawer</span>
                 </h1>
@@ -222,6 +224,7 @@
         <!-- MAIN CONTENT -->
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             
+            <!-- ESENCIA (Aparecen una por una) -->
             <section class="mb-24">
                 <h2 class="text-3xl font-black text-white mb-8 border-b-2 border-red-600 pb-2 inline-block uppercase tracking-wider" data-aos="fade-right">Nuestra Esencia</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -243,6 +246,7 @@
                 </div>
             </section>
 
+            <!-- MECÁNICAS -->
             <section class="mb-24">
                 <h2 class="text-3xl font-black text-white mb-8 border-b-2 border-red-600 pb-2 inline-block uppercase tracking-wider" data-aos="fade-right">Mecánicas de Juego</h2>
                 <div class="bg-zinc-900 rounded-lg p-8 border border-zinc-800 relative shadow-lg" data-aos="zoom-in-up">
@@ -270,6 +274,7 @@
                 </div>
             </section>
 
+            <!-- ECONOMÍA Y COLECCIONABLES (Con colores actualizados) -->
             <section class="mb-24">
                 <h2 class="text-3xl font-black text-white mb-8 border-b-2 border-red-600 pb-2 inline-block uppercase tracking-wider" data-aos="fade-right">Economía y Coleccionables</h2>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -309,6 +314,7 @@
                 </div>
             </section>
 
+            <!-- MÁS FORMAS DE GANAR -->
             <section class="mb-24">
                 <h2 class="text-3xl font-black text-white mb-8 border-b-2 border-red-600 pb-2 inline-block uppercase tracking-wider" data-aos="fade-right">Más formas de ganar</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -331,6 +337,7 @@
                 </div>
             </section>
 
+            <!-- SECCIÓN DISCORD -->
             <section class="mb-10">
                 <div class="bg-zinc-900 rounded-xl p-10 border border-red-700/30 relative overflow-hidden shadow-2xl" data-aos="zoom-in">
                     <div class="absolute -left-10 -top-10 w-40 h-40 bg-red-600/10 rounded-full blur-3xl"></div>
@@ -359,11 +366,13 @@
                             
                             <a href="https://discord.gg/qPshzM5x3m" target="_blank" class="inline-flex items-center justify-center bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-4 px-10 rounded-md transition-all transform hover:scale-105 shadow-lg text-lg w-full sm:w-auto uppercase tracking-wide">
                                 <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
-                        Unirse al Discord
-                    </a>
+                                Ingresar a la Comunidad
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </section>
+        </main>
     </div> <!-- FIN DE VISTA 1 -->
 
 
@@ -379,6 +388,7 @@
                 
                 <!-- RECUADRO DE FOTO DE PERFIL -->
                 <div class="w-full aspect-square bg-zinc-900 rounded-lg flex items-center justify-center relative shadow-inner overflow-hidden border-2 border-zinc-800 group">
+                    <!-- Añadido el efecto de zoom (group-hover:scale-110 transition-transform duration-500) -->
                     <img id="profile-image-display" src="" alt="Foto de perfil" class="w-full h-full object-cover hidden group-hover:scale-110 transition-transform duration-500">
                     <span id="profile-image-placeholder" class="text-zinc-500 font-bold uppercase tracking-widest text-xs text-center px-4">Espacio para Foto de Perfil</span>
                     <input type="file" id="profile-pic-upload" class="hidden" accept="image/*">
@@ -410,20 +420,21 @@
                 </div>
             </div>
 
-            <!-- COLUMNA DERECHA (CONTENIDO PERFIL) -->
+            <!-- COLUMNA DERECHA (CONTENIDO) -->
             <div class="w-full md:w-3/4 bg-zinc-900/80 rounded-xl border border-zinc-800 p-8 shadow-2xl relative overflow-hidden min-h-[500px]">
                 <div class="absolute -right-20 -top-20 w-64 h-64 bg-red-600/5 rounded-full blur-3xl pointer-events-none"></div>
 
-                <!-- CONTENIDO: INFORMACIÓN -->
+                <!-- Contenido: INFORMACIÓN -->
                 <div id="content-info" class="profile-content block animate-fade-in">
+                    <!-- TÍTULO Y LÍNEA ROJA -->
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Información del Perfil</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
                     
-                    <!-- ADVERTENCIA DE NO VINCULADO -->
+                    <!-- BLOQUE 1: CUANDO LA CUENTA AÚN NO ESTÁ VINCULADA -->
                     <div id="unlinked-warning" class="bg-red-950/30 border border-red-800/50 rounded-lg p-8 text-center mb-6 hidden">
                         <svg class="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                         <h3 class="text-2xl font-bold text-white mb-2 uppercase">Cuenta de Roblox no vinculada</h3>
-                        <p class="text-zinc-400 mb-6 max-w-lg mx-auto">Para poder ver tus estadísticas, necesitas demostrar que eres el dueño de tu cuenta de Roblox.</p>
+                        <p class="text-zinc-400 mb-6 max-w-lg mx-auto">Para poder ver tus estadísticas, victorias y SawCoins, necesitas demostrar que eres el dueño de tu cuenta de Roblox.</p>
                         
                         <div id="code-generation-area">
                             <button id="btn-generate-code" class="bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 px-8 rounded-md transition-all shadow-lg uppercase tracking-widest text-sm">
@@ -438,14 +449,15 @@
                                 1. Entra al juego de <strong class="text-white">Proyecto Sawer</strong> en Roblox.<br>
                                 2. Ve al panel de vinculación en el Lobby.<br>
                                 3. Escribe este código exactamente como aparece.<br>
-                                <span class="text-green-400 mt-2 block">Esta página se actualizará automáticamente.</span>
+                                <span class="text-green-400 mt-2 block">Esta página se actualizará automáticamente cuando lo logres.</span>
                             </p>
                         </div>
                     </div>
 
-                    <!-- ESTADÍSTICAS -->
+                    <!-- BLOQUE 2: ESTADÍSTICAS EN FORMATO ÓVALOS APILADOS -->
                     <div id="stats-container" class="hidden flex flex-col gap-4">
                         
+                        <!-- Victorias -->
                         <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform">🏆</span>
@@ -454,6 +466,7 @@
                             <p id="stat-wins" class="text-3xl font-black text-white">0</p>
                         </div>
 
+                        <!-- Récord de Puntos -->
                         <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl drop-shadow-[0_0_8px_rgba(255,215,0,0.4)] group-hover:scale-110 transition-transform">⭐</span>
@@ -462,6 +475,7 @@
                             <p id="stat-record" class="text-3xl font-black text-white">0</p>
                         </div>
 
+                        <!-- SawCoins -->
                         <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
                             <div class="flex items-center gap-4">
                                 <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498468468226527262/image.png?ex=69f14503&is=69eff383&hm=91f7033fcc38ef93fb368a4cf4172b83dc53ab4a516c1d811e5674a83bad8a43&" alt="SawCoin" class="w-8 h-8 shadow-[0_0_10px_rgba(255,215,0,0.3)] rounded-full group-hover:scale-110 transition-transform">
@@ -470,6 +484,7 @@
                             <p id="stat-sawcoins" class="text-3xl font-black text-white">0</p>
                         </div>
 
+                        <!-- Diamantes (AHORA CON EMOJI ARREGLADO) -->
                         <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] group-hover:scale-110 transition-transform">💎</span>
@@ -478,6 +493,7 @@
                             <p id="stat-diamantes" class="text-3xl font-black text-white">0</p>
                         </div>
 
+                        <!-- Items -->
                         <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
                             <div class="flex items-center gap-4">
                                 <span class="text-3xl drop-shadow-[0_0_8px_rgba(168,85,247,0.4)] group-hover:scale-110 transition-transform">📦</span>
@@ -489,7 +505,7 @@
                     </div>
                 </div>
 
-                <!-- CONTENIDO: AGENDA -->
+                <!-- Contenido: AGENDA -->
                 <div id="content-agenda" class="profile-content hidden animate-fade-in">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Tu Agenda</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
@@ -498,6 +514,7 @@
                         <p class="text-zinc-400 text-sm mb-6">Mantente al tanto de los próximos torneos, rondas y eventos especiales de <strong class="text-red-500">Sawer</strong>.</p>
                         
                         <div class="w-full rounded-md overflow-hidden border border-zinc-800 h-[400px] sm:h-[500px] bg-black">
+                            <!-- Calendario de Santiago incrustado aquí -->
                             <iframe src="https://calendar.google.com/calendar/embed?src=44fbad9e814942a4af290b252d7d2452aa11db27253b30124f3b5221b399e0c4%40group.calendar.google.com&ctz=America%2FSantiago" 
                                 style="border-width:0; filter: invert(0.9) hue-rotate(180deg) contrast(1.1);" width="100%" height="100%" frameborder="0" scrolling="no">
                             </iframe>
@@ -507,6 +524,7 @@
 
                 <!-- CONTENIDO: AYUDA E INFORMACIÓN -->
                 <div id="content-ayuda" class="profile-content hidden animate-fade-in">
+                    <!-- TÍTULO Y LÍNEA ROJA -->
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Centro de Ayuda</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
 
@@ -521,6 +539,7 @@
                                 <p class="text-zinc-400 text-sm">¿Tienes un problema con tu cuenta o tus recompensas?</p>
                             </div>
                         </div>
+                        <!-- AHORA ESTE BOTÓN ABRE EL MODAL NUEVO -->
                         <button onclick="openContactModal()" class="bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md transition-colors uppercase tracking-widest text-sm shadow-md whitespace-nowrap">
                             Contactar por Correo
                         </button>
@@ -530,36 +549,41 @@
                     <h3 class="text-xl font-bold text-zinc-300 mb-6 uppercase tracking-widest border-l-4 border-red-600 pl-3">Preguntas Frecuentes (FAQ)</h3>
                     
                     <div class="space-y-4">
+                        
+                        <!-- Pregunta 1 -->
                         <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
                             <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
                                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 ¿Cómo y cuándo recibo mis Robux si gano?
                             </h4>
                             <p class="text-zinc-400 text-sm leading-relaxed">
-                                Tras finalizar y ganar una ronda oficial, el Host te indicará que te unas a un juego de donaciones designado. Allí, un administrador oficial comprará tu gamepass por el valor del premio. Recuerda que Roblox retiene un 30% de las ventas.
+                                Tras finalizar y ganar una ronda oficial, el Host te indicará que te unas a un juego de donaciones designado (como <strong class="text-zinc-200">PLS DONATE</strong> u otros). Allí, un administrador oficial comprará tu gamepass o ropa por el valor del premio. Recuerda que Roblox retiene un 30% de las ventas.
                             </p>
                         </div>
 
+                        <!-- Pregunta 2 -->
                         <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
                             <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
                                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 ¿Puedo comprar SawCoins con dinero real?
                             </h4>
                             <p class="text-zinc-400 text-sm leading-relaxed">
-                                <strong class="text-zinc-200">¡Absolutamente NO!</strong> Proyecto Sawer es una comunidad estrictamente <em class="text-zinc-300">Free-to-Play</em>. Las SawCoins solo se pueden obtener por mérito propio: ganando minijuegos, encontrándolas en Mystery Boxes, o simplemente jugando de forma activa.
+                                <strong class="text-zinc-200">¡Absolutamente NO!</strong> Proyecto Sawer es una comunidad estrictamente <em class="text-zinc-300">Free-to-Play</em>. Las SawCoins solo se pueden obtener por mérito propio: ganando minijuegos, encontrándolas en Mystery Boxes, o simplemente jugando de forma activa en nuestro servidor de Roblox.
                             </p>
                         </div>
 
+                        <!-- Pregunta 3 -->
                         <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
                             <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
                                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 Me cambié el nombre en Roblox, ¿perderé mis stats?
                             </h4>
                             <p class="text-zinc-400 text-sm leading-relaxed">
-                                <strong class="text-green-400">No perderás nada.</strong> Nuestro sistema web vincula tu cuenta utilizando tu "UserId" (un número interno de Roblox que nunca cambia), no tu nombre de usuario. Si te cambias el nombre, tus estadísticas seguirán intactas en tu perfil.
+                                <strong class="text-green-400">No perderás nada.</strong> Nuestro sistema web vincula tu cuenta utilizando tu "UserId" (un número interno de Roblox que nunca cambia), no tu nombre de usuario. Si te cambias el nombre, tus Victorias y SawCoins seguirán intactas en tu perfil.
                             </p>
                         </div>
 
+                        <!-- Pregunta 4 -->
                         <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
                             <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
                                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -573,7 +597,7 @@
                     </div>
                 </div>
 
-                <!-- CONTENIDO: CONFIGURACIÓN -->
+                <!-- Contenido: CONFIGURACIÓN -->
                 <div id="content-config" class="profile-content hidden animate-fade-in">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Configuración de Cuenta</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
@@ -598,18 +622,26 @@
                 <p class="text-zinc-400 font-bold tracking-widest uppercase text-sm">Proyecto Sawer</p>
             </div>
             <div class="text-zinc-500 text-xs tracking-widest uppercase">
-                Fundado por SawFuntime &copy; 2025-2026. Todos los derechos reservados.
+                Fundado por SawFuntime &copy; 2025-2026. Todos los derechos reservados.<br>
             </div>
         </div>
     </footer>
 
-    <!-- SCRIPTS DE ANIMACIONES (AOS) -->
+    <!-- ========================================== -->
+    <!-- NUEVO: SCRIPT DE ANIMACIONES (AOS) -->
+    <!-- ========================================== -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ once: true, offset: 100 });
+        // Inicializar las animaciones de scroll
+        AOS.init({
+            once: true, // La animación solo ocurre la primera vez que haces scroll hacia abajo
+            offset: 100, // Empieza a animar 100px antes de que el elemento aparezca del todo
+        });
     </script>
 
+    <!-- ========================================== -->
     <!-- SCRIPTS DE LA INTERFAZ -->
+    <!-- ========================================== -->
     <script>
         const modal = document.getElementById('auth-modal');
         const formLogin = document.getElementById('form-login');
@@ -618,42 +650,27 @@
         const tabRegister = document.getElementById('tab-register');
         const errorText = document.getElementById('auth-error');
 
-        function openModal(type) { 
-            modal.classList.remove('hidden'); 
-            switchTab(type); 
-            errorText.classList.add('hidden'); 
-        }
-        
-        function closeModal() { 
-            modal.classList.add('hidden'); 
-        }
+        function openModal(type) { modal.classList.remove('hidden'); switchTab(type); errorText.classList.add('hidden'); }
+        function closeModal() { modal.classList.add('hidden'); }
 
         function switchTab(type) {
             errorText.classList.add('hidden');
             if (type === 'login') {
-                formLogin.classList.remove('hidden'); 
-                formRegister.classList.add('hidden');
-                tabLogin.classList.add('text-white', 'border-red-600'); 
-                tabLogin.classList.remove('text-zinc-500', 'border-transparent');
-                tabRegister.classList.add('text-zinc-500', 'border-transparent'); 
-                tabRegister.classList.remove('text-white', 'border-red-600');
+                formLogin.classList.remove('hidden'); formRegister.classList.add('hidden');
+                tabLogin.classList.add('text-white', 'border-red-600'); tabLogin.classList.remove('text-zinc-500', 'border-transparent');
+                tabRegister.classList.add('text-zinc-500', 'border-transparent'); tabRegister.classList.remove('text-white', 'border-red-600');
             } else {
-                formLogin.classList.add('hidden'); 
-                formRegister.classList.remove('hidden');
-                tabRegister.classList.add('text-white', 'border-red-600'); 
-                tabRegister.classList.remove('text-zinc-500', 'border-transparent');
-                tabLogin.classList.add('text-zinc-500', 'border-transparent'); 
-                tabLogin.classList.remove('text-white', 'border-red-600');
+                formLogin.classList.add('hidden'); formRegister.classList.remove('hidden');
+                tabRegister.classList.add('text-white', 'border-red-600'); tabRegister.classList.remove('text-zinc-500', 'border-transparent');
+                tabLogin.classList.add('text-zinc-500', 'border-transparent'); tabLogin.classList.remove('text-white', 'border-red-600');
             }
         }
 
         function switchMainView(viewName) {
             if (viewName === 'home') {
-                document.getElementById('view-home').classList.remove('hidden'); 
-                document.getElementById('view-profile').classList.add('hidden');
+                document.getElementById('view-home').classList.remove('hidden'); document.getElementById('view-profile').classList.add('hidden');
             } else if (viewName === 'profile') {
-                document.getElementById('view-home').classList.add('hidden'); 
-                document.getElementById('view-profile').classList.remove('hidden');
+                document.getElementById('view-home').classList.add('hidden'); document.getElementById('view-profile').classList.remove('hidden');
                 switchProfileTab('info');
             }
         }
@@ -661,12 +678,10 @@
         function switchProfileTab(tabName) {
             document.querySelectorAll('.profile-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('content-' + tabName).classList.remove('hidden');
-            
             document.querySelectorAll('.profile-tab-btn').forEach(btn => {
                 btn.className = "profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group";
                 btn.querySelector('svg').className = "w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity";
             });
-            
             const activeBtn = document.getElementById('btn-tab-' + tabName);
             activeBtn.className = "profile-tab-btn bg-red-700 text-white border border-red-600 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm shadow-md flex items-center justify-between group";
             activeBtn.querySelector('svg').className = "w-4 h-4 text-white opacity-100 transition-opacity";
@@ -684,6 +699,8 @@
 
         function copySupportEmail() {
             const emailToCopy = 'proyectosawermain@gmail.com';
+            
+            // Creamos un input invisible temporal para copiar el texto
             const tempInput = document.createElement('input');
             tempInput.value = emailToCopy;
             document.body.appendChild(tempInput);
@@ -691,6 +708,7 @@
             document.execCommand('copy');
             document.body.removeChild(tempInput);
             
+            // Mostrar mensaje de éxito por 3 segundos
             const msg = document.getElementById('copy-success-msg');
             msg.classList.remove('hidden');
             setTimeout(() => { msg.classList.add('hidden'); }, 3000);
@@ -705,7 +723,8 @@
                     const img = new Image();
                     img.onload = async function() {
                         const canvas = document.createElement('canvas');
-                        const MAX_SIZE = 800; // Calidad HD
+                        // ¡AUMENTADO A 800 PARA CALIDAD FULL HD!
+                        const MAX_SIZE = 800;
                         canvas.width = MAX_SIZE; canvas.height = MAX_SIZE;
                         const ctx = canvas.getContext('2d');
                         const size = Math.min(img.width, img.height);
@@ -713,13 +732,25 @@
                         const startY = (img.height - size) / 2;
                         ctx.drawImage(img, startX, startY, size, size, 0, 0, MAX_SIZE, MAX_SIZE);
 
+                        // ¡CALIDAD AL 90% (0.9) EN LUGAR DE 80% PARA MAYOR NITIDEZ!
                         const base64Image = canvas.toDataURL('image/jpeg', 0.9);
                         
                         document.getElementById('profile-image-display').src = base64Image;
                         document.getElementById('profile-image-display').classList.remove('hidden');
                         document.getElementById('profile-image-placeholder').classList.add('hidden');
 
-                        if(window.saveProfileImageToFirebase) window.saveProfileImageToFirebase(base64Image);
+                        // NUEVO: Mostrar la miniatura inmediatamente en el navbar al subir
+                        const navIconCustom = document.getElementById('nav-profile-icon-custom');
+                        const navIconDefault = document.getElementById('nav-profile-icon-default');
+                        if (navIconCustom && navIconDefault) {
+                            navIconCustom.src = base64Image;
+                            navIconCustom.classList.remove('hidden');
+                            navIconDefault.classList.add('hidden');
+                        }
+
+                        if(window.saveProfileImageToFirebase) {
+                            window.saveProfileImageToFirebase(base64Image);
+                        }
                     }
                     img.src = e.target.result;
                 }
@@ -728,7 +759,9 @@
         });
     </script>
 
-    <!-- SCRIPT DE FIREBASE Y LÓGICA DE USUARIO -->
+    <!-- ========================================== -->
+    <!-- SCRIPT DE FIREBASE -->
+    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -740,31 +773,36 @@
             projectId: "proyecto-sawer",
             storageBucket: "proyecto-sawer.firebasestorage.app",
             messagingSenderId: "770496172923",
-            appId: "1:770496172923:web:79782a0ddbdca6561e23de"
+            appId: "1:770496172923:web:79782a0ddbdca6561e23de",
+            measurementId: "G-XX2DH8WCJM"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Variables Globales
         window.currentUser = null;
-        let unsubscribeProfile = null;
+        let unsubscribeProfile = null; // Para limpiar el escuchador si cerramos sesión
 
         function showError(msg) {
             document.getElementById('auth-error').innerText = msg;
             document.getElementById('auth-error').classList.remove('hidden');
         }
 
+        // 1. REGISTRO SIMPLIFICADO
         document.getElementById('btn-reg-submit').addEventListener('click', async () => {
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value;
 
-            if(!email || !password) return showError("Llena todos los campos.");
+            if(!email || !password) return showError("Por favor, llena todos los campos.");
 
             try {
+                // Creamos el usuario
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
+                // Creamos su documento base en la base de datos indicando que NO está vinculado
                 await setDoc(doc(db, "users", user.uid), {
                     email: email,
                     isLinked: false,
@@ -772,69 +810,83 @@
                     robloxUserId: null,
                     linkCode: null,
                     photoURL: null,
-                    stats: { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: "0/67" }
+                    stats: { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: 0 } // Estadísticas base
                 });
                 
                 await sendEmailVerification(user);
                 await signOut(auth);
                 
                 closeModal();
-                alert("¡Cuenta creada! Revisa tu correo de verificación.");
+                alert("¡Cuenta creada! Te hemos enviado un correo de verificación. Por favor, revísalo para poder activar tu cuenta y vincular tu usuario de Roblox.");
             } catch (error) {
                 if(error.code === 'auth/email-already-in-use') showError("Este correo ya está registrado.");
-                else if(error.code === 'auth/weak-password') showError("Mínimo 6 caracteres.");
-                else showError("Error al registrarse.");
+                else if(error.code === 'auth/weak-password') showError("La contraseña debe tener al menos 6 caracteres.");
+                else showError("Error al registrarse. Intenta de nuevo.");
             }
         });
 
+        // 2. INICIO SESIÓN
         document.getElementById('btn-login-submit').addEventListener('click', async () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
 
-            if(!email || !password) return showError("Ingresa datos.");
+            if(!email || !password) return showError("Ingresa tu correo y contraseña.");
 
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                if (!userCredential.user.emailVerified) {
+                const user = userCredential.user;
+
+                if (!user.emailVerified) {
                     await signOut(auth);
-                    showError("Verifica tu correo antes de entrar.");
+                    showError("Debes verificar tu correo antes de entrar. Revisa tu bandeja de entrada.");
                 } else {
                     closeModal();
                 }
             } catch (error) {
-                showError("Datos incorrectos.");
+                showError("Correo o contraseña incorrectos.");
             }
         });
 
+        // 3. SALIR
         window.logout = async () => {
-            if(unsubscribeProfile) unsubscribeProfile();
+            if(unsubscribeProfile) unsubscribeProfile(); // Dejamos de escuchar la base de datos
             await signOut(auth);
             switchMainView('home'); 
         }
 
+        // 4. GUARDAR FOTO
         window.saveProfileImageToFirebase = async (base64Image) => {
             try {
                 await setDoc(doc(db, "users", window.currentUser.uid), { photoURL: base64Image }, { merge: true });
             } catch (error) {
-                console.error(error);
+                console.error("Error guardando foto:", error);
             }
         };
 
+        // 5. GENERAR CÓDIGO DE VINCULACIÓN
         document.getElementById('btn-generate-code').addEventListener('click', async () => {
             if(!window.currentUser) return;
+            
+            // Generar un código random de 6 caracteres (Ej: A8X2Y9)
             const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+            
+            // Guardarlo en la base de datos
             await setDoc(doc(db, "users", window.currentUser.uid), { linkCode: randomCode }, { merge: true });
         });
 
+        // CLIC EN EL ICONO DE PERFIL
         window.handleProfileClick = () => {
             if (window.currentUser) {
                 switchMainView('profile'); window.scrollTo(0,0);
             } else {
+                alert("Debes registrarte o iniciar sesión para acceder a tu perfil.");
                 openModal('login');
             }
         };
 
-        // LECTURA DE BASE DE DATOS EN TIEMPO REAL
+        // =========================================================
+        // EL CORAZÓN DEL SISTEMA: DETECTAR ESTADO Y LEER DATOS REALES
+        // =========================================================
         onAuthStateChanged(auth, (user) => {
             if (user && user.emailVerified) {
                 window.currentUser = user;
@@ -842,10 +894,13 @@
                 document.getElementById('auth-buttons').classList.add('hidden');
                 document.getElementById('user-profile').classList.remove('hidden');
 
+                // AQUÍ EMPIEZA LA MAGIA EN TIEMPO REAL (onSnapshot)
+                // Esto lee el documento del usuario constamentemente. Si algo cambia en el servidor (Roblox), la web se entera AL INSTANTE.
                 unsubscribeProfile = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
+                        // 1. MANEJAR EL NOMBRE DEL USUARIO Y NAVBAR
                         const displayName = data.isLinked ? data.robloxUsername : "Cuenta no vinculada";
                         document.getElementById('user-display-name').innerText = `Hola, ${data.isLinked ? data.robloxUsername : 'Usuario'}`;
                         
@@ -855,19 +910,31 @@
                             profileNameUI.classList.remove('text-zinc-500'); profileNameUI.classList.add('text-red-500');
                         }
 
+                        // 2. MANEJAR LA FOTO
                         const imgDisplay = document.getElementById('profile-image-display');
                         const placeholder = document.getElementById('profile-image-placeholder');
+                        const navIconCustom = document.getElementById('nav-profile-icon-custom');
+                        const navIconDefault = document.getElementById('nav-profile-icon-default');
 
-                        // Lógica de foto: SOLO usa la foto subida manualmente, NO la de Roblox (versión estable)
                         if (data.photoURL) {
                             imgDisplay.src = data.photoURL;
-                            imgDisplay.classList.remove('hidden'); 
-                            placeholder.classList.add('hidden');
+                            imgDisplay.classList.remove('hidden'); placeholder.classList.add('hidden');
+                            
+                            // Mostrar la foto en la barra superior
+                            if (navIconCustom && navIconDefault) {
+                                navIconCustom.src = data.photoURL;
+                                navIconCustom.classList.remove('hidden');
+                                navIconDefault.classList.add('hidden');
+                            }
                         } else {
-                            imgDisplay.classList.add('hidden'); 
-                            placeholder.classList.remove('hidden');
+                            // Si no hay foto, asegurarse de que se vea el icono genérico en el navbar
+                            if (navIconCustom && navIconDefault) {
+                                navIconCustom.classList.add('hidden');
+                                navIconDefault.classList.remove('hidden');
+                            }
                         }
 
+                        // 3. MANEJAR LA VINCULACIÓN (EL PANEL)
                         const unlinkedWarning = document.getElementById('unlinked-warning');
                         const statsContainer = document.getElementById('stats-container');
                         const codeDisplayArea = document.getElementById('code-display-area');
@@ -875,25 +942,30 @@
                         const secretLinkCode = document.getElementById('secret-link-code');
 
                         if (data.isLinked) {
+                            // SI ESTÁ VINCULADO: Ocultar advertencia, Mostrar Estadísticas Reales
                             unlinkedWarning.classList.add('hidden');
                             statsContainer.classList.remove('hidden');
                             
+                            // Pintar las stats
                             if(data.stats) {
                                 document.getElementById('stat-wins').innerText = data.stats.wins || 0;
                                 document.getElementById('stat-record').innerText = data.stats.recordPuntos || 0;
                                 document.getElementById('stat-sawcoins').innerText = data.stats.sawCoins || 0;
                                 document.getElementById('stat-diamantes').innerText = data.stats.diamantes || 0;
-                                document.getElementById('stat-items').innerText = data.stats.items || "0/67";
+                                document.getElementById('stat-items').innerText = data.stats.items || 0;
                             }
                         } else {
+                            // SI NO ESTÁ VINCULADO: Mostrar advertencia
                             unlinkedWarning.classList.remove('hidden');
                             statsContainer.classList.add('hidden');
 
                             if (data.linkCode) {
+                                // Si ya generó código, mostrarlo
                                 codeGenerationArea.classList.add('hidden');
                                 codeDisplayArea.classList.remove('hidden');
                                 secretLinkCode.innerText = data.linkCode;
                             } else {
+                                // Si no ha generado, mostrar el botón
                                 codeGenerationArea.classList.remove('hidden');
                                 codeDisplayArea.classList.add('hidden');
                             }
@@ -903,11 +975,19 @@
 
             } else {
                 window.currentUser = null;
-                if(unsubscribeProfile) unsubscribeProfile();
+                if(unsubscribeProfile) unsubscribeProfile(); // Parar de escuchar si se desloguea
                 
                 document.getElementById('auth-buttons').classList.remove('hidden');
                 document.getElementById('user-profile').classList.add('hidden');
                 document.getElementById('profile-view-username').innerText = "CARGANDO...";
+                
+                // Restaurar el icono genérico del navbar al cerrar sesión
+                const navIconCustom = document.getElementById('nav-profile-icon-custom');
+                const navIconDefault = document.getElementById('nav-profile-icon-default');
+                if (navIconCustom && navIconDefault) {
+                    navIconCustom.classList.add('hidden');
+                    navIconDefault.classList.remove('hidden');
+                }
             }
         });
     </script>
