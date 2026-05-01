@@ -327,7 +327,6 @@
                 </div>
             </section>
 
-            <!-- SECCIÓN DISCORD INTACTA -->
             <section class="mb-10">
                 <div class="bg-zinc-900 rounded-xl p-10 border border-red-700/30 relative overflow-hidden shadow-2xl" data-aos="zoom-in">
                     <div class="absolute -left-10 -top-10 w-40 h-40 bg-red-600/10 rounded-full blur-3xl"></div>
@@ -376,7 +375,7 @@
             <!-- COLUMNA IZQUIERDA -->
             <div class="w-full md:w-1/4 flex flex-col gap-4">
                 
-                <!-- RECUADRO DE FOTO DE PERFIL (SOLO ROBLOX) -->
+                <!-- RECUADRO DE FOTO DE PERFIL -->
                 <div class="w-full aspect-square bg-zinc-900 rounded-lg flex items-center justify-center relative shadow-inner overflow-hidden border-2 border-zinc-800 group">
                     <img id="profile-image-display" src="" alt="Foto de perfil" class="w-full h-full object-cover hidden group-hover:scale-110 transition-transform duration-500">
                     <span id="profile-image-placeholder" class="text-zinc-500 font-bold uppercase tracking-widest text-xs text-center px-4">Espacio para Foto de Perfil</span>
@@ -489,10 +488,11 @@
                     </div>
                 </div>
 
-                <!-- AYUDA -->
+                <!-- AYUDA (CON LAS PREGUNTAS FRECUENTES RESTAURADAS AL 100%) -->
                 <div id="content-ayuda" class="profile-content hidden animate-fade-in">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Centro de Ayuda</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
+                    
                     <div class="bg-red-950/20 border border-red-800/50 rounded-lg p-6 mb-10 flex flex-col sm:flex-row items-center justify-between shadow-lg">
                         <div class="flex items-center gap-4 mb-4 sm:mb-0 text-center sm:text-left">
                             <div class="bg-red-900/40 p-3 rounded-full text-red-500 hidden sm:block">
@@ -504,6 +504,48 @@
                             </div>
                         </div>
                         <button onclick="openContactModal()" class="bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md transition-colors uppercase tracking-widest text-sm shadow-md whitespace-nowrap">Contactar por Correo</button>
+                    </div>
+
+                    <!-- PREGUNTAS FRECUENTES (Restauradas) -->
+                    <h3 class="text-xl font-bold text-zinc-300 mb-6 uppercase tracking-widest border-l-4 border-red-600 pl-3">Preguntas Frecuentes (FAQ)</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
+                            <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ¿Cómo y cuándo recibo mis Robux si gano?
+                            </h4>
+                            <p class="text-zinc-400 text-sm leading-relaxed">
+                                Tras finalizar y ganar una ronda oficial, el Host te indicará que te unas a un juego de donaciones designado (como <strong class="text-zinc-200">PLS DONATE</strong> u otros). Allí, un administrador oficial comprará tu gamepass o ropa por el valor del premio. Recuerda que Roblox retiene un 30% de las ventas.
+                            </p>
+                        </div>
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
+                            <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ¿Puedo comprar SawCoins con dinero real?
+                            </h4>
+                            <p class="text-zinc-400 text-sm leading-relaxed">
+                                <strong class="text-zinc-200">¡Absolutamente NO!</strong> Proyecto Sawer es una comunidad estrictamente <em class="text-zinc-300">Free-to-Play</em>. Las SawCoins solo se pueden obtener por mérito propio: ganando minijuegos, encontrándolas en Mystery Boxes, o simplemente jugando de forma activa en nuestro servidor de Roblox.
+                            </p>
+                        </div>
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
+                            <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Me cambié el nombre en Roblox, ¿perderé mis stats?
+                            </h4>
+                            <p class="text-zinc-400 text-sm leading-relaxed">
+                                <strong class="text-green-400">No perderás nada.</strong> Nuestro sistema web vincula tu cuenta utilizando tu "UserId" (un número interno de Roblox que nunca cambia), no tu nombre de usuario. Si te cambias el nombre, tus Victorias y SawCoins seguirán intactas en tu perfil.
+                            </p>
+                        </div>
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors shadow-md">
+                            <h4 class="text-red-400 font-bold text-sm sm:text-base mb-2 uppercase flex items-center gap-2">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ¿Cómo vinculo mi cuenta correctamente?
+                            </h4>
+                            <p class="text-zinc-400 text-sm leading-relaxed">
+                                Ve a la pestaña <strong class="text-zinc-200">Información</strong> en esta página y genera un código de vinculación. Luego entra a Proyecto Sawer en Roblox, dirígete al panel de vinculación en el Lobby y escribe ese código. La página web se actualizará automáticamente y tus stats aparecerán.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -532,7 +574,7 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <!-- IZQUIERDA: TOP 3 PUNTOS (ESTE ES EL CAJÓN QUE FALTABA) -->
+            <!-- IZQUIERDA: TOP 3 PUNTOS -->
             <div class="bg-zinc-900/80 rounded-xl border border-zinc-800 p-6 shadow-2xl flex flex-col gap-4">
                 <h3 class="text-xl font-bold text-yellow-500 uppercase tracking-wider text-center border-b border-zinc-700 pb-2">Top Puntos</h3>
                 <div id="lista-top-puntos" class="flex flex-col gap-3">
@@ -548,7 +590,7 @@
                 </div>
             </div>
 
-            <!-- DERECHA: TOP VICTORIAS (ESTE ES EL CAJÓN QUE FALTABA) -->
+            <!-- DERECHA: TOP VICTORIAS -->
             <div class="bg-zinc-900/80 rounded-xl border border-zinc-800 p-6 shadow-2xl flex flex-col gap-4">
                 <h3 class="text-xl font-bold text-red-500 uppercase tracking-wider text-center border-b border-zinc-700 pb-2">Top Victorias</h3>
                 <div id="lista-top-victorias" class="flex flex-col gap-3">
@@ -599,17 +641,6 @@
                 tabLogin.classList.add('text-zinc-500', 'border-transparent'); tabLogin.classList.remove('text-white', 'border-red-600');
             }
         }
-
-        // TUS IDS ORIGINALES
-        window.ganadoresIds = [
-            7049214801, 5536728046, 2352992715, 5094964987, 1233458248,
-            4964215946, 313164315, 9018128264, 7762713951, 1946257681,
-            8293424144, 8932138090, 5041524215, 8325501632, 2481102460,
-            7718554873, 8329533026, 4351713663, 406896192, 4200079355,
-            5841703647, 3218640765, 1081289606, 385139490, 7388281197,
-            3093182823, 564550854, 1903226113, 8112497518, 1887125485,
-            692028670, 2663039457, 2491787908, 343918794
-        ];
 
         function switchMainView(viewName) {
             document.getElementById('view-home').classList.add('hidden'); 
@@ -762,17 +793,31 @@
         };
 
         // =========================================================================
-        // LECTURA DE GANADORES HÍBRIDA A PRUEBA DE FALLOS
+        // LECTURA DE GANADORES A PRUEBA DE BALAS
         // =========================================================================
         window.loadFirebaseGanadores = async () => {
             if(firebaseGanadoresLoaded) return; 
 
             const container = document.getElementById('lista-ganadores');
+            if(!container) return;
+
             container.innerHTML = '<div class="text-center text-zinc-500 py-10">Buscando leyendas en la base de datos...</div>';
             
             try {
                 let mapaGanadores = {};
-                window.ganadoresIds.forEach(id => {
+                
+                // Las 34 IDs base incrustadas internamente
+                const baseIds = [
+                    7049214801, 5536728046, 2352992715, 5094964987, 1233458248,
+                    4964215946, 313164315, 9018128264, 7762713951, 1946257681,
+                    8293424144, 8932138090, 5041524215, 8325501632, 2481102460,
+                    7718554873, 8329533026, 4351713663, 406896192, 4200079355,
+                    5841703647, 3218640765, 1081289606, 385139490, 7388281197,
+                    3093182823, 564550854, 1903226113, 8112497518, 1887125485,
+                    692028670, 2663039457, 2491787908, 343918794
+                ];
+
+                baseIds.forEach(id => {
                     let rngPuntos = Math.floor(Math.random() * (13 - 8 + 1)) + 8;
                     mapaGanadores[id] = {
                         id: id,
@@ -784,23 +829,26 @@
                     };
                 });
 
-                // Lectura segura de Firebase
+                // Lectura segura de Firebase con verificación profunda
                 try {
                     const querySnapshot = await getDocs(collection(db, "users"));
                     
                     querySnapshot.forEach((doc) => { 
                         const data = doc.data();
+                        if (!data) return;
+
                         const idNum = Number(data.robloxUserId);
                         
                         if (idNum) {
-                            const hasRealWins = data.stats && data.stats.wins > 0;
+                            const stats = data.stats || {};
+                            const hasRealWins = stats.wins && stats.wins > 0;
                             const isBaseWinner = mapaGanadores[idNum] !== undefined;
 
                             if (hasRealWins || isBaseWinner) {
                                 mapaGanadores[idNum] = {
                                     id: idNum,
-                                    puntos: data.stats?.recordPuntos || 0,
-                                    victorias: data.stats?.wins || 0,
+                                    puntos: stats.recordPuntos || 0,
+                                    victorias: stats.wins || 0,
                                     nombre: data.robloxUsername || "Usuario",
                                     avatarUrl: "https://via.placeholder.com/150/1f1f22/52525b?text=...",
                                     needsProxy: true // Siempre fuerza Roblox
@@ -809,10 +857,10 @@
                         }
                     });
                 } catch (fbError) {
-                    console.warn("Firebase bloqueó la lectura de otros usuarios, mostrando solo la base de 34.", fbError);
+                    console.warn("Aviso: Firebase no entregó los documentos adicionales.", fbError);
                 }
 
-                // Generar lista final y ordenar
+                // Generar lista final y ordenar por puntos (Centro)
                 let listaFinal = Object.values(mapaGanadores);
                 listaFinal.sort((a, b) => b.puntos - a.puntos);
 
@@ -890,10 +938,11 @@
 
                 firebaseGanadoresLoaded = true;
 
-                // CARGAR FOTOS Y NOMBRES DESDE ROPROXY
+                // CARGAR FOTOS Y NOMBRES (Método a prueba de Spam)
                 if (idsToFetchProxy.length > 0) {
                     const batchIds = idsToFetchProxy.join(',');
                     
+                    // FOTOS BATCH (Soporta múltiples ids de una sola vez)
                     fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${batchIds}&size=150x150&format=Png&isCircular=false`)
                         .then(res => res.json())
                         .then(json => {
@@ -911,19 +960,16 @@
                                 });
                             }
                         })
-                        .catch(err => console.error("Error obteniendo avatares:", err));
+                        .catch(err => console.error("Error obteniendo avatares batch:", err));
 
-                    // ==============================================================
-                    // NUEVO: Descargar Nombres de Roblox (Método Seguro en Fila)
-                    // RoProxy bloquea peticiones masivas, así que pedimos 1 por 1 con pausa
-                    // ==============================================================
+                    // NOMBRES INDIVIDUALES ESPACIADOS (Evita Error 429 de RoProxy)
                     const cargarNombresSeguro = async () => {
                         for (let id of idsToFetchProxy) {
                             try {
                                 let res = await fetch(`https://users.roproxy.com/v1/users/${id}`);
                                 if (res.ok) {
                                     let d = await res.json();
-                                    const realName = d.displayName || d.name || "Leyenda de Sawer";
+                                    const realName = d.displayName || d.name || "Jugador Sawer";
                                     
                                     const nameMain = document.getElementById(`fb-name-${id}`);
                                     const nameTopPt = document.getElementById(`top-pt-name-${id}`);
@@ -933,10 +979,9 @@
                                     if (nameTopPt && nameTopPt.innerText === "Cargando...") nameTopPt.innerText = realName;
                                     if (nameTopWin && nameTopWin.innerText === "Cargando...") nameTopWin.innerText = realName;
                                 }
-                                // Pausa de 150 milisegundos para no activar la alarma de spam de RoProxy
                                 await new Promise(resolve => setTimeout(resolve, 150));
                             } catch(e) {
-                                console.error("Fallo obteniendo nombre de la ID:", id);
+                                // Ignoramos si falla uno
                             }
                         }
                     };
@@ -946,7 +991,10 @@
 
             } catch (error) {
                 console.error("Error fatal procesando ganadores:", error);
-                container.innerHTML = '<div class="text-center text-red-500 py-10 font-bold">Ocurrió un error crítico cargando el Salón de la Fama.</div>';
+                const cajaError = document.getElementById('lista-ganadores');
+                if(cajaError) {
+                    cajaError.innerHTML = `<div class="text-center text-red-500 py-10 font-bold">Ocurrió un error crítico cargando el Salón de la Fama.<br><br>Detalle: ${error.message}</div>`;
+                }
             }
         }
 
@@ -964,7 +1012,18 @@
 
                         // VERIFICADOR CAZA GANADORES
                         if (data.isLinked && data.robloxUserId && data.winnerChecked !== true) {
-                            const isWinner = window.ganadoresIds.includes(Number(data.robloxUserId));
+                            
+                            const baseIds = [
+                                7049214801, 5536728046, 2352992715, 5094964987, 1233458248,
+                                4964215946, 313164315, 9018128264, 7762713951, 1946257681,
+                                8293424144, 8932138090, 5041524215, 8325501632, 2481102460,
+                                7718554873, 8329533026, 4351713663, 406896192, 4200079355,
+                                5841703647, 3218640765, 1081289606, 385139490, 7388281197,
+                                3093182823, 564550854, 1903226113, 8112497518, 1887125485,
+                                692028670, 2663039457, 2491787908, 343918794
+                            ];
+                            
+                            const isWinner = baseIds.includes(Number(data.robloxUserId));
                             let newStats = data.stats || { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: "0/67" };
                             
                             if (isWinner && newStats.wins === 0) {
@@ -982,9 +1041,11 @@
                         document.getElementById('user-display-name').innerText = `Hola, ${data.isLinked ? data.robloxUsername : 'Usuario'}`;
                         
                         const profileNameUI = document.getElementById('profile-view-username');
-                        profileNameUI.innerText = displayName;
-                        if(data.isLinked) {
-                            profileNameUI.classList.remove('text-zinc-500'); profileNameUI.classList.add('text-red-500');
+                        if (profileNameUI) {
+                            profileNameUI.innerText = displayName;
+                            if(data.isLinked) {
+                                profileNameUI.classList.remove('text-zinc-500'); profileNameUI.classList.add('text-red-500');
+                            }
                         }
 
                         const imgDisplay = document.getElementById('profile-image-display');
@@ -999,9 +1060,11 @@
                                 .then(json => {
                                     if (json && json.data && json.data.length > 0) {
                                         const avatarUrl = json.data[0].imageUrl;
-                                        imgDisplay.src = avatarUrl;
-                                        imgDisplay.classList.remove('hidden'); 
-                                        placeholder.classList.add('hidden');
+                                        if(imgDisplay) {
+                                            imgDisplay.src = avatarUrl;
+                                            imgDisplay.classList.remove('hidden'); 
+                                            placeholder.classList.add('hidden');
+                                        }
                                         if (navIconCustom && navIconDefault) {
                                             navIconCustom.src = avatarUrl;
                                             navIconCustom.classList.remove('hidden');
@@ -1010,8 +1073,10 @@
                                     }
                                 }).catch(err => console.error("Error RoProxy:", err));
                         } else {
-                            imgDisplay.classList.add('hidden'); 
-                            placeholder.classList.remove('hidden');
+                            if(imgDisplay) {
+                                imgDisplay.classList.add('hidden'); 
+                                placeholder.classList.remove('hidden');
+                            }
                             if (navIconCustom && navIconDefault) {
                                 navIconCustom.classList.add('hidden');
                                 navIconDefault.classList.remove('hidden');
@@ -1025,27 +1090,33 @@
                         const secretLinkCode = document.getElementById('secret-link-code');
 
                         if (data.isLinked) {
-                            unlinkedWarning.classList.add('hidden');
-                            statsContainer.classList.remove('hidden');
+                            if(unlinkedWarning) unlinkedWarning.classList.add('hidden');
+                            if(statsContainer) statsContainer.classList.remove('hidden');
                             
                             if(data.stats) {
-                                document.getElementById('stat-wins').innerText = data.stats.wins || 0;
-                                document.getElementById('stat-record').innerText = data.stats.recordPuntos || 0;
-                                document.getElementById('stat-sawcoins').innerText = data.stats.sawCoins || 0;
-                                document.getElementById('stat-diamantes').innerText = data.stats.diamantes || 0;
-                                document.getElementById('stat-items').innerText = data.stats.items || "0/67";
+                                const stWins = document.getElementById('stat-wins');
+                                const stRec = document.getElementById('stat-record');
+                                const stSaw = document.getElementById('stat-sawcoins');
+                                const stDia = document.getElementById('stat-diamantes');
+                                const stItems = document.getElementById('stat-items');
+
+                                if(stWins) stWins.innerText = data.stats.wins || 0;
+                                if(stRec) stRec.innerText = data.stats.recordPuntos || 0;
+                                if(stSaw) stSaw.innerText = data.stats.sawCoins || 0;
+                                if(stDia) stDia.innerText = data.stats.diamantes || 0;
+                                if(stItems) stItems.innerText = data.stats.items || "0/67";
                             }
                         } else {
-                            unlinkedWarning.classList.remove('hidden');
-                            statsContainer.classList.add('hidden');
+                            if(unlinkedWarning) unlinkedWarning.classList.remove('hidden');
+                            if(statsContainer) statsContainer.classList.add('hidden');
 
                             if (data.linkCode) {
-                                codeGenerationArea.classList.add('hidden');
-                                codeDisplayArea.classList.remove('hidden');
-                                secretLinkCode.innerText = data.linkCode;
+                                if(codeGenerationArea) codeGenerationArea.classList.add('hidden');
+                                if(codeDisplayArea) codeDisplayArea.classList.remove('hidden');
+                                if(secretLinkCode) secretLinkCode.innerText = data.linkCode;
                             } else {
-                                codeGenerationArea.classList.remove('hidden');
-                                codeDisplayArea.classList.add('hidden');
+                                if(codeGenerationArea) codeGenerationArea.classList.remove('hidden');
+                                if(codeDisplayArea) codeDisplayArea.classList.add('hidden');
                             }
                         }
                     }
@@ -1057,7 +1128,8 @@
                 
                 document.getElementById('auth-buttons').classList.remove('hidden');
                 document.getElementById('user-profile').classList.add('hidden');
-                document.getElementById('profile-view-username').innerText = "CARGANDO...";
+                const profileNameUI = document.getElementById('profile-view-username');
+                if(profileNameUI) profileNameUI.innerText = "CARGANDO...";
                 
                 const navIconCustom = document.getElementById('nav-profile-icon-custom');
                 const navIconDefault = document.getElementById('nav-profile-icon-default');
