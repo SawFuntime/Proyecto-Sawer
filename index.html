@@ -702,7 +702,7 @@
         }
 
         // TABLA DE GANADORES VÍA IDS (CON ROPROXY)
-        const ganadoresIds = [
+        window.ganadoresIds = [
             7049214801, 5536728046, 2352992715, 5094964987, 1233458248,
             4964215946, 313164315, 9018128264, 7762713951, 1946257681,
             8293424144, 8932138090, 5041524215, 8325501632, 2481102460,
@@ -716,7 +716,7 @@
             const container = document.getElementById('lista-ganadores');
             container.innerHTML = ''; // Limpiar lista
             
-            ganadoresIds.forEach(id => {
+            window.ganadoresIds.forEach(id => {
                 // Generar puntos aleatorios entre 8 y 13
                 const puntosAleatorios = Math.floor(Math.random() * (13 - 8 + 1)) + 8;
                 const victorias = 1;
@@ -759,7 +759,7 @@
             });
 
             // Obtener TODOS los avatares en 1 sola llamada súper rápida (Batch)
-            const batchIds = ganadoresIds.join(',');
+            const batchIds = window.ganadoresIds.join(',');
             fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${batchIds}&size=150x150&format=Png&isCircular=false`)
                 .then(res => res.json())
                 .then(json => {
@@ -1016,6 +1016,25 @@
                 unsubscribeProfile = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
+
+                        // === NUEVO: VERIFICACIÓN DE GANADORES ===
+                        // Esto se ejecuta 1 sola vez cuando el jugador vincula su cuenta
+                        if (data.isLinked && data.robloxUserId && data.winnerChecked !== true) {
+                            const isWinner = window.ganadoresIds.includes(data.robloxUserId);
+                            
+                            let newStats = data.stats || { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: "0/67" };
+                            
+                            if (isWinner) {
+                                newStats.wins = 1;
+                                newStats.recordPuntos = Math.floor(Math.random() * (13 - 8 + 1)) + 8; // Entre 8 y 13 puntos
+                            }
+                            
+                            // Guardamos en Firebase que ya revisamos su cuenta para no repetir este proceso en el futuro
+                            setDoc(doc(db, "users", user.uid), {
+                                winnerChecked: true,
+                                stats: newStats
+                            }, { merge: true });
+                        }
 
                         // 1. MANEJAR EL NOMBRE DEL USUARIO Y NAVBAR
                         const displayName = data.isLinked ? data.robloxUsername : "Cuenta no vinculada";
