@@ -70,7 +70,7 @@
                     <button onclick="switchMainView('home'); window.scrollTo(0,0)" class="text-zinc-400 hover:text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors">
                         Inicio
                     </button>
-                    <!-- BOTÓN DE GANADORES -->
+                    <!-- BOTÓN DE GANADORES FORZADO A MOSTRARSE -->
                     <button onclick="switchMainView('ganadores'); window.scrollTo(0,0)" class="text-zinc-400 hover:text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors">
                         Ganadores
                     </button>
@@ -488,7 +488,7 @@
                     </div>
                 </div>
 
-                <!-- AYUDA Y PREGUNTAS FRECUENTES (COMPLETA) -->
+                <!-- AYUDA Y PREGUNTAS FRECUENTES -->
                 <div id="content-ayuda" class="profile-content hidden animate-fade-in">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Centro de Ayuda</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
@@ -642,47 +642,6 @@
             }
         }
 
-        // =========================================================================================
-        // AQUÍ ESTÁN TUS 34 GANADORES CON SU NOMBRE MANUAL (ASÍ NO DEPENDE DE ROPROXY)
-        // Solo tienes que cambiar donde dice "Falta Nombre" por el nombre real que corresponda al ID.
-        // =========================================================================================
-        window.ganadoresBase = [
-            { id: 7049214801, nombre: "Falta Nombre" },
-            { id: 5536728046, nombre: "Falta Nombre" },
-            { id: 2352992715, nombre: "Falta Nombre" },
-            { id: 5094964987, nombre: "Falta Nombre" },
-            { id: 1233458248, nombre: "Falta Nombre" },
-            { id: 4964215946, nombre: "Falta Nombre" },
-            { id: 313164315, nombre: "Falta Nombre" },
-            { id: 9018128264, nombre: "Falta Nombre" },
-            { id: 7762713951, nombre: "Falta Nombre" },
-            { id: 1946257681, nombre: "Falta Nombre" },
-            { id: 8293424144, nombre: "Falta Nombre" },
-            { id: 8932138090, nombre: "Falta Nombre" },
-            { id: 5041524215, nombre: "Falta Nombre" },
-            { id: 8325501632, nombre: "Falta Nombre" },
-            { id: 2481102460, nombre: "Falta Nombre" },
-            { id: 7718554873, nombre: "Falta Nombre" },
-            { id: 8329533026, nombre: "Falta Nombre" },
-            { id: 4351713663, nombre: "Falta Nombre" },
-            { id: 406896192, nombre: "Falta Nombre" },
-            { id: 4200079355, nombre: "Falta Nombre" },
-            { id: 5841703647, nombre: "Falta Nombre" },
-            { id: 3218640765, nombre: "Falta Nombre" },
-            { id: 1081289606, nombre: "Falta Nombre" },
-            { id: 385139490, nombre: "Falta Nombre" },
-            { id: 7388281197, nombre: "Falta Nombre" },
-            { id: 3093182823, nombre: "Falta Nombre" },
-            { id: 564550854, nombre: "Falta Nombre" },
-            { id: 1903226113, nombre: "Falta Nombre" },
-            { id: 8112497518, nombre: "Falta Nombre" },
-            { id: 1887125485, nombre: "Falta Nombre" },
-            { id: 692028670, nombre: "Falta Nombre" },
-            { id: 2663039457, nombre: "Falta Nombre" },
-            { id: 2491787908, nombre: "Falta Nombre" },
-            { id: 343918794, nombre: "Falta Nombre" }
-        ];
-
         function switchMainView(viewName) {
             document.getElementById('view-home').classList.add('hidden'); 
             document.getElementById('view-profile').classList.add('hidden');
@@ -834,7 +793,7 @@
         };
 
         // =========================================================================
-        // LECTURA DE GANADORES A PRUEBA DE BALAS SIN BUSCAR NOMBRES EN ROPROXY
+        // LECTURA DE GANADORES: 100% AUTOMÁTICA Y HÍBRIDA
         // =========================================================================
         window.loadFirebaseGanadores = async () => {
             if(firebaseGanadoresLoaded) return; 
@@ -845,22 +804,34 @@
             container.innerHTML = '<div class="text-center text-zinc-500 py-10">Buscando leyendas en la base de datos...</div>';
             
             try {
+                // 1. Cargamos las 34 IDs base de memoria (Cero nombres manuales, el código los extraerá solos)
+                const baseIds = [
+                    7049214801, 5536728046, 2352992715, 5094964987, 1233458248,
+                    4964215946, 313164315, 9018128264, 7762713951, 1946257681,
+                    8293424144, 8932138090, 5041524215, 8325501632, 2481102460,
+                    7718554873, 8329533026, 4351713663, 406896192, 4200079355,
+                    5841703647, 3218640765, 1081289606, 385139490, 7388281197,
+                    3093182823, 564550854, 1903226113, 8112497518, 1887125485,
+                    692028670, 2663039457, 2491787908, 343918794
+                ];
+
                 let mapaGanadores = {};
                 
-                // Agregamos a los 34 base usando el nombre que tú le pongas
-                window.ganadoresBase.forEach(jugador => {
+                // Las pre-llenamos con datos inventados (1 win, 8-13 pts)
+                baseIds.forEach(id => {
                     let rngPuntos = Math.floor(Math.random() * (13 - 8 + 1)) + 8;
-                    mapaGanadores[jugador.id] = {
-                        id: jugador.id,
+                    mapaGanadores[id] = {
+                        id: id,
                         puntos: rngPuntos,
                         victorias: 1,
-                        nombre: jugador.nombre,
+                        nombre: "Cargando...",
                         avatarUrl: "https://via.placeholder.com/150/1f1f22/52525b?text=...",
-                        needsProxy: true
+                        fetchName: true,
+                        fetchAvatar: true
                     };
                 });
 
-                // Lectura segura de Firebase con verificación profunda (Si un jugador de la base se registró, actualizamos sus puntos reales)
+                // 2. Buscamos en Firebase a los jugadores que se registraron Y a los nuevos ganadores
                 try {
                     const querySnapshot = await getDocs(collection(db, "users"));
                     
@@ -872,17 +843,27 @@
                         
                         if (idNum) {
                             const stats = data.stats || {};
-                            const hasRealWins = stats.wins && stats.wins > 0;
+                            const realWins = stats.wins || 0;
+                            const realPuntos = stats.recordPuntos || 0;
                             const isBaseWinner = mapaGanadores[idNum] !== undefined;
 
-                            if (hasRealWins || isBaseWinner) {
+                            // Si tiene victorias reales (nuevo ganador) O si ya era parte de los 34
+                            if (realWins > 0 || isBaseWinner) {
+                                // Si tiene datos reales mayores a 0, sobrescribimos los datos falsos inventados.
+                                let finalWins = realWins > 0 ? realWins : (isBaseWinner ? mapaGanadores[idNum].victorias : 0);
+                                let finalPoints = realPuntos > 0 ? realPuntos : (isBaseWinner ? mapaGanadores[idNum].puntos : 0);
+                                
+                                // Si ya guardó su nombre en Firebase, lo usamos para no pedirlo a RoProxy
+                                let finalName = data.robloxUsername || "Cargando...";
+
                                 mapaGanadores[idNum] = {
                                     id: idNum,
-                                    puntos: stats.recordPuntos || 0,
-                                    victorias: stats.wins || 0,
-                                    nombre: data.robloxUsername || "Usuario",
-                                    avatarUrl: "https://via.placeholder.com/150/1f1f22/52525b?text=...",
-                                    needsProxy: true // Siempre fuerza Roblox para la foto
+                                    puntos: finalPoints,
+                                    victorias: finalWins,
+                                    nombre: finalName,
+                                    avatarUrl: "https://via.placeholder.com/150/1f1f22/52525b?text=...", // Se forzará la foto original de Roblox después
+                                    fetchName: !data.robloxUsername, // Solo buscamos en RoProxy si Firebase no tiene el nombre
+                                    fetchAvatar: true
                                 };
                             }
                         }
@@ -891,22 +872,24 @@
                     console.warn("Aviso: Firebase no entregó los documentos adicionales.", fbError);
                 }
 
-                // Generar lista final y ordenar por puntos (Centro)
+                // 3. Generar lista final y ordenar por puntos (Centro)
                 let listaFinal = Object.values(mapaGanadores);
                 listaFinal.sort((a, b) => b.puntos - a.puntos);
 
                 let htmlContent = '';
-                let idsToFetchProxy = [];
+                let idsToFetchAvatar = [];
+                let idsToFetchName = [];
 
                 listaFinal.forEach(jugador => {
-                    if (jugador.needsProxy) idsToFetchProxy.push(jugador.id);
+                    if (jugador.fetchAvatar) idsToFetchAvatar.push(jugador.id);
+                    if (jugador.fetchName) idsToFetchName.push(jugador.id);
 
                     htmlContent += `
                         <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 flex items-center justify-between hover:border-red-600/50 transition-colors">
                             <div class="flex items-center gap-4">
                                 <img id="fb-avatar-${jugador.id}" src="${jugador.avatarUrl}" alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-zinc-700">
                                 <div>
-                                    <p class="text-white font-bold uppercase tracking-wider text-sm">${jugador.nombre}</p>
+                                    <p id="fb-name-${jugador.id}" class="text-white font-bold uppercase tracking-wider text-sm">${jugador.nombre}</p>
                                     <p class="text-zinc-500 text-xs">ID: ${jugador.id}</p>
                                 </div>
                             </div>
@@ -937,7 +920,7 @@
                             <span class="text-2xl drop-shadow-[0_0_5px_rgba(234,179,8,0.5)]">${medal}</span>
                             <img id="top-pt-avatar-${jugador.id}" src="${jugador.avatarUrl}" alt="Avatar" class="w-10 h-10 rounded-md object-cover border border-zinc-700">
                             <div class="overflow-hidden">
-                                <p class="text-white font-bold uppercase tracking-wider text-xs whitespace-nowrap overflow-hidden text-ellipsis">${jugador.nombre}</p>
+                                <p id="top-pt-name-${jugador.id}" class="text-white font-bold uppercase tracking-wider text-xs whitespace-nowrap overflow-hidden text-ellipsis">${jugador.nombre}</p>
                                 <p class="text-yellow-500 font-black text-sm leading-none mt-1">${jugador.puntos} PTS</p>
                             </div>
                         </div>
@@ -958,7 +941,7 @@
                             <span class="text-2xl drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]">${medal}</span>
                             <img id="top-win-avatar-${jugador.id}" src="${jugador.avatarUrl}" alt="Avatar" class="w-10 h-10 rounded-md object-cover border border-zinc-700">
                             <div class="overflow-hidden">
-                                <p class="text-white font-bold uppercase tracking-wider text-xs whitespace-nowrap overflow-hidden text-ellipsis">${jugador.nombre}</p>
+                                <p id="top-win-name-${jugador.id}" class="text-white font-bold uppercase tracking-wider text-xs whitespace-nowrap overflow-hidden text-ellipsis">${jugador.nombre}</p>
                                 <p class="text-red-500 font-black text-sm leading-none mt-1">${jugador.victorias} WINS</p>
                             </div>
                         </div>
@@ -969,10 +952,13 @@
 
                 firebaseGanadoresLoaded = true;
 
-                // CARGAR SOLO LAS FOTOS DE ROPROXY (Nombres ya no se buscan)
-                if (idsToFetchProxy.length > 0) {
-                    const batchIds = idsToFetchProxy.join(',');
-                    
+                // ===============================================
+                // DESCARGAR LAS FOTOS Y NOMBRES FALTANTES DESDE ROBLOX
+                // ===============================================
+                
+                // 1. Fotos en Lote (muy rápido y no se bloquea)
+                if (idsToFetchAvatar.length > 0) {
+                    const batchIds = idsToFetchAvatar.join(',');
                     fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${batchIds}&size=150x150&format=Png&isCircular=false`)
                         .then(res => res.json())
                         .then(json => {
@@ -991,6 +977,49 @@
                             }
                         })
                         .catch(err => console.error("Error obteniendo avatares batch:", err));
+                }
+
+                // 2. Nombres Inteligentes en Lote
+                if (idsToFetchName.length > 0) {
+                    try {
+                        let res = await fetch('https://users.roproxy.com/v1/users', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({userIds: idsToFetchName, excludeBannedUsers: false})
+                        });
+                        let json = await res.json();
+                        
+                        if(json && json.data) {
+                            json.data.forEach(user => {
+                                const realName = user.displayName || user.name || "Jugador Sawer";
+                                const els = [
+                                    document.getElementById(`fb-name-${user.id}`),
+                                    document.getElementById(`top-pt-name-${user.id}`),
+                                    document.getElementById(`top-win-name-${user.id}`)
+                                ];
+                                els.forEach(el => { 
+                                    if(el) el.innerText = realName; 
+                                });
+                            });
+                        }
+                    } catch(e) {
+                        // Respaldo de seguridad si el método en lote falla, busca de 1 en 1
+                        console.warn("Respaldo: Buscando nombres de a uno...", e);
+                        for(let id of idsToFetchName) {
+                            try {
+                                let r = await fetch(`https://users.roproxy.com/v1/users/${id}`);
+                                let d = await r.json();
+                                const realName = d.displayName || d.name || "Jugador Sawer";
+                                const els = [
+                                    document.getElementById(`fb-name-${id}`),
+                                    document.getElementById(`top-pt-name-${id}`),
+                                    document.getElementById(`top-win-name-${id}`)
+                                ];
+                                els.forEach(el => { if(el) el.innerText = realName; });
+                                await new Promise(resolve => setTimeout(resolve, 150));
+                            } catch(e2){}
+                        }
+                    }
                 }
 
             } catch (error) {
@@ -1013,25 +1042,6 @@
                 unsubscribeProfile = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
-
-                        // VERIFICADOR CAZA GANADORES
-                        if (data.isLinked && data.robloxUserId && data.winnerChecked !== true) {
-                            
-                            const baseIds = window.ganadoresBase.map(j => j.id);
-                            
-                            const isWinner = baseIds.includes(Number(data.robloxUserId));
-                            let newStats = data.stats || { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: "0/67" };
-                            
-                            if (isWinner && newStats.wins === 0) {
-                                newStats.wins = 1;
-                                newStats.recordPuntos = Math.floor(Math.random() * (13 - 8 + 1)) + 8;
-                            }
-                            
-                            setDoc(doc(db, "users", user.uid), {
-                                winnerChecked: true,
-                                stats: newStats
-                            }, { merge: true });
-                        }
 
                         const displayName = data.isLinked ? data.robloxUsername : "Cuenta no vinculada";
                         document.getElementById('user-display-name').innerText = `Hola, ${data.isLinked ? data.robloxUsername : 'Usuario'}`;
