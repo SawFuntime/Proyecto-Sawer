@@ -834,7 +834,7 @@
             }
         };
 
-        // LECTURA DE GANADORES HÍBRIDA (TUS 34 BASE + FIREBASE EN TIEMPO REAL)
+        // LECTURA DE GANADORES HÍBRIDA (TUS 34 BASE + FIREBASE EN TIEMPO REAL + TOPS)
         window.loadFirebaseGanadores = async () => {
             if(firebaseGanadoresLoaded) return; // Evitar recargar cada vez que se hace click
 
@@ -845,7 +845,6 @@
                 // 1. Crear el mapa base con los 34 ganadores originales
                 let mapaGanadores = {};
                 window.ganadoresIds.forEach(id => {
-                    // Generar puntos base aleatorios entre 8 y 13
                     let rngPuntos = Math.floor(Math.random() * (13 - 8 + 1)) + 8;
                     mapaGanadores[id] = {
                         id: id,
@@ -858,7 +857,6 @@
                 });
 
                 // 2. Buscamos usuarios en Firebase que ya estén vinculados y tengan victorias
-                // Quitamos el orderBy para no dar errores en Firebase, los ordenamos nosotros acá
                 const q = query(collection(db, "users"), where("stats.wins", ">", 0));
                 const querySnapshot = await getDocs(q);
                 
@@ -867,7 +865,6 @@
                     const data = doc.data();
                     const idNum = Number(data.robloxUserId);
                     
-                    // Si el jugador está vinculado a un ID
                     if (idNum) {
                         mapaGanadores[idNum] = {
                             id: idNum,
@@ -875,7 +872,7 @@
                             victorias: data.stats.wins || 0,
                             nombre: data.robloxUsername || "Usuario",
                             avatarUrl: "https://via.placeholder.com/150/1f1f22/52525b?text=...",
-                            needsProxy: true // SIEMPRE sacamos de Roblox, ignoramos cualquier foto manual vieja
+                            needsProxy: true // SIEMPRE sacamos de Roblox, ignoramos foto manual vieja
                         };
                     }
                 });
@@ -912,11 +909,52 @@
                         </div>
                     `;
                 });
-
                 container.innerHTML = htmlContent;
+
+                // ===============================================
+                // NUEVO: CREAR EL TOP 3 DE PUNTOS (COLUMNA IZQUIERDA)
+                // ===============================================
+                const topPuntosList = listaFinal.slice(0, 3); // Cortamos los 3 primeros (ya vienen ordenados por puntos)
+                let htmlTopPuntos = '';
+                topPuntosList.forEach((jugador, index) => {
+                    let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+                    htmlTopPuntos += `
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 flex items-center gap-3 hover:border-yellow-500/50 transition-colors">
+                            <span class="text-2xl drop-shadow-[0_0_5px_rgba(234,179,8,0.5)]">${medal}</span>
+                            <img id="top-pt-avatar-${jugador.id}" src="${jugador.avatarUrl}" alt="Avatar" class="w-10 h-10 rounded-md object-cover border border-zinc-700">
+                            <div class="overflow-hidden">
+                                <p id="top-pt-name-${jugador.id}" class="text-white font-bold uppercase tracking-wider text-xs whitespace-nowrap overflow-hidden text-ellipsis">${jugador.nombre}</p>
+                                <p class="text-yellow-500 font-black text-sm leading-none mt-1">${jugador.puntos} PTS</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('lista-top-puntos').innerHTML = htmlTopPuntos;
+
+                // ===============================================
+                // NUEVO: CREAR EL TOP 3 DE VICTORIAS (COLUMNA DERECHA)
+                // ===============================================
+                // Hacemos una copia de la lista, la ordenamos por VICTORIAS de mayor a menor, y cortamos los 3 primeros
+                const topVictoriasList = [...listaFinal].sort((a, b) => b.victorias - a.victorias).slice(0, 3);
+                let htmlTopVictorias = '';
+                topVictoriasList.forEach((jugador, index) => {
+                    let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+                    htmlTopVictorias += `
+                        <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 flex items-center gap-3 hover:border-red-600/50 transition-colors">
+                            <span class="text-2xl drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]">${medal}</span>
+                            <img id="top-win-avatar-${jugador.id}" src="${jugador.avatarUrl}" alt="Avatar" class="w-10 h-10 rounded-md object-cover border border-zinc-700">
+                            <div class="overflow-hidden">
+                                <p id="top-win-name-${jugador.id}" class="text-white font-bold uppercase tracking-wider text-xs whitespace-nowrap overflow-hidden text-ellipsis">${jugador.nombre}</p>
+                                <p class="text-red-500 font-black text-sm leading-none mt-1">${jugador.victorias} WINS</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('lista-top-victorias').innerHTML = htmlTopVictorias;
+
                 firebaseGanadoresLoaded = true;
 
-                // 5. Cargar Fotos y Nombres faltantes vía RoProxy
+                // 5. Cargar Fotos y Nombres faltantes vía RoProxy (Actualiza el Centro y los Tops al mismo tiempo)
                 if (idsToFetchProxy.length > 0) {
                     const batchIds = idsToFetchProxy.join(',');
                     
@@ -926,9 +964,15 @@
                         .then(json => {
                             if (json && json.data) {
                                 json.data.forEach(item => {
-                                    const imgEl = document.getElementById(`fb-avatar-${item.targetId}`);
-                                    if (imgEl && imgEl.src.includes('placeholder')) {
-                                        imgEl.src = item.imageUrl;
+                                    // Actualizamos la foto en la lista central, y en los Tops si el jugador está ahí
+                                    const imgMain = document.getElementById(`fb-avatar-${item.targetId}`);
+                                    const imgTopPt = document.getElementById(`top-pt-avatar-${item.targetId}`);
+                                    const imgTopWin = document.getElementById(`top-win-avatar-${item.targetId}`);
+                                    
+                                    if (item.imageUrl) {
+                                        if (imgMain && imgMain.src.includes('placeholder')) imgMain.src = item.imageUrl;
+                                        if (imgTopPt && imgTopPt.src.includes('placeholder')) imgTopPt.src = item.imageUrl;
+                                        if (imgTopWin && imgTopWin.src.includes('placeholder')) imgTopWin.src = item.imageUrl;
                                     }
                                 });
                             }
@@ -945,20 +989,29 @@
                     .then(json => {
                         if (json && json.data) {
                             json.data.forEach(user => {
-                                const nameEl = document.getElementById(`fb-name-${user.id}`);
-                                if (nameEl && nameEl.innerText === "Cargando...") {
-                                    nameEl.innerText = user.displayName || user.name;
-                                }
+                                const realName = user.displayName || user.name;
+                                const nameMain = document.getElementById(`fb-name-${user.id}`);
+                                const nameTopPt = document.getElementById(`top-pt-name-${user.id}`);
+                                const nameTopWin = document.getElementById(`top-win-name-${user.id}`);
+                                
+                                if (nameMain && nameMain.innerText === "Cargando...") nameMain.innerText = realName;
+                                if (nameTopPt && nameTopPt.innerText === "Cargando...") nameTopPt.innerText = realName;
+                                if (nameTopWin && nameTopWin.innerText === "Cargando...") nameTopWin.innerText = realName;
                             });
                         }
                     })
                     .catch(err => {
-                        // Respaldo de emergencia: Si el servidor falla, le pregunta de a uno a Roblox
+                        // Respaldo de emergencia
                         idsToFetchProxy.forEach(id => {
                             fetch(`https://users.roproxy.com/v1/users/${id}`)
                             .then(r=>r.json()).then(d=>{
-                                const nm = document.getElementById(`fb-name-${id}`);
-                                if(nm && d.displayName) nm.innerText = d.displayName;
+                                const realName = d.displayName || d.name;
+                                const nmMain = document.getElementById(`fb-name-${id}`);
+                                const nmPt = document.getElementById(`top-pt-name-${id}`);
+                                const nmWin = document.getElementById(`top-win-name-${id}`);
+                                if(nmMain && nmMain.innerText === "Cargando...") nmMain.innerText = realName;
+                                if(nmPt && nmPt.innerText === "Cargando...") nmPt.innerText = realName;
+                                if(nmWin && nmWin.innerText === "Cargando...") nmWin.innerText = realName;
                             }).catch(e=>{});
                         });
                     });
