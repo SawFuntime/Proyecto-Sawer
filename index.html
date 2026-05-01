@@ -884,7 +884,7 @@
             }
         };
 
-        // LECTURA DE GANADORES DESDE FIREBASE
+        // LECTURA DE GANADORES HÍBRIDA (TUS 34 BASE + FIREBASE EN TIEMPO REAL)
         window.loadFirebaseGanadores = async () => {
             if(firebaseGanadoresLoaded) return; // Evitar recargar cada vez que se hace click
 
@@ -892,49 +892,70 @@
             container.innerHTML = '<div class="text-center text-zinc-500 py-10">Buscando leyendas en la base de datos...</div>';
             
             try {
-                // Buscamos usuarios que tengan wins mayor a 0 y los ordenamos por recordPuntos
-                const q = query(collection(db, "users"), where("stats.wins", ">", 0), orderBy("stats.wins", "desc"));
+                // 1. Crear el mapa base con los 34 ganadores originales
+                let mapaGanadores = {};
+                window.ganadoresIds.forEach(id => {
+                    // Generar puntos base aleatorios entre 8 y 13
+                    let rngPuntos = Math.floor(Math.random() * (13 - 8 + 1)) + 8;
+                    mapaGanadores[id] = {
+                        id: id,
+                        puntos: rngPuntos,
+                        victorias: 1,
+                        nombre: "Cargando...",
+                        avatarUrl: "https://via.placeholder.com/150/1f1f22/52525b?text=...",
+                        needsProxy: true
+                    };
+                });
+
+                // 2. Buscamos usuarios en Firebase que ya estén vinculados y tengan victorias
+                // Quitamos el orderBy para no dar errores en Firebase, los ordenamos nosotros acá
+                const q = query(collection(db, "users"), where("stats.wins", ">", 0));
                 const querySnapshot = await getDocs(q);
                 
-                let htmlContent = '';
-                let idsToFetch = [];
-
-                if(querySnapshot.empty) {
-                    container.innerHTML = '<div class="text-center text-zinc-500 py-10">Nadie ha reclamado su victoria vinculando su cuenta aún.</div>';
-                    return;
-                }
-
-                // Convertimos el resultado a un Array para poder ordenarlo por puntos manualmente si queremos
-                let ganadoresDocs = [];
-                querySnapshot.forEach((doc) => { ganadoresDocs.push(doc.data()); });
-                
-                // Ordenar por recordPuntos de mayor a menor
-                ganadoresDocs.sort((a, b) => b.stats.recordPuntos - a.stats.recordPuntos);
-
-                ganadoresDocs.forEach(data => {
-                    const id = data.robloxUserId;
-                    const puntos = data.stats.recordPuntos || 0;
-                    const victorias = data.stats.wins || 0;
-                    const nombre = data.robloxUsername || "Usuario";
+                // 3. Sobrescribir/Agregar con datos reales de Firebase
+                querySnapshot.forEach((doc) => { 
+                    const data = doc.data();
+                    const idNum = Number(data.robloxUserId);
                     
-                    if(id) idsToFetch.push(id);
+                    // Si el jugador está vinculado a un ID
+                    if (idNum) {
+                        mapaGanadores[idNum] = {
+                            id: idNum,
+                            puntos: data.stats.recordPuntos || 0,
+                            victorias: data.stats.wins || 0,
+                            nombre: data.robloxUsername || "Usuario",
+                            avatarUrl: data.photoURL || "https://via.placeholder.com/150/1f1f22/52525b?text=...",
+                            needsProxy: !data.photoURL // Si no tiene foto manual, sacamos de Roblox
+                        };
+                    }
+                });
+
+                // 4. Convertir a Lista y ordenar por puntos (el que tiene más va arriba)
+                let listaFinal = Object.values(mapaGanadores);
+                listaFinal.sort((a, b) => b.puntos - a.puntos);
+
+                let htmlContent = '';
+                let idsToFetchProxy = [];
+
+                listaFinal.forEach(jugador => {
+                    if (jugador.needsProxy) idsToFetchProxy.push(jugador.id);
 
                     htmlContent += `
                         <div class="bg-zinc-950 border border-zinc-800 rounded-lg p-3 flex items-center justify-between hover:border-red-600/50 transition-colors">
                             <div class="flex items-center gap-4">
-                                <img id="fb-avatar-${id}" src="${data.photoURL || 'https://via.placeholder.com/150/1f1f22/52525b?text=...'}" alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-zinc-700">
+                                <img id="fb-avatar-${jugador.id}" src="${jugador.avatarUrl}" alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-zinc-700">
                                 <div>
-                                    <p class="text-white font-bold uppercase tracking-wider text-sm">${nombre}</p>
-                                    <p class="text-zinc-500 text-xs">ID: ${id || 'Desconocida'}</p>
+                                    <p id="fb-name-${jugador.id}" class="text-white font-bold uppercase tracking-wider text-sm">${jugador.nombre}</p>
+                                    <p class="text-zinc-500 text-xs">ID: ${jugador.id}</p>
                                 </div>
                             </div>
                             <div class="flex gap-4 text-center">
                                 <div>
-                                    <p class="text-yellow-500 font-black text-lg leading-none">${puntos}</p>
+                                    <p class="text-yellow-500 font-black text-lg leading-none">${jugador.puntos}</p>
                                     <p class="text-zinc-500 text-[10px] uppercase tracking-widest">Puntos</p>
                                 </div>
                                 <div>
-                                    <p class="text-white font-black text-lg leading-none">${victorias}</p>
+                                    <p class="text-white font-black text-lg leading-none">${jugador.victorias}</p>
                                     <p class="text-zinc-500 text-[10px] uppercase tracking-widest">Wins</p>
                                 </div>
                             </div>
@@ -945,17 +966,17 @@
                 container.innerHTML = htmlContent;
                 firebaseGanadoresLoaded = true;
 
-                // Solo traemos avatares de RoProxy si no subieron una foto manual (data.photoURL)
-                if (idsToFetch.length > 0) {
-                    // Para evitar urls infinitamente largas, dividimos por lotes (aunque 34 es poco)
-                    const batchIds = idsToFetch.join(',');
+                // 5. Cargar Fotos y Nombres faltantes vía RoProxy
+                if (idsToFetchProxy.length > 0) {
+                    const batchIds = idsToFetchProxy.join(',');
+                    
+                    // Descargar Fotos
                     fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${batchIds}&size=150x150&format=Png&isCircular=false`)
                         .then(res => res.json())
                         .then(json => {
                             if (json && json.data) {
                                 json.data.forEach(item => {
                                     const imgEl = document.getElementById(`fb-avatar-${item.targetId}`);
-                                    // Solo reemplazamos si era el placeholder por defecto (significa que no tenían foto en Firebase)
                                     if (imgEl && imgEl.src.includes('placeholder')) {
                                         imgEl.src = item.imageUrl;
                                     }
@@ -963,11 +984,39 @@
                             }
                         })
                         .catch(err => console.error("Error obteniendo avatares batch:", err));
+
+                    // Descargar Nombres de Roblox
+                    fetch(`https://users.roproxy.com/v1/users`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userIds: idsToFetchProxy, excludeBannedUsers: false })
+                    })
+                    .then(r => r.json())
+                    .then(json => {
+                        if (json && json.data) {
+                            json.data.forEach(user => {
+                                const nameEl = document.getElementById(`fb-name-${user.id}`);
+                                if (nameEl && nameEl.innerText === "Cargando...") {
+                                    nameEl.innerText = user.displayName || user.name;
+                                }
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        // Respaldo de emergencia: Si el servidor falla, le pregunta de a uno a Roblox
+                        idsToFetchProxy.forEach(id => {
+                            fetch(`https://users.roproxy.com/v1/users/${id}`)
+                            .then(r=>r.json()).then(d=>{
+                                const nm = document.getElementById(`fb-name-${id}`);
+                                if(nm && d.displayName) nm.innerText = d.displayName;
+                            }).catch(e=>{});
+                        });
+                    });
                 }
 
             } catch (error) {
                 console.error("Error cargando ganadores desde Firebase:", error);
-                container.innerHTML = '<div class="text-center text-red-500 py-10 font-bold">Ocurrió un error cargando el Salón de la Fama. Intenta refrescar la página. (Asegúrate de que en Firebase se haya creado el Índice de ordenamiento)</div>';
+                container.innerHTML = '<div class="text-center text-red-500 py-10 font-bold">Ocurrió un error cargando el Salón de la Fama. Intenta refrescar la página.</div>';
             }
         }
 
