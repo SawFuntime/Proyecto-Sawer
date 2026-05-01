@@ -379,14 +379,10 @@
             <!-- COLUMNA IZQUIERDA -->
             <div class="w-full md:w-1/4 flex flex-col gap-4">
                 
-                <!-- RECUADRO DE FOTO DE PERFIL (CON BOTÓN MANUAL INTACTO) -->
+                <!-- RECUADRO DE FOTO DE PERFIL -->
                 <div class="w-full aspect-square bg-zinc-900 rounded-lg flex items-center justify-center relative shadow-inner overflow-hidden border-2 border-zinc-800 group">
                     <img id="profile-image-display" src="" alt="Foto de perfil" class="w-full h-full object-cover hidden group-hover:scale-110 transition-transform duration-500">
                     <span id="profile-image-placeholder" class="text-zinc-500 font-bold uppercase tracking-widest text-xs text-center px-4">Espacio para Foto de Perfil</span>
-                    <input type="file" id="profile-pic-upload" class="hidden" accept="image/*">
-                    <button onclick="document.getElementById('profile-pic-upload').click()" class="absolute top-2 right-2 bg-black/60 hover:bg-red-600 p-2 rounded-md transition-all duration-300 opacity-50 hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 backdrop-blur-sm border border-white/10 shadow-lg">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                    </button>
                 </div>
                 
                 <!-- Nombre de Usuario Dinámico -->
@@ -737,44 +733,6 @@
             msg.classList.remove('hidden');
             setTimeout(() => { msg.classList.add('hidden'); }, 3000);
         }
-
-        document.getElementById('profile-pic-upload').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file && window.currentUser) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = async function() {
-                        const canvas = document.createElement('canvas');
-                        const MAX_SIZE = 800;
-                        canvas.width = MAX_SIZE; canvas.height = MAX_SIZE;
-                        const ctx = canvas.getContext('2d');
-                        const size = Math.min(img.width, img.height);
-                        const startX = (img.width - size) / 2;
-                        const startY = (img.height - size) / 2;
-                        ctx.drawImage(img, startX, startY, size, size, 0, 0, MAX_SIZE, MAX_SIZE);
-
-                        const base64Image = canvas.toDataURL('image/jpeg', 0.9);
-                        
-                        document.getElementById('profile-image-display').src = base64Image;
-                        document.getElementById('profile-image-display').classList.remove('hidden');
-                        document.getElementById('profile-image-placeholder').classList.add('hidden');
-
-                        const navIconCustom = document.getElementById('nav-profile-icon-custom');
-                        const navIconDefault = document.getElementById('nav-profile-icon-default');
-                        if (navIconCustom && navIconDefault) {
-                            navIconCustom.src = base64Image;
-                            navIconCustom.classList.remove('hidden');
-                            navIconDefault.classList.add('hidden');
-                        }
-
-                        if(window.saveProfileImageToFirebase) window.saveProfileImageToFirebase(base64Image);
-                    }
-                    img.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
     </script>
 
     <!-- SCRIPT DE FIREBASE -->
@@ -862,14 +820,6 @@
             switchMainView('home'); 
         }
 
-        window.saveProfileImageToFirebase = async (base64Image) => {
-            try {
-                await setDoc(doc(db, "users", window.currentUser.uid), { photoURL: base64Image }, { merge: true });
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
         document.getElementById('btn-generate-code').addEventListener('click', async () => {
             if(!window.currentUser) return;
             const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -924,8 +874,8 @@
                             puntos: data.stats.recordPuntos || 0,
                             victorias: data.stats.wins || 0,
                             nombre: data.robloxUsername || "Usuario",
-                            avatarUrl: data.photoURL || "https://via.placeholder.com/150/1f1f22/52525b?text=...",
-                            needsProxy: !data.photoURL // Si no tiene foto manual, sacamos de Roblox
+                            avatarUrl: "https://via.placeholder.com/150/1f1f22/52525b?text=...",
+                            needsProxy: true // SIEMPRE sacamos de Roblox, ignoramos cualquier foto manual vieja
                         };
                     }
                 });
@@ -1069,7 +1019,7 @@
                         const navIconCustom = document.getElementById('nav-profile-icon-custom');
                         const navIconDefault = document.getElementById('nav-profile-icon-default');
 
-                        // LÓGICA DE FOTO:
+                        // LÓGICA DE FOTO: IGNORAMOS FOTO MANUAL, SOLO ROPROXY
                         if (data.isLinked && data.robloxUserId) {
                             fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${data.robloxUserId}&size=420x420&format=Png&isCircular=false`)
                                 .then(res => res.json())
@@ -1086,15 +1036,6 @@
                                         }
                                     }
                                 }).catch(err => console.error("Error RoProxy:", err));
-                        } else if (data.photoURL) {
-                            imgDisplay.src = data.photoURL;
-                            imgDisplay.classList.remove('hidden'); 
-                            placeholder.classList.add('hidden');
-                            if (navIconCustom && navIconDefault) {
-                                navIconCustom.src = data.photoURL;
-                                navIconCustom.classList.remove('hidden');
-                                navIconDefault.classList.add('hidden');
-                            }
                         } else {
                             imgDisplay.classList.add('hidden'); 
                             placeholder.classList.remove('hidden');
