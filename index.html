@@ -913,40 +913,35 @@
                         })
                         .catch(err => console.error("Error obteniendo avatares:", err));
 
-                    fetch(`https://users.roproxy.com/v1/users`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ userIds: idsToFetchProxy, excludeBannedUsers: false })
-                    })
-                    .then(r => r.json())
-                    .then(json => {
-                        if (json && json.data) {
-                            json.data.forEach(user => {
-                                const realName = user.displayName || user.name;
-                                const nameMain = document.getElementById(`fb-name-${user.id}`);
-                                const nameTopPt = document.getElementById(`top-pt-name-${user.id}`);
-                                const nameTopWin = document.getElementById(`top-win-name-${user.id}`);
-                                
-                                if (nameMain && nameMain.innerText === "Cargando...") nameMain.innerText = realName;
-                                if (nameTopPt && nameTopPt.innerText === "Cargando...") nameTopPt.innerText = realName;
-                                if (nameTopWin && nameTopWin.innerText === "Cargando...") nameTopWin.innerText = realName;
-                            });
+                    // ==============================================================
+                    // NUEVO: Descargar Nombres de Roblox (Método Seguro en Fila)
+                    // RoProxy bloquea peticiones masivas, así que pedimos 1 por 1 con pausa
+                    // ==============================================================
+                    const cargarNombresSeguro = async () => {
+                        for (let id of idsToFetchProxy) {
+                            try {
+                                let res = await fetch(`https://users.roproxy.com/v1/users/${id}`);
+                                if (res.ok) {
+                                    let d = await res.json();
+                                    const realName = d.displayName || d.name || "Leyenda de Sawer";
+                                    
+                                    const nameMain = document.getElementById(`fb-name-${id}`);
+                                    const nameTopPt = document.getElementById(`top-pt-name-${id}`);
+                                    const nameTopWin = document.getElementById(`top-win-name-${id}`);
+                                    
+                                    if (nameMain && nameMain.innerText === "Cargando...") nameMain.innerText = realName;
+                                    if (nameTopPt && nameTopPt.innerText === "Cargando...") nameTopPt.innerText = realName;
+                                    if (nameTopWin && nameTopWin.innerText === "Cargando...") nameTopWin.innerText = realName;
+                                }
+                                // Pausa de 150 milisegundos para no activar la alarma de spam de RoProxy
+                                await new Promise(resolve => setTimeout(resolve, 150));
+                            } catch(e) {
+                                console.error("Fallo obteniendo nombre de la ID:", id);
+                            }
                         }
-                    })
-                    .catch(err => {
-                        idsToFetchProxy.forEach(id => {
-                            fetch(`https://users.roproxy.com/v1/users/${id}`)
-                            .then(r=>r.json()).then(d=>{
-                                const realName = d.displayName || d.name;
-                                const nmMain = document.getElementById(`fb-name-${id}`);
-                                const nmPt = document.getElementById(`top-pt-name-${id}`);
-                                const nmWin = document.getElementById(`top-win-name-${id}`);
-                                if(nmMain && nmMain.innerText === "Cargando...") nmMain.innerText = realName;
-                                if(nmPt && nmPt.innerText === "Cargando...") nmPt.innerText = realName;
-                                if(nmWin && nmWin.innerText === "Cargando...") nmWin.innerText = realName;
-                            }).catch(e=>{});
-                        });
-                    });
+                    };
+                    
+                    cargarNombresSeguro();
                 }
 
             } catch (error) {
