@@ -333,14 +333,10 @@
             <!-- COLUMNA IZQUIERDA -->
             <div class="w-full md:w-1/4 flex flex-col gap-4">
                 
-                <!-- RECUADRO DE FOTO DE PERFIL -->
+                <!-- RECUADRO DE FOTO DE PERFIL (SOLO ROBLOX AHORA) -->
                 <div class="w-full aspect-square bg-zinc-900 rounded-lg flex items-center justify-center relative shadow-inner overflow-hidden border-2 border-zinc-800 group">
                     <img id="profile-image-display" src="" alt="Foto de perfil" class="w-full h-full object-cover hidden group-hover:scale-110 transition-transform duration-500">
                     <span id="profile-image-placeholder" class="text-zinc-500 font-bold uppercase tracking-widest text-xs text-center px-4">Espacio para Foto de Perfil</span>
-                    <input type="file" id="profile-pic-upload" class="hidden" accept="image/*">
-                    <button onclick="document.getElementById('profile-pic-upload').click()" class="absolute top-2 right-2 bg-black/60 hover:bg-red-600 p-2 rounded-md transition-all duration-300 opacity-50 hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 backdrop-blur-sm border border-white/10 shadow-lg">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                    </button>
                 </div>
                 
                 <!-- Nombre de Usuario Dinámico -->
@@ -529,14 +525,14 @@
                                 ¿Cómo vinculo mi cuenta correctamente?
                             </h4>
                             <p class="text-zinc-400 text-sm leading-relaxed">
-                                Ve a la pestaña <strong class="text-zinc-200">Información</strong> en esta página y genera un código de vinculación. Luego entra a Proyecto Sawer en Roblox, dirí জানালা al panel de vinculación en el Lobby y escribe ese código. La página web se actualizará automáticamente y tus stats aparecerán.
+                                Ve a la pestaña <strong class="text-zinc-200">Información</strong> en esta página y genera un código de vinculación. Luego entra a Proyecto Sawer en Roblox, dirígete al panel de vinculación en el Lobby y escribe ese código. La página web se actualizará automáticamente y tus stats aparecerán.
                             </p>
                         </div>
 
                     </div>
                 </div>
 
-                <!-- Contenido: CONFIGURACIÓN -->
+                <!-- CONTENIDO: CONFIGURACIÓN -->
                 <div id="content-config" class="profile-content hidden animate-fade-in">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Configuración de Cuenta</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
@@ -561,26 +557,21 @@
                 <p class="text-zinc-400 font-bold tracking-widest uppercase text-sm">Proyecto Sawer</p>
             </div>
             <div class="text-zinc-500 text-xs tracking-widest uppercase">
-                Fundado por SawFuntime &copy; 2025-2026. Todos los derechos reservados.<br>
+                Fundado por SawFuntime &copy; 2025-2026. Todos los derechos reservados.
             </div>
         </div>
     </footer>
 
-    <!-- ========================================== -->
-    <!-- NUEVO: SCRIPT DE ANIMACIONES (AOS) -->
-    <!-- ========================================== -->
+    <!-- SCRIPTS DE ANIMACIONES (AOS) -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Inicializar las animaciones de scroll
         AOS.init({
-            once: true, // La animación solo ocurre la primera vez que haces scroll hacia abajo
-            offset: 100, // Empieza a animar 100px antes de que el elemento aparezca del todo
+            once: true,
+            offset: 100,
         });
     </script>
 
-    <!-- ========================================== -->
     <!-- SCRIPTS DE LA INTERFAZ -->
-    <!-- ========================================== -->
     <script>
         const modal = document.getElementById('auth-modal');
         const formLogin = document.getElementById('form-login');
@@ -626,7 +617,6 @@
             activeBtn.querySelector('svg').className = "w-4 h-4 text-white opacity-100 transition-opacity";
         }
 
-        // FUNCIONES DEL MODAL DE CONTACTO
         function openContactModal() {
             document.getElementById('contact-modal').classList.remove('hidden');
             document.getElementById('copy-success-msg').classList.add('hidden');
@@ -638,8 +628,6 @@
 
         function copySupportEmail() {
             const emailToCopy = 'proyectosawermain@gmail.com';
-            
-            // Creamos un input invisible temporal para copiar el texto
             const tempInput = document.createElement('input');
             tempInput.value = emailToCopy;
             document.body.appendChild(tempInput);
@@ -647,60 +635,13 @@
             document.execCommand('copy');
             document.body.removeChild(tempInput);
             
-            // Mostrar mensaje de éxito por 3 segundos
             const msg = document.getElementById('copy-success-msg');
             msg.classList.remove('hidden');
             setTimeout(() => { msg.classList.add('hidden'); }, 3000);
         }
-
-        // FOTO DE PERFIL VISUAL Y COMPRESIÓN
-        document.getElementById('profile-pic-upload').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file && window.currentUser) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = async function() {
-                        const canvas = document.createElement('canvas');
-                        // ¡AUMENTADO A 800 PARA CALIDAD FULL HD!
-                        const MAX_SIZE = 800;
-                        canvas.width = MAX_SIZE; canvas.height = MAX_SIZE;
-                        const ctx = canvas.getContext('2d');
-                        const size = Math.min(img.width, img.height);
-                        const startX = (img.width - size) / 2;
-                        const startY = (img.height - size) / 2;
-                        ctx.drawImage(img, startX, startY, size, size, 0, 0, MAX_SIZE, MAX_SIZE);
-
-                        // ¡CALIDAD AL 90% (0.9) EN LUGAR DE 80% PARA MAYOR NITIDEZ!
-                        const base64Image = canvas.toDataURL('image/jpeg', 0.9);
-                        
-                        document.getElementById('profile-image-display').src = base64Image;
-                        document.getElementById('profile-image-display').classList.remove('hidden');
-                        document.getElementById('profile-image-placeholder').classList.add('hidden');
-
-                        // NUEVO: Mostrar la miniatura inmediatamente en el navbar al subir
-                        const navIconCustom = document.getElementById('nav-profile-icon-custom');
-                        const navIconDefault = document.getElementById('nav-profile-icon-default');
-                        if (navIconCustom && navIconDefault) {
-                            navIconCustom.src = base64Image;
-                            navIconCustom.classList.remove('hidden');
-                            navIconDefault.classList.add('hidden');
-                        }
-
-                        if(window.saveProfileImageToFirebase) {
-                            window.saveProfileImageToFirebase(base64Image);
-                        }
-                    }
-                    img.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
     </script>
 
-    <!-- ========================================== -->
     <!-- SCRIPT DE FIREBASE -->
-    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -712,120 +653,91 @@
             projectId: "proyecto-sawer",
             storageBucket: "proyecto-sawer.firebasestorage.app",
             messagingSenderId: "770496172923",
-            appId: "1:770496172923:web:79782a0ddbdca6561e23de",
-            measurementId: "G-XX2DH8WCJM"
+            appId: "1:770496172923:web:79782a0ddbdca6561e23de"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Variables Globales
         window.currentUser = null;
-        let unsubscribeProfile = null; // Para limpiar el escuchador si cerramos sesión
+        let unsubscribeProfile = null;
 
         function showError(msg) {
             document.getElementById('auth-error').innerText = msg;
             document.getElementById('auth-error').classList.remove('hidden');
         }
 
-        // 1. REGISTRO SIMPLIFICADO
         document.getElementById('btn-reg-submit').addEventListener('click', async () => {
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value;
 
-            if(!email || !password) return showError("Por favor, llena todos los campos.");
+            if(!email || !password) return showError("Llena todos los campos.");
 
             try {
-                // Creamos el usuario
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
-                // Creamos su documento base en la base de datos indicando que NO está vinculado
                 await setDoc(doc(db, "users", user.uid), {
                     email: email,
                     isLinked: false,
                     robloxUsername: null,
                     robloxUserId: null,
                     linkCode: null,
-                    photoURL: null,
-                    stats: { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: "0/67" } // Estadísticas base
+                    stats: { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: "0/67" }
                 });
                 
                 await sendEmailVerification(user);
                 await signOut(auth);
                 
                 closeModal();
-                alert("¡Cuenta creada! Te hemos enviado un correo de verificación. Por favor, revísalo para poder activar tu cuenta y vincular tu usuario de Roblox.");
+                alert("¡Cuenta creada! Revisa tu correo de verificación.");
             } catch (error) {
                 if(error.code === 'auth/email-already-in-use') showError("Este correo ya está registrado.");
-                else if(error.code === 'auth/weak-password') showError("La contraseña debe tener al menos 6 caracteres.");
-                else showError("Error al registrarse. Intenta de nuevo.");
+                else if(error.code === 'auth/weak-password') showError("Mínimo 6 caracteres.");
+                else showError("Error al registrarse.");
             }
         });
 
-        // 2. INICIO SESIÓN
         document.getElementById('btn-login-submit').addEventListener('click', async () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
 
-            if(!email || !password) return showError("Ingresa tu correo y contraseña.");
+            if(!email || !password) return showError("Ingresa datos.");
 
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                if (!user.emailVerified) {
+                if (!userCredential.user.emailVerified) {
                     await signOut(auth);
-                    showError("Debes verificar tu correo antes de entrar. Revisa tu bandeja de entrada.");
+                    showError("Verifica tu correo antes de entrar.");
                 } else {
                     closeModal();
                 }
             } catch (error) {
-                showError("Correo o contraseña incorrectos.");
+                showError("Datos incorrectos.");
             }
         });
 
-        // 3. SALIR
         window.logout = async () => {
-            if(unsubscribeProfile) unsubscribeProfile(); // Dejamos de escuchar la base de datos
+            if(unsubscribeProfile) unsubscribeProfile();
             await signOut(auth);
             switchMainView('home'); 
         }
 
-        // 4. GUARDAR FOTO
-        window.saveProfileImageToFirebase = async (base64Image) => {
-            try {
-                await setDoc(doc(db, "users", window.currentUser.uid), { photoURL: base64Image }, { merge: true });
-            } catch (error) {
-                console.error("Error guardando foto:", error);
-            }
-        };
-
-        // 5. GENERAR CÓDIGO DE VINCULACIÓN
         document.getElementById('btn-generate-code').addEventListener('click', async () => {
             if(!window.currentUser) return;
-            
-            // Generar un código random de 6 caracteres (Ej: A8X2Y9)
             const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-            
-            // Guardarlo en la base de datos
             await setDoc(doc(db, "users", window.currentUser.uid), { linkCode: randomCode }, { merge: true });
         });
 
-        // CLIC EN EL ICONO DE PERFIL
         window.handleProfileClick = () => {
             if (window.currentUser) {
                 switchMainView('profile'); window.scrollTo(0,0);
             } else {
-                alert("Debes registrarte o iniciar sesión para acceder a tu perfil.");
                 openModal('login');
             }
         };
 
-        // =========================================================
-        // EL CORAZÓN DEL SISTEMA: DETECTAR ESTADO Y LEER DATOS REALES
-        // =========================================================
         onAuthStateChanged(auth, (user) => {
             if (user && user.emailVerified) {
                 window.currentUser = user;
@@ -833,13 +745,10 @@
                 document.getElementById('auth-buttons').classList.add('hidden');
                 document.getElementById('user-profile').classList.remove('hidden');
 
-                // AQUÍ EMPIEZA LA MAGIA EN TIEMPO REAL (onSnapshot)
-                // Esto lee el documento del usuario constamentemente. Si algo cambia en el servidor (Roblox), la web se entera AL INSTANTE.
                 unsubscribeProfile = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
 
-                        // 1. MANEJAR EL NOMBRE DEL USUARIO Y NAVBAR
                         const displayName = data.isLinked ? data.robloxUsername : "Cuenta no vinculada";
                         document.getElementById('user-display-name').innerText = `Hola, ${data.isLinked ? data.robloxUsername : 'Usuario'}`;
                         
@@ -849,31 +758,47 @@
                             profileNameUI.classList.remove('text-zinc-500'); profileNameUI.classList.add('text-red-500');
                         }
 
-                        // 2. MANEJAR LA FOTO
+                        // === LÓGICA DE AVATAR ROBLOX AUTOMÁTICO VÍA ROPROXY ===
                         const imgDisplay = document.getElementById('profile-image-display');
                         const placeholder = document.getElementById('profile-image-placeholder');
                         const navIconCustom = document.getElementById('nav-profile-icon-custom');
                         const navIconDefault = document.getElementById('nav-profile-icon-default');
 
-                        if (data.photoURL) {
-                            imgDisplay.src = data.photoURL;
-                            imgDisplay.classList.remove('hidden'); placeholder.classList.add('hidden');
-                            
-                            // Mostrar la foto en la barra superior
-                            if (navIconCustom && navIconDefault) {
-                                navIconCustom.src = data.photoURL;
-                                navIconCustom.classList.remove('hidden');
-                                navIconDefault.classList.add('hidden');
-                            }
+                        // IGNORAMOS POR COMPLETO la foto manual vieja. Si está vinculado, forzamos RoProxy.
+                        if (data.isLinked && data.robloxUserId) {
+                            fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${data.robloxUserId}&size=420x420&format=Png&isCircular=false`)
+                                .then(res => res.json())
+                                .then(json => {
+                                    if (json && json.data && json.data.length > 0) {
+                                        const avatarUrl = json.data[0].imageUrl;
+                                        
+                                        imgDisplay.src = avatarUrl;
+                                        imgDisplay.classList.remove('hidden'); 
+                                        placeholder.classList.add('hidden');
+                                        
+                                        if (navIconCustom && navIconDefault) {
+                                            navIconCustom.src = avatarUrl;
+                                            navIconCustom.classList.remove('hidden');
+                                            navIconDefault.classList.add('hidden');
+                                        }
+                                    }
+                                }).catch(err => {
+                                    console.error("Error cargando avatar de Roblox:", err);
+                                    // Si falla, mostramos los placeholders
+                                    imgDisplay.classList.add('hidden'); 
+                                    placeholder.classList.remove('hidden');
+                                });
                         } else {
-                            // Si no hay foto, asegurarse de que se vea el icono genérico en el navbar
+                            // Si NO está vinculado, mostrar los íconos genéricos
+                            imgDisplay.classList.add('hidden'); 
+                            placeholder.classList.remove('hidden');
+                            
                             if (navIconCustom && navIconDefault) {
                                 navIconCustom.classList.add('hidden');
                                 navIconDefault.classList.remove('hidden');
                             }
                         }
 
-                        // 3. MANEJAR LA VINCULACIÓN (EL PANEL)
                         const unlinkedWarning = document.getElementById('unlinked-warning');
                         const statsContainer = document.getElementById('stats-container');
                         const codeDisplayArea = document.getElementById('code-display-area');
@@ -881,11 +806,9 @@
                         const secretLinkCode = document.getElementById('secret-link-code');
 
                         if (data.isLinked) {
-                            // SI ESTÁ VINCULADO: Ocultar advertencia, Mostrar Estadísticas Reales
                             unlinkedWarning.classList.add('hidden');
                             statsContainer.classList.remove('hidden');
                             
-                            // Pintar las stats
                             if(data.stats) {
                                 document.getElementById('stat-wins').innerText = data.stats.wins || 0;
                                 document.getElementById('stat-record').innerText = data.stats.recordPuntos || 0;
@@ -894,17 +817,14 @@
                                 document.getElementById('stat-items').innerText = data.stats.items || "0/67";
                             }
                         } else {
-                            // SI NO ESTÁ VINCULADO: Mostrar advertencia
                             unlinkedWarning.classList.remove('hidden');
                             statsContainer.classList.add('hidden');
 
                             if (data.linkCode) {
-                                // Si ya generó código, mostrarlo
                                 codeGenerationArea.classList.add('hidden');
                                 codeDisplayArea.classList.remove('hidden');
                                 secretLinkCode.innerText = data.linkCode;
                             } else {
-                                // Si no ha generado, mostrar el botón
                                 codeGenerationArea.classList.remove('hidden');
                                 codeDisplayArea.classList.add('hidden');
                             }
@@ -914,13 +834,12 @@
 
             } else {
                 window.currentUser = null;
-                if(unsubscribeProfile) unsubscribeProfile(); // Parar de escuchar si se desloguea
+                if(unsubscribeProfile) unsubscribeProfile();
                 
                 document.getElementById('auth-buttons').classList.remove('hidden');
                 document.getElementById('user-profile').classList.add('hidden');
                 document.getElementById('profile-view-username').innerText = "CARGANDO...";
                 
-                // Restaurar el icono genérico del navbar al cerrar sesión
                 const navIconCustom = document.getElementById('nav-profile-icon-custom');
                 const navIconDefault = document.getElementById('nav-profile-icon-default');
                 if (navIconCustom && navIconDefault) {
