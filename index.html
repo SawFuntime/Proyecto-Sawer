@@ -598,19 +598,6 @@
                         </button>
                     </div>
 
-                    <!-- Sección Zona Peligrosa -->
-                    <div class="bg-red-950/20 border border-red-900 rounded-xl p-6 shadow-md transition-all relative overflow-hidden group">
-                        <div class="absolute inset-0 bg-red-900/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                        <h3 class="text-xl font-bold text-red-500 mb-4 uppercase tracking-widest flex items-center gap-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                            Zona Peligrosa
-                        </h3>
-                        <p class="text-zinc-400 text-sm mb-6">Eliminar tu cuenta borrará todos tus registros, correos y acceso a la plataforma. Esta acción no se puede deshacer.</p>
-                        <button id="btn-delete-account" class="bg-red-900 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition-all uppercase tracking-widest text-sm shadow-md border border-red-700 w-full sm:w-auto">
-                            Eliminar Cuenta Permanentemente
-                        </button>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -919,30 +906,6 @@
             } catch(error) {
                 msgObj.innerText = "Error: " + error.message;
                 msgObj.className = "text-xs font-bold uppercase tracking-widest mt-3 text-red-500 block";
-            }
-        });
-
-        // 4. Eliminar Cuenta
-        document.getElementById('btn-delete-account').addEventListener('click', async () => {
-            if(!window.currentUser) return;
-            const confirm1 = confirm("¡ADVERTENCIA! Estás a punto de ELIMINAR tu cuenta. Se perderán tus correos y configuraciones permanentemente. ¿Deseas continuar?");
-            if(confirm1) {
-                const confirm2 = prompt('Para confirmar, escribe "ELIMINAR" en mayúsculas:');
-                if(confirm2 === "ELIMINAR") {
-                    try {
-                        await deleteUser(window.currentUser);
-                        alert("Cuenta eliminada correctamente. Lamentamos que te vayas.");
-                        window.location.reload(); // Recarga toda la app
-                    } catch (error) {
-                        if(error.code === 'auth/requires-recent-login') {
-                            alert('Por razones de seguridad estricta, debes cerrar sesión y volver a ingresar para poder eliminar tu cuenta.');
-                        } else {
-                            alert("Error al eliminar la cuenta: " + error.message);
-                        }
-                    }
-                } else {
-                    alert("Eliminación cancelada. La palabra ingresada fue incorrecta.");
-                }
             }
         });
 
