@@ -32,6 +32,12 @@
         ::-webkit-scrollbar-thumb { background: #991b1b; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
         
+        /* Scrollbar interno para chats y listas */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #dc2626; }
+
         .glow-red { text-shadow: 0 0 15px rgba(220, 38, 38, 0.5); }
         .box-glow:hover { box-shadow: 0 0 20px rgba(220, 38, 38, 0.15); border-color: #b91c1c; }
 
@@ -97,8 +103,9 @@
     </nav>
 
     <!-- ========================================== -->
-    <!-- VENTANA EMERGENTE (MODAL AUTH) -->
+    <!-- VENTANAS EMERGENTES (MODALS) -->
     <!-- ========================================== -->
+    <!-- MODAL DE AUTENTICACIÓN -->
     <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
         <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-8 max-w-md w-full mx-4 relative shadow-[0_0_40px_rgba(220,38,38,0.15)]">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
@@ -140,9 +147,35 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- VENTANA EMERGENTE DE CONTACTO -->
-    <!-- ========================================== -->
+    <!-- MODAL DE CREAR FORO -->
+    <div id="create-forum-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-8 max-w-md w-full mx-4 relative shadow-[0_0_40px_rgba(220,38,38,0.15)]">
+            <button onclick="closeForumModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="text-2xl font-black text-white mb-2 uppercase tracking-wider border-b border-red-600 pb-2 inline-block">Crear Nuevo Foro</h2>
+            <p class="text-zinc-400 text-sm mt-2 mb-6">Crea un espacio para compartir tus pensamientos. Recuerda que solo tú podrás escribir en él.</p>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1">Título del Foro <span class="text-red-500">*</span></label>
+                    <input type="text" id="new-forum-title" class="w-full bg-zinc-900 border border-zinc-700 rounded-md p-3 text-white focus:border-red-500 focus:outline-none transition-colors" placeholder="Ej: Mis mejores estrategias" maxlength="50">
+                </div>
+                <div>
+                    <label class="flex justify-between items-end mb-1">
+                        <span class="block text-xs font-bold text-zinc-400 uppercase tracking-wider">Descripción (Opcional)</span>
+                        <span id="new-forum-desc-counter" class="text-xs text-zinc-500">0/120</span>
+                    </label>
+                    <textarea id="new-forum-desc" oninput="document.getElementById('new-forum-desc-counter').innerText = this.value.length + '/120'" class="w-full bg-zinc-900 border border-zinc-700 rounded-md p-3 text-white focus:border-red-500 focus:outline-none transition-colors resize-none h-24 custom-scroll" placeholder="¿De qué trata este foro?" maxlength="120"></textarea>
+                </div>
+                <button onclick="submitNewForum()" class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 rounded-md transition-all mt-2 uppercase tracking-wider shadow-lg shadow-red-900/30">
+                    Crear Foro
+                </button>
+                <p id="forum-create-error" class="text-red-500 text-xs font-bold text-center mt-2 hidden"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONTACTO -->
     <div id="contact-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
         <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-8 max-w-sm w-full mx-4 relative shadow-[0_0_40px_rgba(220,38,38,0.15)] text-center">
             <button onclick="closeContactModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
@@ -398,6 +431,10 @@
                     <button onclick="switchProfileTab('ayuda')" id="btn-tab-ayuda" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
                         Ayuda e Información <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
+                    <!-- NUEVO BOTÓN FOROS -->
+                    <button onclick="switchProfileTab('foros')" id="btn-tab-foros" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
+                        Foros Comunitarios <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
                     <button onclick="switchProfileTab('config')" id="btn-tab-config" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
                         Configuración <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
@@ -546,6 +583,69 @@
                                 Ve a la pestaña <strong class="text-zinc-200">Información</strong> en esta página y genera un código de vinculación. Luego entra a Proyecto Sawer en Roblox, dirígete al panel de vinculación en el Lobby y escribe ese código. La página web se actualizará automáticamente y tus stats aparecerán.
                             </p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- FOROS COMUNITARIOS -->
+                <div id="content-foros" class="profile-content hidden animate-fade-in flex-col md:flex-row gap-6 h-[500px]">
+                    
+                    <!-- Lado A: Lista de Foros -->
+                    <div class="w-full md:w-1/3 bg-zinc-950 border border-zinc-800 rounded-xl flex flex-col overflow-hidden shadow-inner h-64 md:h-full">
+                        <div class="p-4 border-b border-zinc-800 flex justify-between items-center bg-zinc-900/50">
+                            <h3 class="font-bold text-white uppercase tracking-wider text-sm">Lista de Foros</h3>
+                            <button onclick="openForumModal()" class="bg-red-700 hover:bg-red-600 text-white p-1.5 rounded-md transition-all shadow-md" title="Crear Foro">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            </button>
+                        </div>
+                        <div id="forums-sidebar-list" class="flex-1 overflow-y-auto p-2 space-y-2 custom-scroll">
+                            <div class="text-center text-zinc-600 text-xs py-4">Cargando foros...</div>
+                        </div>
+                    </div>
+
+                    <!-- Lado C/D/E: Área de Chat -->
+                    <div class="w-full md:w-2/3 bg-zinc-950 border border-zinc-800 rounded-xl flex flex-col overflow-hidden relative shadow-inner h-[400px] md:h-full">
+                        
+                        <!-- Placeholder si no hay foro seleccionado -->
+                        <div id="forum-chat-placeholder" class="flex-1 flex flex-col items-center justify-center text-zinc-600 p-6 text-center">
+                            <svg class="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
+                            <p class="uppercase tracking-widest font-bold">Selecciona un foro</p>
+                            <p class="text-xs mt-2">Lee lo que otros jugadores tienen para decir, o crea tu propio canal de difusión.</p>
+                        </div>
+
+                        <!-- Chat Activo -->
+                        <div id="forum-active-chat" class="hidden flex flex-col h-full w-full">
+                            <!-- B y C: Cabecera del Foro -->
+                            <div class="p-3 sm:p-4 border-b border-zinc-800 bg-zinc-900/80 flex items-center gap-4 relative shadow-md">
+                                <div class="relative group">
+                                    <img id="chat-header-avatar" src="./Inquisitor.png" alt="Avatar Creador" class="w-12 h-12 rounded-full object-cover border border-zinc-700 cursor-pointer hover:border-red-500 transition-colors">
+                                    
+                                    <!-- Tooltip de Stats del Creador -->
+                                    <div id="chat-header-tooltip" class="absolute left-0 top-14 bg-zinc-900 border border-red-800 p-3 rounded-lg hidden group-hover:block z-50 w-48 shadow-xl">
+                                        <p class="text-zinc-500 text-xs text-center">Cargando stats...</p>
+                                    </div>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <h4 id="chat-header-title" class="font-bold text-white uppercase tracking-wider text-sm sm:text-base leading-tight whitespace-nowrap overflow-hidden text-ellipsis">Título</h4>
+                                    <p id="chat-header-desc" class="text-zinc-400 text-xs sm:text-sm mt-1 whitespace-nowrap overflow-hidden text-ellipsis">Descripción</p>
+                                </div>
+                            </div>
+
+                            <!-- D: Contenedor de Mensajes -->
+                            <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 space-y-4 bg-[#0a0a0c] custom-scroll">
+                                <!-- Los mensajes aparecerán aquí (alineados a la izquierda) -->
+                            </div>
+
+                            <!-- E: Barra de Input (Solo visible para el creador) -->
+                            <div id="chat-input-area" class="p-3 border-t border-zinc-800 bg-zinc-900/50 hidden">
+                                <div class="flex gap-2">
+                                    <input type="text" id="chat-input-text" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-full px-4 py-2 text-sm text-white focus:border-red-500 focus:outline-none transition-colors" placeholder="Escribe un mensaje para tus seguidores..." onkeypress="if(event.key === 'Enter') sendForumMessage()">
+                                    <button onclick="sendForumMessage()" class="bg-red-700 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-md flex-shrink-0">
+                                        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -716,8 +816,19 @@
         }
 
         function switchProfileTab(tabName) {
-            document.querySelectorAll('.profile-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('content-' + tabName).classList.remove('hidden');
+            document.querySelectorAll('.profile-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('flex'); // Remove flex just in case it's a flex container
+            });
+            
+            const selectedContent = document.getElementById('content-' + tabName);
+            selectedContent.classList.remove('hidden');
+            // Si es foros, añadir flex display de nuevo
+            if(tabName === 'foros') {
+                selectedContent.classList.add('flex');
+                if(window.loadForums) window.loadForums();
+            }
+
             document.querySelectorAll('.profile-tab-btn').forEach(btn => {
                 btn.className = "profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group";
                 btn.querySelector('svg').className = "w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity";
@@ -748,13 +859,31 @@
             msg.classList.remove('hidden');
             setTimeout(() => { msg.classList.add('hidden'); }, 3000);
         }
+
+        // ====== FORUM MODAL ======
+        window.openForumModal = () => {
+            if(!window.currentUserData || !window.currentUserData.isLinked) {
+                alert("Debes tener tu cuenta de Roblox vinculada para crear un Foro.");
+                return;
+            }
+            document.getElementById('create-forum-modal').classList.remove('hidden');
+            document.getElementById('forum-create-error').classList.add('hidden');
+            document.getElementById('new-forum-title').value = '';
+            document.getElementById('new-forum-desc').value = '';
+            document.getElementById('new-forum-desc-counter').innerText = '0/120';
+        }
+
+        window.closeForumModal = () => {
+            document.getElementById('create-forum-modal').classList.add('hidden');
+        }
+
     </script>
 
     <!-- SCRIPT DE FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, updatePassword, deleteUser } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, updatePassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
@@ -770,6 +899,7 @@
         const db = getFirestore(app);
 
         window.currentUser = null;
+        window.currentUserData = null; // Guardar datos para crear foro
         let unsubscribeProfile = null;
         let firebaseGanadoresLoaded = false;
 
@@ -882,10 +1012,10 @@
                         isLinked: false,
                         robloxUsername: null,
                         robloxUserId: null,
-                        linkCode: null // Se borra para generar uno nuevo en el futuro
+                        linkCode: null 
                     }, { merge: true });
                     alert("Cuenta desvinculada exitosamente.");
-                    switchProfileTab('info'); // Te lleva a la info para que veas que se quitó
+                    switchProfileTab('info'); 
                 } catch(e) {
                     alert("Error al desvincular la cuenta: " + e.message);
                 }
@@ -923,6 +1053,215 @@
                 openModal('login');
             }
         };
+
+        // =========================================================================
+        // LÓGICA DE FOROS COMUNITARIOS
+        // =========================================================================
+        window.activeForumsListener = null;
+        window.currentForumId = null;
+        window.activeMessagesListener = null;
+
+        // 1. Cargar Foros en la barra lateral
+        window.loadForums = () => {
+            if(window.activeForumsListener) return; // Si ya escucha, no duplicar
+            
+            const forumsRef = collection(db, "forums");
+            window.activeForumsListener = onSnapshot(forumsRef, (snapshot) => {
+                let forums = [];
+                snapshot.forEach(doc => {
+                    forums.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Ordenar del más nuevo al más viejo
+                forums.sort((a,b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+
+                const container = document.getElementById('forums-sidebar-list');
+                if(forums.length === 0) {
+                    container.innerHTML = '<div class="text-center text-zinc-600 text-xs py-4">No hay foros aún. ¡Sé el primero!</div>';
+                    return;
+                }
+
+                let htmlContent = '';
+                forums.forEach(forum => {
+                    const descPreview = forum.description ? `<p class="text-[10px] text-zinc-500 whitespace-nowrap overflow-hidden text-ellipsis">${forum.description}</p>` : '';
+                    
+                    htmlContent += `
+                        <div id="forum-item-${forum.id}" onclick="selectForum('${forum.id}', '${escapeHTML(forum.title)}', '${escapeHTML(forum.description || '')}', '${forum.creatorId}', '${escapeHTML(forum.creatorName)}', '${forum.creatorAvatarUrl}')" class="forum-list-item cursor-pointer p-2 rounded-md border border-zinc-800/50 hover:bg-zinc-900 hover:border-red-600/50 transition-all flex items-center gap-3">
+                            <img src="${forum.creatorAvatarUrl || './Inquisitor.png'}" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-zinc-700">
+                            <div class="overflow-hidden">
+                                <h4 class="text-zinc-200 font-bold text-xs uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis leading-tight">${escapeHTML(forum.title)}</h4>
+                                ${descPreview}
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = htmlContent;
+            });
+        };
+
+        // 2. Crear un nuevo foro en Firebase
+        window.submitNewForum = async () => {
+            const titleInput = document.getElementById('new-forum-title');
+            const descInput = document.getElementById('new-forum-desc');
+            const errorMsg = document.getElementById('forum-create-error');
+            
+            const title = titleInput.value.trim();
+            const desc = descInput.value.trim();
+
+            if(!title) {
+                errorMsg.innerText = "El título es obligatorio.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                // Sacamos la foto actual del perfil del usuario (desde la UI que ya la tiene procesada)
+                const imgDisplay = document.getElementById('profile-image-display');
+                let avatarUrl = './Inquisitor.png';
+                if(imgDisplay && !imgDisplay.classList.contains('hidden')) {
+                    avatarUrl = imgDisplay.src;
+                }
+
+                await addDoc(collection(db, "forums"), {
+                    title: title,
+                    description: desc,
+                    creatorId: window.currentUser.uid,
+                    creatorName: window.currentUserData.robloxUsername || "Usuario",
+                    creatorAvatarUrl: avatarUrl,
+                    createdAt: serverTimestamp()
+                });
+                
+                window.closeForumModal();
+                alert("¡Foro creado exitosamente!");
+            } catch (e) {
+                errorMsg.innerText = "Error al crear: " + e.message;
+                errorMsg.classList.remove('hidden');
+            }
+        };
+
+        // 3. Seleccionar y abrir un foro
+        window.selectForum = async (forumId, title, desc, creatorId, creatorName, creatorAvatar) => {
+            window.currentForumId = forumId;
+            
+            // UI Alternar a Chat Activo
+            document.getElementById('forum-chat-placeholder').classList.add('hidden');
+            document.getElementById('forum-active-chat').classList.remove('hidden');
+
+            // Actualizar Cabecera
+            document.getElementById('chat-header-title').innerText = title;
+            document.getElementById('chat-header-desc').innerText = desc || "Un espacio de difusión de Proyecto Sawer.";
+            document.getElementById('chat-header-avatar').src = creatorAvatar || "./Inquisitor.png";
+
+            // Resaltar en la lista
+            document.querySelectorAll('.forum-list-item').forEach(el => el.classList.remove('border-red-600', 'bg-zinc-900'));
+            const activeEl = document.getElementById(`forum-item-${forumId}`);
+            if(activeEl) activeEl.classList.add('border-red-600', 'bg-zinc-900');
+
+            // Control de Permiso para escribir (Area E)
+            if (window.currentUser && window.currentUser.uid === creatorId) {
+                document.getElementById('chat-input-area').classList.remove('hidden');
+            } else {
+                document.getElementById('chat-input-area').classList.add('hidden');
+            }
+
+            // TOOLTIP STATS: Cargar Stats del creador del foro
+            const tooltip = document.getElementById('chat-header-tooltip');
+            tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Buscando jugador...</p>';
+            try {
+                const userDoc = await getDoc(doc(db, "users", creatorId));
+                if(userDoc.exists()) {
+                    const stats = userDoc.data().stats || {};
+                    tooltip.innerHTML = `
+                        <div class="text-center mb-2 border-b border-zinc-700 pb-1">
+                            <span class="text-white font-bold text-[11px] uppercase tracking-wider">${creatorName}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-zinc-400">Wins:</span>
+                            <span class="text-white font-black">${stats.wins || 0}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-zinc-400">Puntos:</span>
+                            <span class="text-white font-black">${stats.recordPuntos || 0}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400">SawCoins:</span>
+                            <span class="text-yellow-500 font-black">${stats.sawCoins || 0}</span>
+                        </div>
+                    `;
+                } else {
+                    tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Desconocido</p>';
+                }
+            } catch(e) {
+                tooltip.innerHTML = '<p class="text-red-500 text-[10px] text-center">Error al cargar</p>';
+            }
+
+            // CARGAR MENSAJES DEL FORO (Chat)
+            if(window.activeMessagesListener) window.activeMessagesListener();
+            
+            const msgRef = collection(db, "forums", forumId, "messages");
+            window.activeMessagesListener = onSnapshot(msgRef, (snapshot) => {
+                let messages = [];
+                snapshot.forEach(doc => messages.push({id: doc.id, ...doc.data()}));
+                
+                // Ordenar del más viejo al más nuevo (para chat)
+                messages.sort((a,b) => (a.createdAt?.toMillis() || 0) - (b.createdAt?.toMillis() || 0));
+
+                const msgContainer = document.getElementById('chat-messages-container');
+                let msgHtml = '';
+                
+                messages.forEach(msg => {
+                    let timeString = '';
+                    if(msg.createdAt) {
+                        const date = msg.createdAt.toDate();
+                        timeString = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    }
+
+                    // Burbuja de mensaje estilo Broadcast WhatsApp (Lado Izquierdo)
+                    msgHtml += `
+                        <div class="flex flex-col items-start w-full animate-fade-in">
+                            <div class="bg-zinc-800 border border-zinc-700 text-zinc-200 px-4 py-2 rounded-2xl rounded-tl-sm max-w-[85%] md:max-w-[70%] shadow-md">
+                                <p class="text-sm leading-relaxed break-words">${escapeHTML(msg.text)}</p>
+                                <span class="text-[9px] text-zinc-500 block text-right mt-1 tracking-widest">${timeString}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                msgContainer.innerHTML = msgHtml || '<div class="text-center text-zinc-600 text-xs py-10">Este foro está vacío.</div>';
+                // Scrollear hacia abajo automáticamente
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            });
+        };
+
+        // 4. Enviar Mensaje
+        window.sendForumMessage = async () => {
+            if(!window.currentForumId || !window.currentUser) return;
+            const input = document.getElementById('chat-input-text');
+            const text = input.value.trim();
+            if(!text) return;
+
+            input.value = ''; // Limpiar rápido para fluidez
+
+            try {
+                await addDoc(collection(db, "forums", window.currentForumId, "messages"), {
+                    text: text,
+                    createdAt: serverTimestamp()
+                });
+            } catch(e) {
+                console.error("Error al enviar mensaje", e);
+                alert("Hubo un error al enviar tu mensaje.");
+            }
+        };
+
+        // Utilidad para seguridad
+        function escapeHTML(str) {
+            if(!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+                }[tag])
+            );
+        }
 
         // =========================================================================
         // LECTURA DE GANADORES: 100% AUTOMÁTICA Y HÍBRIDA
@@ -1177,6 +1516,9 @@
                 unsubscribeProfile = onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
+                        
+                        // Guardar datos temporalmente para creación de foros
+                        window.currentUserData = data; 
 
                         const displayName = data.isLinked ? data.robloxUsername : "Cuenta no vinculada";
                         document.getElementById('user-display-name').innerText = `Hola, ${data.isLinked ? data.robloxUsername : 'Usuario'}`;
@@ -1272,6 +1614,7 @@
 
             } else {
                 window.currentUser = null;
+                window.currentUserData = null;
                 if(unsubscribeProfile) unsubscribeProfile();
                 
                 document.getElementById('auth-buttons').classList.remove('hidden');
