@@ -617,10 +617,10 @@
                             <!-- B y C: Cabecera del Foro -->
                             <div class="p-3 sm:p-4 border-b border-zinc-800 bg-zinc-900/80 flex items-center gap-4 relative shadow-md">
                                 <div class="relative group">
-                                    <img id="chat-header-avatar" src="./Inquisitor.png" alt="Avatar Creador" class="w-12 h-12 rounded-full object-cover border border-zinc-700 cursor-pointer hover:border-red-500 transition-colors">
+                                    <img id="chat-header-avatar" src="./Inquisitor.png" alt="Avatar Creador" class="w-12 h-12 rounded-full object-cover border border-zinc-700 cursor-pointer hover:border-red-500 transition-colors relative z-10">
                                     
-                                    <!-- Tooltip de Stats del Creador -->
-                                    <div id="chat-header-tooltip" class="absolute left-0 top-14 bg-zinc-900 border border-red-800 p-3 rounded-lg hidden group-hover:block z-50 w-48 shadow-xl">
+                                    <!-- Tooltip de Stats del Creador (Actualizado para aparecer suavemente a la derecha) -->
+                                    <div id="chat-header-tooltip" class="absolute left-14 -top-2 bg-zinc-950 border border-red-800 p-3 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 w-48 shadow-[0_0_20px_rgba(220,38,38,0.2)] pointer-events-none">
                                         <p class="text-zinc-500 text-xs text-center">Cargando stats...</p>
                                     </div>
                                 </div>
