@@ -95,7 +95,7 @@
 
                     <button onclick="handleProfileClick()" class="p-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 rounded-md transition-colors ml-2 shadow-md group flex items-center justify-center">
                         <svg id="nav-profile-icon-default" class="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                        <img id="nav-profile-icon-custom" src="" alt="Perfil Navbar" class="w-6 h-6 rounded-full object-cover hidden border border-zinc-600">
+                        <img id="nav-profile-icon-custom" src="" alt="Perfil Navbar" class="w-6 h-6 rounded-full object-cover hidden border border-zinc-600" onerror="this.src='./Inquisitor.png'">
                     </button>
                 </div>
             </div>
@@ -327,12 +327,12 @@
                         <div class="bg-zinc-900 p-4 rounded-lg border border-zinc-800 shadow-md relative group">
                             <div class="absolute inset-0 bg-red-600 opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-lg"></div>
                             <h4 class="text-xs text-zinc-400 mb-3 font-bold uppercase tracking-[0.1em] text-center">Colección de Objetos</h4>
-                            <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498467113629782107/image.png?ex=69f143c0&is=69eff240&hm=d208d3fb75ca4c971d78bdf235a31f44a299d8997b000364e1c7686998a278af&" alt="Objetos de Sawer" class="w-full rounded-md opacity-95 group-hover:opacity-100 transition-opacity filter contrast-110">
+                            <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498467113629782107/image.png?ex=69f143c0&is=69eff240&hm=d208d3fb75ca4c971d78bdf235a31f44a299d8997b000364e1c7686998a278af&" alt="Objetos de Sawer" class="w-full rounded-md opacity-95 group-hover:opacity-100 transition-opacity filter contrast-110" onerror="this.src='./Inquisitor.png'">
                         </div>
                         <div class="bg-zinc-900 p-4 rounded-lg border border-zinc-800 shadow-md relative group">
                             <div class="absolute inset-0 bg-red-600 opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-lg"></div>
                             <h4 class="text-xs text-zinc-400 mb-3 font-bold uppercase tracking-[0.1em] text-center">Mystery Boxes</h4>
-                            <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498468232787398729/image.png?ex=69f144ca&is=69eff34a&hm=46a08a8860b8bd7a0fd11a6ee360b775bb1e18eec474b7821a88939d6a5b17ea&" alt="Mystery Boxes" class="w-full rounded-md opacity-95 group-hover:opacity-100 transition-opacity filter contrast-110">
+                            <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498468232787398729/image.png?ex=69f144ca&is=69eff34a&hm=46a08a8860b8bd7a0fd11a6ee360b775bb1e18eec474b7821a88939d6a5b17ea&" alt="Mystery Boxes" class="w-full rounded-md opacity-95 group-hover:opacity-100 transition-opacity filter contrast-110" onerror="this.src='./Inquisitor.png'">
                         </div>
                     </div>
                 </div>
@@ -383,7 +383,7 @@
                         
                         <div class="text-center" data-aos="fade-left" data-aos-delay="300">
                             <div class="p-2 bg-zinc-950 border border-zinc-800 rounded-lg mb-8 transform -rotate-2 hover:rotate-0 transition-transform duration-300 shadow-xl">
-                                <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498469521550479542/image.png?ex=69f145fe&is=69eff47e&hm=c318d199504dd6e55949669bb3509247e9fe613a2caf65be1f4b3698f20b8d2e&" alt="Anuncio de Ronda en Discord" class="w-full rounded-md opacity-95">
+                                <img src="https://cdn.discordapp.com/attachments/1380998783554555954/1498469521550479542/image.png?ex=69f145fe&is=69eff47e&hm=c318d199504dd6e55949669bb3509247e9fe613a2caf65be1f4b3698f20b8d2e&" alt="Anuncio de Ronda en Discord" class="w-full rounded-md opacity-95" onerror="this.src='./Inquisitor.png'">
                             </div>
                             
                             <a href="https://discord.gg/qPshzM5x3m" target="_blank" class="inline-flex items-center justify-center bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-4 px-10 rounded-md transition-all transform hover:scale-105 shadow-lg text-lg w-full sm:w-auto uppercase tracking-wide">
@@ -410,7 +410,7 @@
                 
                 <!-- RECUADRO DE FOTO DE PERFIL -->
                 <div class="w-full aspect-square bg-zinc-900 rounded-lg flex items-center justify-center relative shadow-inner overflow-hidden border-2 border-zinc-800 group">
-                    <img id="profile-image-display" src="" alt="Foto de perfil" class="w-full h-full object-cover hidden group-hover:scale-110 transition-transform duration-500">
+                    <img id="profile-image-display" src="" alt="Foto de perfil" class="w-full h-full object-cover hidden group-hover:scale-110 transition-transform duration-500" onerror="this.src='./Inquisitor.png'">
                     <span id="profile-image-placeholder" class="text-zinc-500 font-bold uppercase tracking-widest text-xs text-center px-4">Espacio para Foto de Perfil</span>
                 </div>
                 
@@ -431,7 +431,7 @@
                     <button onclick="switchProfileTab('ayuda')" id="btn-tab-ayuda" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
                         Ayuda e Información <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
-                    <!-- NUEVO BOTÓN FOROS -->
+                    <!-- BOTÓN FOROS -->
                     <button onclick="switchProfileTab('foros')" id="btn-tab-foros" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
                         Foros Comunitarios <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
@@ -618,7 +618,7 @@
                             <div class="p-3 sm:p-4 border-b border-zinc-800 bg-zinc-900/80 flex items-center justify-between relative shadow-md">
                                 <div class="flex items-center gap-4 flex-1 overflow-hidden">
                                     <div class="relative group">
-                                        <img id="chat-header-avatar" src="./Inquisitor.png" alt="Avatar Creador" class="w-12 h-12 rounded-full object-cover border border-zinc-700 cursor-pointer hover:border-red-500 transition-colors relative z-10">
+                                        <img id="chat-header-avatar" src="./Inquisitor.png" alt="Avatar Creador" class="w-12 h-12 rounded-full object-cover border border-zinc-700 cursor-pointer hover:border-red-500 transition-colors relative z-10" onerror="this.src='./Inquisitor.png'">
                                         
                                         <!-- Tooltip de Stats del Creador -->
                                         <div id="chat-header-tooltip" class="absolute left-16 top-1/2 -translate-y-1/2 bg-zinc-950 border border-red-800 p-3 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100] w-48 shadow-[0_0_20px_rgba(220,38,38,0.4)] pointer-events-none">
@@ -896,12 +896,12 @@
             
             // FILTRO PARA MENSAJES ANTIGUOS DE PRUEBA (SIN ID)
             if (!userId || userId === 'undefined' || userId === 'null') {
-                tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Mensaje Antiguo</p>';
+                tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center mt-3">Mensaje Antiguo</p>';
                 return;
             }
             
             try {
-                // Importación dinámica porque estamos fuera del module
+                // Importación dinámica porque estamos fuera del module principal
                 const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
                 const db = getFirestore();
                 
@@ -926,10 +926,10 @@
                         </div>
                     `;
                 } else {
-                    tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Desconocido</p>';
+                    tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center mt-3">Desconocido</p>';
                 }
             } catch(e) {
-                tooltip.innerHTML = '<p class="text-red-500 text-[10px] text-center">Error</p>';
+                tooltip.innerHTML = '<p class="text-red-500 text-[10px] text-center mt-3">Error</p>';
             }
         };
 
@@ -1144,7 +1144,7 @@
                     
                     htmlContent += `
                         <div id="forum-item-${forum.id}" onclick="selectForum('${forum.id}', '${escapeHTML(forum.title)}', '${escapeHTML(forum.description || '')}', '${forum.creatorId}', '${escapeHTML(forum.creatorName)}', '${forum.creatorAvatarUrl}', ${forum.isPublic === true})" class="forum-list-item cursor-pointer p-2 rounded-md border border-zinc-800/50 hover:bg-zinc-900 hover:border-red-600/50 transition-all flex items-center gap-3">
-                            <img src="${forum.creatorAvatarUrl || './Inquisitor.png'}" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-zinc-700">
+                            <img src="${forum.creatorAvatarUrl || './Inquisitor.png'}" onerror="this.src='./Inquisitor.png'" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-zinc-700">
                             <div class="overflow-hidden">
                                 <h4 class="text-zinc-200 font-bold text-xs uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis leading-tight">${escapeHTML(forum.title)}</h4>
                                 ${descPreview}
@@ -1205,8 +1205,7 @@
                 await updateDoc(doc(db, "forums", window.currentForumId), {
                     isPublic: newPrivacyState
                 });
-                // No necesitamos cambiar la UI aquí, el onSnapshot de mensajes/foros actualizará selectForum automáticamente si lo integramos, 
-                // pero para que sea instantáneo actualizamos las variables globales y la UI del botón:
+                
                 window.isForumPublic = newPrivacyState;
                 updatePrivacyButtonUI();
                 
@@ -1220,6 +1219,8 @@
             const btn = document.getElementById('btn-forum-privacy');
             const iconPrivate = document.getElementById('icon-privacy-private');
             const iconPublic = document.getElementById('icon-privacy-public');
+            const inputArea = document.getElementById('chat-input-area');
+            const inputField = document.getElementById('chat-input-text');
             
             if(window.isForumPublic) {
                 btn.className = "p-2 rounded-md transition-colors border flex-shrink-0 bg-green-900/20 border-green-800/50 hover:bg-green-900/40";
@@ -1264,7 +1265,6 @@
             if(activeEl) activeEl.classList.add('border-red-600', 'bg-zinc-900');
 
             // Control de Permiso para escribir (Area E)
-            // Aparece si eres el creador O si el foro es público y estás logueado
             if ((isCreator || isPublic) && window.currentUser) {
                 document.getElementById('chat-input-area').classList.remove('hidden');
                 const inputField = document.getElementById('chat-input-text');
@@ -1275,8 +1275,8 @@
 
             // TOOLTIP STATS: Cargar Stats del creador del foro
             const tooltip = document.getElementById('chat-header-tooltip');
-            tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Buscando jugador...</p>';
-            window.fetchTooltipData(creatorId, 'chat-header-tooltip', creatorName); // Llamada a la función global
+            tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Buscando...</p>';
+            window.fetchTooltipData(creatorId, 'chat-header-tooltip', creatorName); 
 
             // CARGAR MENSAJES DEL FORO (Chat)
             if(window.activeMessagesListener) window.activeMessagesListener();
@@ -1306,7 +1306,7 @@
                     msgHtml += `
                         <div class="flex items-start gap-3 w-full animate-fade-in group/msg">
                             <div class="relative group/avatar mt-1">
-                                <img src="${msgAuthorAvatar}" class="w-8 h-8 rounded-full object-cover border border-zinc-700 cursor-pointer flex-shrink-0 relative z-10" onmouseover="window.fetchTooltipData('${msg.authorId}', '${tooltipId}', '${msgAuthorName}')">
+                                <img src="${msgAuthorAvatar}" onerror="this.src='./Inquisitor.png'" class="w-8 h-8 rounded-full object-cover border border-zinc-700 cursor-pointer flex-shrink-0 relative z-10" onmouseover="window.fetchTooltipData('${msg.authorId}', '${tooltipId}', '${msgAuthorName}')">
                                 <!-- Tooltip del autor del mensaje -->
                                 <div id="${tooltipId}" class="absolute left-12 top-1/2 -translate-y-1/2 bg-zinc-950 border border-red-800 p-3 rounded-lg opacity-0 invisible group-hover/avatar:opacity-100 group-hover/avatar:visible transition-all duration-300 z-[100] w-48 shadow-[0_0_20px_rgba(220,38,38,0.4)] pointer-events-none">
                                     <p class="text-zinc-500 text-xs text-center">Buscando...</p>
@@ -1446,7 +1446,7 @@
                     console.warn("Aviso: Firebase no entregó los documentos adicionales.", fbError);
                 }
 
-                // Generar lista final (sin ordenar específicamente por puntos para el centro, mantiene orden mixto de inserción/búsqueda)
+                // Generar lista final 
                 let listaFinal = Object.values(mapaGanadores);
 
                 // Crear copias para ordenar los Tops antes de modificar la lista central
@@ -1464,7 +1464,7 @@
                     htmlContent += `
                         <div class="bg-zinc-950 border border-zinc-800/80 rounded-lg p-3 flex items-center justify-between hover:border-red-900/50 hover:bg-zinc-900 transition-all shadow-sm">
                             <div class="flex items-center gap-4">
-                                <img id="fb-avatar-${jugador.id}" src="${jugador.avatarUrl}" alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-zinc-700">
+                                <img id="fb-avatar-${jugador.id}" src="${jugador.avatarUrl}" onerror="this.src='./Inquisitor.png'" alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-zinc-700">
                                 <div>
                                     <p id="fb-name-${jugador.id}" class="text-white font-bold uppercase tracking-wider text-sm">${jugador.nombre}</p>
                                     <p class="text-zinc-500 text-xs">ID: ${jugador.id}</p>
@@ -1495,7 +1495,7 @@
                     htmlTopPuntos += `
                         <div class="${bgStyle} border rounded-lg p-3 flex items-center gap-3 hover:border-yellow-500/80 transition-colors shadow-md">
                             <span class="text-3xl drop-shadow-[0_0_8px_rgba(234,179,8,0.6)]">${medal}</span>
-                            <img id="top-pt-avatar-${jugador.id}" src="${jugador.avatarUrl}" alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-yellow-900/50 shadow-[0_0_10px_rgba(234,179,8,0.2)]">
+                            <img id="top-pt-avatar-${jugador.id}" src="${jugador.avatarUrl}" onerror="this.src='./Inquisitor.png'" alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-yellow-900/50 shadow-[0_0_10px_rgba(234,179,8,0.2)]">
                             <div class="overflow-hidden">
                                 <p id="top-pt-name-${jugador.id}" class="text-white font-black uppercase tracking-wider text-xs whitespace-nowrap overflow-hidden text-ellipsis">${jugador.nombre}</p>
                                 <p class="text-yellow-500 font-black text-sm leading-none mt-1 drop-shadow-md">${jugador.puntos} PTS</p>
@@ -1516,7 +1516,7 @@
                     htmlTopVictorias += `
                         <div class="${bgStyle} border rounded-lg p-3 flex items-center gap-3 hover:border-red-600/80 transition-colors shadow-md">
                             <span class="text-3xl drop-shadow-[0_0_8px_rgba(220,38,38,0.6)]">${medal}</span>
-                            <img id="top-win-avatar-${jugador.id}" src="${jugador.avatarUrl}" alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-red-900/50 shadow-[0_0_10px_rgba(220,38,38,0.2)]">
+                            <img id="top-win-avatar-${jugador.id}" src="${jugador.avatarUrl}" onerror="this.src='./Inquisitor.png'" alt="Avatar" class="w-12 h-12 rounded-md object-cover border border-red-900/50 shadow-[0_0_10px_rgba(220,38,38,0.2)]">
                             <div class="overflow-hidden">
                                 <p id="top-win-name-${jugador.id}" class="text-white font-black uppercase tracking-wider text-xs whitespace-nowrap overflow-hidden text-ellipsis">${jugador.nombre}</p>
                                 <p class="text-red-500 font-black text-sm leading-none mt-1 drop-shadow-md">${jugador.victorias} WINS</p>
@@ -1533,7 +1533,7 @@
                 // DESCARGAR LAS FOTOS Y NOMBRES FALTANTES DESDE ROBLOX
                 // ===============================================
                 
-                // 1. Fotos en Lote (muy rápido y no se bloquea)
+                // 1. Fotos en Lote
                 if (idsToFetchAvatar.length > 0) {
                     const batchIds = idsToFetchAvatar.join(',');
                     fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${batchIds}&size=150x150&format=Png&isCircular=false`)
@@ -1556,7 +1556,7 @@
                         .catch(err => console.error("Error obteniendo avatares batch:", err));
                 }
 
-                // 2. Nombres Inteligentes en Lote
+                // 2. Nombres en Lote
                 if (idsToFetchName.length > 0) {
                     try {
                         let res = await fetch('https://users.roproxy.com/v1/users', {
@@ -1580,8 +1580,6 @@
                             });
                         }
                     } catch(e) {
-                        // Respaldo de seguridad si el método en lote falla, busca de 1 en 1
-                        console.warn("Respaldo: Buscando nombres de a uno...", e);
                         for(let id of idsToFetchName) {
                             try {
                                 let r = await fetch(`https://users.roproxy.com/v1/users/${id}`);
@@ -1646,7 +1644,7 @@
                         const navIconCustom = document.getElementById('nav-profile-icon-custom');
                         const navIconDefault = document.getElementById('nav-profile-icon-default');
 
-                        // LÓGICA DE FOTO DEL PERFIL: SIEMPRE ROPROXY
+                        // LÓGICA DE FOTO DEL PERFIL
                         if (data.isLinked && data.robloxUserId) {
                             fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${data.robloxUserId}&size=420x420&format=Png&isCircular=false`)
                                 .then(res => res.json())
