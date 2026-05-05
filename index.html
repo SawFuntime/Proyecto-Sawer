@@ -621,7 +621,7 @@
                                         <img id="chat-header-avatar" src="./Inquisitor.png" alt="Avatar Creador" class="w-12 h-12 rounded-full object-cover border border-zinc-700 cursor-pointer hover:border-red-500 transition-colors relative z-10">
                                         
                                         <!-- Tooltip de Stats del Creador -->
-                                        <div id="chat-header-tooltip" class="absolute left-14 -top-2 bg-zinc-950 border border-red-800 p-3 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 w-48 shadow-[0_0_20px_rgba(220,38,38,0.2)] pointer-events-none">
+                                        <div id="chat-header-tooltip" class="absolute left-16 top-1/2 -translate-y-1/2 bg-zinc-950 border border-red-800 p-3 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100] w-48 shadow-[0_0_20px_rgba(220,38,38,0.4)] pointer-events-none">
                                             <p class="text-zinc-500 text-xs text-center">Cargando stats...</p>
                                         </div>
                                     </div>
@@ -894,6 +894,12 @@
             // Si ya tiene los datos (no dice "Buscando..."), no volvemos a hacer la petición a Firebase
             if(!tooltip.innerHTML.includes("Buscando")) return; 
             
+            // FILTRO PARA MENSAJES ANTIGUOS DE PRUEBA (SIN ID)
+            if (!userId || userId === 'undefined' || userId === 'null') {
+                tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Mensaje Antiguo</p>';
+                return;
+            }
+            
             try {
                 // Importación dinámica porque estamos fuera del module
                 const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
@@ -903,20 +909,20 @@
                 if(userDoc.exists()) {
                     const stats = userDoc.data().stats || {};
                     tooltip.innerHTML = `
-                        <div class="text-center mb-2 border-b border-zinc-700 pb-1">
-                            <span class="text-white font-bold text-[11px] uppercase tracking-wider">${username}</span>
+                        <div class="text-center mb-2 border-b border-zinc-700 pb-2">
+                            <span class="text-white font-bold text-xs uppercase tracking-wider block truncate px-1" title="${username}">${username}</span>
                         </div>
-                        <div class="flex justify-between items-center text-xs mb-1">
-                            <span class="text-zinc-400">Wins:</span>
-                            <span class="text-white font-black">${stats.wins || 0}</span>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-zinc-400 text-xs">Wins:</span>
+                            <span class="text-white font-black text-sm">${stats.wins || 0}</span>
                         </div>
-                        <div class="flex justify-between items-center text-xs mb-1">
-                            <span class="text-zinc-400">Puntos:</span>
-                            <span class="text-white font-black">${stats.recordPuntos || 0}</span>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-zinc-400 text-xs">Puntos:</span>
+                            <span class="text-white font-black text-sm">${stats.recordPuntos || 0}</span>
                         </div>
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-zinc-400">SawCoins:</span>
-                            <span class="text-yellow-500 font-black">${stats.sawCoins || 0}</span>
+                        <div class="flex justify-between items-center">
+                            <span class="text-zinc-400 text-xs">SawCoins:</span>
+                            <span class="text-yellow-500 font-black text-sm">${stats.sawCoins || 0}</span>
                         </div>
                     `;
                 } else {
@@ -1300,10 +1306,10 @@
                     msgHtml += `
                         <div class="flex items-start gap-3 w-full animate-fade-in group/msg">
                             <div class="relative group/avatar mt-1">
-                                <img src="${msgAuthorAvatar}" class="w-8 h-8 rounded-full object-cover border border-zinc-700 cursor-pointer flex-shrink-0" onmouseover="window.fetchTooltipData('${msg.authorId}', '${tooltipId}', '${msgAuthorName}')">
+                                <img src="${msgAuthorAvatar}" class="w-8 h-8 rounded-full object-cover border border-zinc-700 cursor-pointer flex-shrink-0 relative z-10" onmouseover="window.fetchTooltipData('${msg.authorId}', '${tooltipId}', '${msgAuthorName}')">
                                 <!-- Tooltip del autor del mensaje -->
-                                <div id="${tooltipId}" class="absolute left-10 -top-2 bg-zinc-950 border border-red-800 p-2 rounded-lg opacity-0 invisible group-hover/avatar:opacity-100 group-hover/avatar:visible transition-all duration-300 z-50 w-40 shadow-xl pointer-events-none">
-                                    <p class="text-zinc-500 text-[10px] text-center">Buscando...</p>
+                                <div id="${tooltipId}" class="absolute left-12 top-1/2 -translate-y-1/2 bg-zinc-950 border border-red-800 p-3 rounded-lg opacity-0 invisible group-hover/avatar:opacity-100 group-hover/avatar:visible transition-all duration-300 z-[100] w-48 shadow-[0_0_20px_rgba(220,38,38,0.4)] pointer-events-none">
+                                    <p class="text-zinc-500 text-xs text-center">Buscando...</p>
                                 </div>
                             </div>
                             <div class="bg-zinc-800 border border-zinc-700 text-zinc-200 px-4 py-2 rounded-2xl rounded-tl-sm max-w-[85%] md:max-w-[70%] shadow-md">
