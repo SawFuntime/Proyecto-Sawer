@@ -154,7 +154,7 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <h2 class="text-2xl font-black text-white mb-2 uppercase tracking-wider border-b border-red-600 pb-2 inline-block">Crear Nuevo Foro</h2>
-            <p class="text-zinc-400 text-sm mt-2 mb-6">Crea un espacio para compartir tus pensamientos. Recuerda que solo tú podrás escribir en él.</p>
+            <p class="text-zinc-400 text-sm mt-2 mb-6">Crea un espacio para compartir tus pensamientos. Podrás decidir si otros pueden escribir luego.</p>
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1">Título del Foro <span class="text-red-500">*</span></label>
@@ -614,31 +614,39 @@
 
                         <!-- Chat Activo -->
                         <div id="forum-active-chat" class="hidden flex flex-col h-full w-full">
-                            <!-- B y C: Cabecera del Foro -->
-                            <div class="p-3 sm:p-4 border-b border-zinc-800 bg-zinc-900/80 flex items-center gap-4 relative shadow-md">
-                                <div class="relative group">
-                                    <img id="chat-header-avatar" src="./Inquisitor.png" alt="Avatar Creador" class="w-12 h-12 rounded-full object-cover border border-zinc-700 cursor-pointer hover:border-red-500 transition-colors relative z-10">
-                                    
-                                    <!-- Tooltip de Stats del Creador (Actualizado para aparecer suavemente a la derecha) -->
-                                    <div id="chat-header-tooltip" class="absolute left-14 -top-2 bg-zinc-950 border border-red-800 p-3 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 w-48 shadow-[0_0_20px_rgba(220,38,38,0.2)] pointer-events-none">
-                                        <p class="text-zinc-500 text-xs text-center">Cargando stats...</p>
+                            <!-- Cabecera del Foro -->
+                            <div class="p-3 sm:p-4 border-b border-zinc-800 bg-zinc-900/80 flex items-center justify-between relative shadow-md">
+                                <div class="flex items-center gap-4 flex-1 overflow-hidden">
+                                    <div class="relative group">
+                                        <img id="chat-header-avatar" src="./Inquisitor.png" alt="Avatar Creador" class="w-12 h-12 rounded-full object-cover border border-zinc-700 cursor-pointer hover:border-red-500 transition-colors relative z-10">
+                                        
+                                        <!-- Tooltip de Stats del Creador -->
+                                        <div id="chat-header-tooltip" class="absolute left-14 -top-2 bg-zinc-950 border border-red-800 p-3 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 w-48 shadow-[0_0_20px_rgba(220,38,38,0.2)] pointer-events-none">
+                                            <p class="text-zinc-500 text-xs text-center">Cargando stats...</p>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-hidden">
+                                        <h4 id="chat-header-title" class="font-bold text-white uppercase tracking-wider text-sm sm:text-base leading-tight whitespace-nowrap overflow-hidden text-ellipsis">Título</h4>
+                                        <p id="chat-header-desc" class="text-zinc-400 text-xs sm:text-sm mt-1 whitespace-nowrap overflow-hidden text-ellipsis">Descripción</p>
                                     </div>
                                 </div>
-                                <div class="overflow-hidden">
-                                    <h4 id="chat-header-title" class="font-bold text-white uppercase tracking-wider text-sm sm:text-base leading-tight whitespace-nowrap overflow-hidden text-ellipsis">Título</h4>
-                                    <p id="chat-header-desc" class="text-zinc-400 text-xs sm:text-sm mt-1 whitespace-nowrap overflow-hidden text-ellipsis">Descripción</p>
-                                </div>
+                                
+                                <!-- Botón de Configuración de Privacidad (Solo visible para el creador) -->
+                                <button id="btn-forum-privacy" onclick="toggleForumPrivacy()" class="hidden p-2 rounded-md transition-colors border flex-shrink-0" title="Cambiar Privacidad del Foro">
+                                    <svg id="icon-privacy-private" class="w-5 h-5 text-zinc-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                    <svg id="icon-privacy-public" class="w-5 h-5 text-green-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
+                                </button>
                             </div>
 
-                            <!-- D: Contenedor de Mensajes -->
+                            <!-- Contenedor de Mensajes -->
                             <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 space-y-4 bg-[#0a0a0c] custom-scroll">
-                                <!-- Los mensajes aparecerán aquí (alineados a la izquierda) -->
+                                <!-- Los mensajes aparecerán aquí -->
                             </div>
 
-                            <!-- E: Barra de Input (Solo visible para el creador) -->
+                            <!-- Barra de Input (Aparece según privacidad/creador) -->
                             <div id="chat-input-area" class="p-3 border-t border-zinc-800 bg-zinc-900/50 hidden">
                                 <div class="flex gap-2">
-                                    <input type="text" id="chat-input-text" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-full px-4 py-2 text-sm text-white focus:border-red-500 focus:outline-none transition-colors" placeholder="Escribe un mensaje para tus seguidores..." onkeypress="if(event.key === 'Enter') sendForumMessage()">
+                                    <input type="text" id="chat-input-text" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-full px-4 py-2 text-sm text-white focus:border-red-500 focus:outline-none transition-colors" placeholder="Escribe un mensaje..." onkeypress="if(event.key === 'Enter') sendForumMessage()">
                                     <button onclick="sendForumMessage()" class="bg-red-700 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-md flex-shrink-0">
                                         <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
                                     </button>
@@ -877,13 +885,55 @@
             document.getElementById('create-forum-modal').classList.add('hidden');
         }
 
+        // TOOLTIP HELPER PARA MENSAJES DINÁMICOS
+        // Definimos la función globalmente para que los eventos onmouseover la encuentren
+        window.fetchTooltipData = async (userId, tooltipId, username) => {
+            const tooltip = document.getElementById(tooltipId);
+            if(!tooltip) return;
+            
+            // Si ya tiene los datos (no dice "Buscando..."), no volvemos a hacer la petición a Firebase
+            if(!tooltip.innerHTML.includes("Buscando")) return; 
+            
+            try {
+                // Importación dinámica porque estamos fuera del module
+                const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+                const db = getFirestore();
+                
+                const userDoc = await getDoc(doc(db, "users", userId));
+                if(userDoc.exists()) {
+                    const stats = userDoc.data().stats || {};
+                    tooltip.innerHTML = `
+                        <div class="text-center mb-2 border-b border-zinc-700 pb-1">
+                            <span class="text-white font-bold text-[11px] uppercase tracking-wider">${username}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-zinc-400">Wins:</span>
+                            <span class="text-white font-black">${stats.wins || 0}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="text-zinc-400">Puntos:</span>
+                            <span class="text-white font-black">${stats.recordPuntos || 0}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400">SawCoins:</span>
+                            <span class="text-yellow-500 font-black">${stats.sawCoins || 0}</span>
+                        </div>
+                    `;
+                } else {
+                    tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Desconocido</p>';
+                }
+            } catch(e) {
+                tooltip.innerHTML = '<p class="text-red-500 text-[10px] text-center">Error</p>';
+            }
+        };
+
     </script>
 
     <!-- SCRIPT DE FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, updatePassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, addDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
@@ -1060,10 +1110,11 @@
         window.activeForumsListener = null;
         window.currentForumId = null;
         window.activeMessagesListener = null;
+        window.isForumPublic = false;
 
         // 1. Cargar Foros en la barra lateral
         window.loadForums = () => {
-            if(window.activeForumsListener) return; // Si ya escucha, no duplicar
+            if(window.activeForumsListener) return; 
             
             const forumsRef = collection(db, "forums");
             window.activeForumsListener = onSnapshot(forumsRef, (snapshot) => {
@@ -1086,7 +1137,7 @@
                     const descPreview = forum.description ? `<p class="text-[10px] text-zinc-500 whitespace-nowrap overflow-hidden text-ellipsis">${forum.description}</p>` : '';
                     
                     htmlContent += `
-                        <div id="forum-item-${forum.id}" onclick="selectForum('${forum.id}', '${escapeHTML(forum.title)}', '${escapeHTML(forum.description || '')}', '${forum.creatorId}', '${escapeHTML(forum.creatorName)}', '${forum.creatorAvatarUrl}')" class="forum-list-item cursor-pointer p-2 rounded-md border border-zinc-800/50 hover:bg-zinc-900 hover:border-red-600/50 transition-all flex items-center gap-3">
+                        <div id="forum-item-${forum.id}" onclick="selectForum('${forum.id}', '${escapeHTML(forum.title)}', '${escapeHTML(forum.description || '')}', '${forum.creatorId}', '${escapeHTML(forum.creatorName)}', '${forum.creatorAvatarUrl}', ${forum.isPublic === true})" class="forum-list-item cursor-pointer p-2 rounded-md border border-zinc-800/50 hover:bg-zinc-900 hover:border-red-600/50 transition-all flex items-center gap-3">
                             <img src="${forum.creatorAvatarUrl || './Inquisitor.png'}" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-zinc-700">
                             <div class="overflow-hidden">
                                 <h4 class="text-zinc-200 font-bold text-xs uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis leading-tight">${escapeHTML(forum.title)}</h4>
@@ -1115,7 +1166,6 @@
             }
 
             try {
-                // Sacamos la foto actual del perfil del usuario (desde la UI que ya la tiene procesada)
                 const imgDisplay = document.getElementById('profile-image-display');
                 let avatarUrl = './Inquisitor.png';
                 if(imgDisplay && !imgDisplay.classList.contains('hidden')) {
@@ -1128,6 +1178,7 @@
                     creatorId: window.currentUser.uid,
                     creatorName: window.currentUserData.robloxUsername || "Usuario",
                     creatorAvatarUrl: avatarUrl,
+                    isPublic: false, // Por defecto cerrado (solo el dueño habla)
                     createdAt: serverTimestamp()
                 });
                 
@@ -1139,9 +1190,49 @@
             }
         };
 
-        // 3. Seleccionar y abrir un foro
-        window.selectForum = async (forumId, title, desc, creatorId, creatorName, creatorAvatar) => {
+        // 3. Cambiar Privacidad del Foro (Solo Creador)
+        window.toggleForumPrivacy = async () => {
+            if(!window.currentForumId || !window.currentUser) return;
+            const newPrivacyState = !window.isForumPublic; // Invertir estado actual
+            
+            try {
+                await updateDoc(doc(db, "forums", window.currentForumId), {
+                    isPublic: newPrivacyState
+                });
+                // No necesitamos cambiar la UI aquí, el onSnapshot de mensajes/foros actualizará selectForum automáticamente si lo integramos, 
+                // pero para que sea instantáneo actualizamos las variables globales y la UI del botón:
+                window.isForumPublic = newPrivacyState;
+                updatePrivacyButtonUI();
+                
+            } catch(e) {
+                console.error("Error al cambiar privacidad", e);
+                alert("No se pudo cambiar la configuración del foro.");
+            }
+        };
+
+        function updatePrivacyButtonUI() {
+            const btn = document.getElementById('btn-forum-privacy');
+            const iconPrivate = document.getElementById('icon-privacy-private');
+            const iconPublic = document.getElementById('icon-privacy-public');
+            
+            if(window.isForumPublic) {
+                btn.className = "p-2 rounded-md transition-colors border flex-shrink-0 bg-green-900/20 border-green-800/50 hover:bg-green-900/40";
+                btn.title = "Foro Público: Todos pueden hablar";
+                iconPublic.classList.remove('hidden');
+                iconPrivate.classList.add('hidden');
+            } else {
+                btn.className = "p-2 rounded-md transition-colors border flex-shrink-0 bg-zinc-900 border-zinc-700 hover:bg-zinc-800";
+                btn.title = "Canal Cerrado: Solo tú puedes hablar";
+                iconPrivate.classList.remove('hidden');
+                iconPublic.classList.add('hidden');
+            }
+        }
+
+        // 4. Seleccionar y abrir un foro
+        window.selectForum = async (forumId, title, desc, creatorId, creatorName, creatorAvatar, isPublic) => {
             window.currentForumId = forumId;
+            window.isForumPublic = isPublic;
+            const isCreator = window.currentUser && window.currentUser.uid === creatorId;
             
             // UI Alternar a Chat Activo
             document.getElementById('forum-chat-placeholder').classList.add('hidden');
@@ -1152,14 +1243,26 @@
             document.getElementById('chat-header-desc').innerText = desc || "Un espacio de difusión de Proyecto Sawer.";
             document.getElementById('chat-header-avatar').src = creatorAvatar || "./Inquisitor.png";
 
+            // Mostrar/Configurar botón de privacidad
+            const privacyBtn = document.getElementById('btn-forum-privacy');
+            if (isCreator) {
+                privacyBtn.classList.remove('hidden');
+                updatePrivacyButtonUI();
+            } else {
+                privacyBtn.classList.add('hidden');
+            }
+
             // Resaltar en la lista
             document.querySelectorAll('.forum-list-item').forEach(el => el.classList.remove('border-red-600', 'bg-zinc-900'));
             const activeEl = document.getElementById(`forum-item-${forumId}`);
             if(activeEl) activeEl.classList.add('border-red-600', 'bg-zinc-900');
 
             // Control de Permiso para escribir (Area E)
-            if (window.currentUser && window.currentUser.uid === creatorId) {
+            // Aparece si eres el creador O si el foro es público y estás logueado
+            if ((isCreator || isPublic) && window.currentUser) {
                 document.getElementById('chat-input-area').classList.remove('hidden');
+                const inputField = document.getElementById('chat-input-text');
+                inputField.placeholder = isCreator ? "Escribe un mensaje para tus seguidores..." : "Escribe un mensaje en el foro...";
             } else {
                 document.getElementById('chat-input-area').classList.add('hidden');
             }
@@ -1167,33 +1270,7 @@
             // TOOLTIP STATS: Cargar Stats del creador del foro
             const tooltip = document.getElementById('chat-header-tooltip');
             tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Buscando jugador...</p>';
-            try {
-                const userDoc = await getDoc(doc(db, "users", creatorId));
-                if(userDoc.exists()) {
-                    const stats = userDoc.data().stats || {};
-                    tooltip.innerHTML = `
-                        <div class="text-center mb-2 border-b border-zinc-700 pb-1">
-                            <span class="text-white font-bold text-[11px] uppercase tracking-wider">${creatorName}</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs mb-1">
-                            <span class="text-zinc-400">Wins:</span>
-                            <span class="text-white font-black">${stats.wins || 0}</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs mb-1">
-                            <span class="text-zinc-400">Puntos:</span>
-                            <span class="text-white font-black">${stats.recordPuntos || 0}</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-zinc-400">SawCoins:</span>
-                            <span class="text-yellow-500 font-black">${stats.sawCoins || 0}</span>
-                        </div>
-                    `;
-                } else {
-                    tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center">Desconocido</p>';
-                }
-            } catch(e) {
-                tooltip.innerHTML = '<p class="text-red-500 text-[10px] text-center">Error al cargar</p>';
-            }
+            window.fetchTooltipData(creatorId, 'chat-header-tooltip', creatorName); // Llamada a la función global
 
             // CARGAR MENSAJES DEL FORO (Chat)
             if(window.activeMessagesListener) window.activeMessagesListener();
@@ -1215,11 +1292,22 @@
                         const date = msg.createdAt.toDate();
                         timeString = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                     }
+                    
+                    const msgAuthorAvatar = msg.authorAvatarUrl || "./Inquisitor.png";
+                    const msgAuthorName = escapeHTML(msg.authorName || "Desconocido");
+                    const tooltipId = `msg-tooltip-${msg.id}`;
 
-                    // Burbuja de mensaje estilo Broadcast WhatsApp (Lado Izquierdo)
                     msgHtml += `
-                        <div class="flex flex-col items-start w-full animate-fade-in">
+                        <div class="flex items-start gap-3 w-full animate-fade-in group/msg">
+                            <div class="relative group/avatar mt-1">
+                                <img src="${msgAuthorAvatar}" class="w-8 h-8 rounded-full object-cover border border-zinc-700 cursor-pointer flex-shrink-0" onmouseover="window.fetchTooltipData('${msg.authorId}', '${tooltipId}', '${msgAuthorName}')">
+                                <!-- Tooltip del autor del mensaje -->
+                                <div id="${tooltipId}" class="absolute left-10 -top-2 bg-zinc-950 border border-red-800 p-2 rounded-lg opacity-0 invisible group-hover/avatar:opacity-100 group-hover/avatar:visible transition-all duration-300 z-50 w-40 shadow-xl pointer-events-none">
+                                    <p class="text-zinc-500 text-[10px] text-center">Buscando...</p>
+                                </div>
+                            </div>
                             <div class="bg-zinc-800 border border-zinc-700 text-zinc-200 px-4 py-2 rounded-2xl rounded-tl-sm max-w-[85%] md:max-w-[70%] shadow-md">
+                                <span class="text-[10px] font-bold text-red-400 uppercase tracking-wider block mb-1">${msgAuthorName}</span>
                                 <p class="text-sm leading-relaxed break-words">${escapeHTML(msg.text)}</p>
                                 <span class="text-[9px] text-zinc-500 block text-right mt-1 tracking-widest">${timeString}</span>
                             </div>
@@ -1233,9 +1321,9 @@
             });
         };
 
-        // 4. Enviar Mensaje
+        // 5. Enviar Mensaje
         window.sendForumMessage = async () => {
-            if(!window.currentForumId || !window.currentUser) return;
+            if(!window.currentForumId || !window.currentUser || !window.currentUserData) return;
             const input = document.getElementById('chat-input-text');
             const text = input.value.trim();
             if(!text) return;
@@ -1243,8 +1331,17 @@
             input.value = ''; // Limpiar rápido para fluidez
 
             try {
+                const imgDisplay = document.getElementById('profile-image-display');
+                let avatarUrl = './Inquisitor.png';
+                if(imgDisplay && !imgDisplay.classList.contains('hidden')) {
+                    avatarUrl = imgDisplay.src;
+                }
+
                 await addDoc(collection(db, "forums", window.currentForumId, "messages"), {
                     text: text,
+                    authorId: window.currentUser.uid,
+                    authorName: window.currentUserData.robloxUsername || "Usuario",
+                    authorAvatarUrl: avatarUrl,
                     createdAt: serverTimestamp()
                 });
             } catch(e) {
