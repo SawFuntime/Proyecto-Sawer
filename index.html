@@ -939,7 +939,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, updatePassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, addDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, addDoc, updateDoc, serverTimestamp, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
@@ -985,6 +985,7 @@
                     linkCode: null,
                     photoURL: null,
                     discordUsername: null,
+                    hideStats: false, // <-- Por defecto las stats se muestran
                     stats: { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: "0/67" }
                 });
                 
@@ -1095,6 +1096,38 @@
             }
         });
 
+        // 4. Actualizar Estado de Privacidad (Ocultar Stats)
+        const toggleHideStats = document.getElementById('toggle-hide-stats');
+        if(toggleHideStats) {
+            toggleHideStats.addEventListener('change', async (e) => {
+                if(!window.currentUser) return;
+                const isHidden = e.target.checked;
+                try {
+                    await updateDoc(doc(db, "users", window.currentUser.uid), { hideStats: isHidden });
+                } catch(error) {
+                    console.error("Error cambiando privacidad", error);
+                    e.target.checked = !isHidden; // Revierte visualmente si hay error
+                }
+            });
+        }
+
+        // 5. Dar Like a Mensajes del Foro
+        window.toggleMessageLike = async (msgId, hasLiked) => {
+            if(!window.currentUser || !window.currentForumId) {
+                alert("Debes iniciar sesión para interactuar con los mensajes.");
+                return;
+            }
+            const msgRef = doc(db, "forums", window.currentForumId, "messages", msgId);
+            try {
+                if(hasLiked) {
+                    await updateDoc(msgRef, { likes: arrayRemove(window.currentUser.uid) });
+                } else {
+                    await updateDoc(msgRef, { likes: arrayUnion(window.currentUser.uid) });
+                }
+            } catch(e) {
+                console.error("Error al dar like:", e);
+            }
+        };
 
         document.getElementById('btn-generate-code').addEventListener('click', async () => {
             if(!window.currentUser) return;
@@ -1616,15 +1649,15 @@
                             profileNameUI.innerText = displayName;
                             if(data.isLinked) {
                                 profileNameUI.classList.remove('text-zinc-500'); profileNameUI.classList.add('text-red-500');
-                            }
-                        }
-
-                        // Actualizar el estado de Discord
+                        // Actualizar el estado de Discord y Privacidad (UI)
                         if(data.discordUsername !== undefined && data.discordUsername !== null) {
                             document.getElementById('config-discord-username').value = data.discordUsername;
                         } else {
                             document.getElementById('config-discord-username').value = "";
                         }
+                        
+                        const toggleStats = document.getElementById('toggle-hide-stats');
+                        if(toggleStats) toggleStats.checked = data.hideStats === true;
 
                         const imgDisplay = document.getElementById('profile-image-display');
                         const placeholder = document.getElementById('profile-image-placeholder');
