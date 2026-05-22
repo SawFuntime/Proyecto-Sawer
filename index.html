@@ -208,7 +208,20 @@
         </div>
     </div>
 
-
+<div id="verify-email-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-8 max-w-sm w-full mx-4 relative shadow-[0_0_40px_rgba(220,38,38,0.15)] text-center">
+            <div class="bg-red-900/40 p-4 rounded-full text-red-500 inline-block mb-4">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            </div>
+            
+            <h2 class="text-2xl font-black text-white mb-2 uppercase">Verificar Correo</h2>
+            <p id="verify-msg" class="text-zinc-400 text-sm mb-6">Estás a un paso de unirte. Haz clic abajo para confirmar tu cuenta y evitar que el enlace expire por seguridad.</p>
+            
+            <button id="btn-confirm-verification" class="block w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3 rounded-md transition-all uppercase tracking-wider shadow-lg mb-3 text-sm">
+                Confirmar mi cuenta
+            </button>
+        </div>
+    </div>
     <!-- ========================================================================= -->
     <!-- VISTA 1: PÁGINA DE INICIO -->
     <!-- ========================================================================= -->
@@ -1047,7 +1060,7 @@
     <!-- SCRIPT DE FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, updatePassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+ 	import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, updatePassword, applyActionCode } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, addDoc, updateDoc, serverTimestamp, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1098,7 +1111,12 @@
                     stats: { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: "0/67" }
                 });
                 
-                await sendEmailVerification(user);
+                // Configuramos el correo para que regrese a tu web
+                const actionCodeSettings = {
+                    url: 'https://proyectosawer.com/',
+                    handleCodeInApp: true,
+                };
+                await sendEmailVerification(user, actionCodeSettings);
                 await signOut(auth);
                 
                 closeModal();
@@ -1908,6 +1926,47 @@
                 }
             }
         });
+                const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        const oobCode = urlParams.get('oobCode');
+
+        // Si detecta que la URL tiene un código de verificación...
+        if (mode === 'verifyEmail' && oobCode) {
+            // Abre la ventana de verificación que creamos en el Paso 2
+            document.getElementById('verify-email-modal').classList.remove('hidden');
+            
+            // Le da la orden al botón
+            document.getElementById('btn-confirm-verification').addEventListener('click', async () => {
+                const btn = document.getElementById('btn-confirm-verification');
+                const msg = document.getElementById('verify-msg');
+                
+                btn.disabled = true;
+                btn.innerText = "Verificando...";
+                
+                try {
+                    // Aquí se consume el código real con Firebase
+                    await applyActionCode(auth, oobCode);
+                    msg.innerText = "¡Cuenta verificada con éxito! Ya puedes iniciar sesión.";
+                    msg.classList.remove('text-zinc-400');
+                    msg.classList.add('text-green-500', 'font-bold');
+                    btn.style.display = 'none';
+                    
+                    // Limpia la URL y te manda al login después de 3 segundos
+                    setTimeout(() => {
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        document.getElementById('verify-email-modal').classList.add('hidden');
+                        openModal('login');
+                    }, 3000);
+                } catch (error) {
+                    console.error("Error validando el código:", error);
+                    msg.innerText = "El enlace ya expiró o es inválido. Por favor, regístrate de nuevo.";
+                    msg.classList.remove('text-zinc-400');
+                    msg.classList.add('text-red-500', 'font-bold');
+                    btn.disabled = false;
+                    btn.innerText = "Intentar de nuevo";
+                }
+            });
+        }
     </script>
 </body>
 </html>
