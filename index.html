@@ -10,16 +10,13 @@
     <meta name="keywords" content="Roblox, Proyecto Sawer, Robux gratis, Minijuegos Roblox, Comunidad Roblox, SawFuntime, Juegos de supervivencia Roblox, Torneos Roblox, Donaciones Robux">
     <meta name="author" content="SawFuntime">
     
-    <!-- Etiquetas para Redes Sociales -->
     <meta property="og:title" content="Proyecto Sawer | Comunidad de Roblox">
     <meta property="og:description" content="Juega minijuegos, sobrevive y gana recompensas en nuestra comunidad. ¡Únete hoy mismo!">
     <meta property="og:image" content="./Inquisitor.png">
     <meta property="og:url" content="https://sawfuntime.github.io/Proyecto-Sawer/">
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Librería de Animaciones AOS (CSS) -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
@@ -51,7 +48,6 @@
         .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
     </style>
 
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-W6BQY376EV"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -62,9 +58,6 @@
 </head>
 <body class="font-sans antialiased selection:bg-red-800 selection:text-white pt-20">
 
-    <!-- ========================================== -->
-    <!-- BARRA SUPERIOR (NAVBAR) -->
-    <!-- ========================================== -->
     <nav class="fixed top-0 left-0 w-full z-40 bg-[#0f0f11]/90 backdrop-blur-md border-b border-zinc-800 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
@@ -77,7 +70,6 @@
                     <button onclick="switchMainView('home'); window.scrollTo(0,0)" class="text-zinc-400 hover:text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors">
                         Inicio
                     </button>
-                    <!-- BOTÓN DE GANADORES FORZADO A MOSTRARSE -->
                     <button onclick="switchMainView('ganadores'); window.scrollTo(0,0)" class="text-zinc-400 hover:text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors">
                         Ganadores
                     </button>
@@ -103,10 +95,6 @@
         </div>
     </nav>
 
-    <!-- ========================================== -->
-    <!-- VENTANAS EMERGENTES (MODALS) -->
-    <!-- ========================================== -->
-    <!-- MODAL DE AUTENTICACIÓN -->
     <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
         <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-8 max-w-md w-full mx-4 relative shadow-[0_0_40px_rgba(220,38,38,0.15)]">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
@@ -148,7 +136,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE CREAR FORO -->
     <div id="create-forum-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
         <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-8 max-w-md w-full mx-4 relative shadow-[0_0_40px_rgba(220,38,38,0.15)]">
             <button onclick="closeForumModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
@@ -176,7 +163,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE CONTACTO -->
     <div id="contact-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity">
         <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-8 max-w-sm w-full mx-4 relative shadow-[0_0_40px_rgba(220,38,38,0.15)] text-center">
             <button onclick="closeContactModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
@@ -222,9 +208,6 @@
             </button>
         </div>
     </div>
-    <!-- ========================================================================= -->
-    <!-- VISTA 1: PÁGINA DE INICIO -->
-    <!-- ========================================================================= -->
     <div id="view-home" class="block">
         
         <header class="relative border-b border-red-800 bg-zinc-950 overflow-hidden">
@@ -306,7 +289,7 @@
                     <h4 class="text-xl font-bold text-red-400 mb-6 uppercase tracking-wide">Estructura del Juego</h4>
                     <ul class="space-y-4 text-zinc-300 list-none font-light">
                         <li class="flex items-start bg-zinc-800/50 p-4 rounded-md border border-zinc-700/50"><span class="text-red-500 mr-4 font-black text-xl">01</span> Consta de <strong class="text-zinc-100 mx-1">15 minijuegos</strong> + <strong class="text-zinc-100 mx-1">3 rondas extras</strong>.</li>
-                        <li class="flex items-start bg-zinc-800/50 p-4 rounded-md border border-zinc-700/50"><span class="text-red-500 mr-4 font-black text-xl">02</span> Puntos por dificultad: Fáciles (1 pt), Medios (2 pts) y Difíciles (3 pts).</li>
+                        <li class="flex items-start bg-zinc-800/50 p-4 rounded-md border border-zinc-700/50"><span class="text-red-500 mr-4 font-black text-xl">02</span> Puntos por difficulty: Fáciles (1 pt), Medios (2 pts) y Difíciles (3 pts).</li>
                         <li class="flex items-start bg-zinc-800/50 p-4 rounded-md border border-zinc-700/50"><span class="text-red-500 mr-4 font-black text-xl">03</span> Tras los 15 juegos, los jugadores <strong class="text-zinc-100 mx-1">votan</strong> qué minijuegos repetir al final. ¡Ideal para remontar!</li>
                         <li class="flex items-start bg-zinc-800/50 p-4 rounded-md border border-zinc-700/50"><span class="text-red-500 mr-4 font-black text-xl">04</span> El ganador absoluto será el jugador que <strong class="text-zinc-100 mx-1">más puntos haya acumulado</strong> al finalizar todos los minijuegos.</li>
                     </ul>
@@ -409,30 +392,21 @@
                 </div>
             </section>
         </main>
-    </div> <!-- FIN DE VISTA 1 -->
-
-    <!-- ========================================================================= -->
-    <!-- VISTA 2: PÁGINA DE PERFIL -->
-    <!-- ========================================================================= -->
-    <div id="view-profile" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-[85vh]">
+    </div> <div id="view-profile" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-[85vh]">
         
         <div class="flex flex-col md:flex-row gap-8">
             
-            <!-- COLUMNA IZQUIERDA -->
             <div class="w-full md:w-1/4 flex flex-col gap-4">
                 
-                <!-- RECUADRO DE FOTO DE PERFIL -->
                 <div class="w-full aspect-square bg-zinc-900 rounded-lg flex items-center justify-center relative shadow-inner overflow-hidden border-2 border-zinc-800 group">
                     <img id="profile-image-display" src="./Inquisitor.png" alt="Foto de perfil" class="w-full h-full object-cover hidden group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='./Inquisitor.png';">
                     <span id="profile-image-placeholder" class="text-zinc-500 font-bold uppercase tracking-widest text-xs text-center px-4">Espacio para Foto de Perfil</span>
                 </div>
                 
-                <!-- Nombre de Usuario Dinámico -->
                 <div id="profile-view-username" class="bg-zinc-950 border border-zinc-800 rounded-md py-3 text-center text-zinc-500 font-black uppercase tracking-widest text-lg shadow-md overflow-hidden text-ellipsis whitespace-nowrap px-2">
                     CARGANDO...
                 </div>
                 
-                <!-- Botones de Navegación del Perfil -->
                 <div class="flex flex-col gap-2 mt-2">
                     <button onclick="switchProfileTab('info')" id="btn-tab-info" class="profile-tab-btn bg-red-700 text-white border border-red-600 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm shadow-md flex items-center justify-between group">
                         Información
@@ -444,13 +418,14 @@
                     <button onclick="switchProfileTab('ayuda')" id="btn-tab-ayuda" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
                         Ayuda e Información <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
-                    <!-- BOTÓN FOROS -->
                     <button onclick="switchProfileTab('foros')" id="btn-tab-foros" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
                         Foros Comunitarios <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
-                    <!-- NUEVO BOTÓN REGALOS DIARIOS -->
                     <button onclick="switchProfileTab('regalos')" id="btn-tab-regalos" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
                         Regalos Diarios <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    <button onclick="goToBanco()" id="btn-tab-finanzas" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
+                        Finanzas <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
                     <button onclick="switchProfileTab('config')" id="btn-tab-config" class="profile-tab-btn bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700 font-bold py-3 px-4 rounded-md transition-all text-left uppercase tracking-wider text-sm flex items-center justify-between group">
                         Configuración <svg class="w-4 h-4 text-zinc-500 group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
@@ -458,11 +433,9 @@
                 </div>
             </div>
 
-            <!-- COLUMNA DERECHA (CONTENIDO) -->
             <div class="w-full md:w-3/4 bg-zinc-900/80 rounded-xl border border-zinc-800 p-8 shadow-2xl relative overflow-hidden min-h-[500px]">
                 <div class="absolute -right-20 -top-20 w-64 h-64 bg-red-600/5 rounded-full blur-3xl pointer-events-none"></div>
 
-                <!-- Contenido: INFORMACIÓN -->
                 <div id="content-info" class="profile-content block animate-fade-in">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Información del Perfil</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
@@ -490,7 +463,6 @@
                         </div>
                     </div>
 
-                    <!-- ESTADÍSTICAS -->
                     <div id="stats-container" class="hidden flex flex-col gap-4">
                         <div class="w-full bg-zinc-950 border border-zinc-800 p-4 px-6 sm:px-8 rounded-full flex items-center justify-between hover:border-zinc-600 transition-colors shadow-lg group">
                             <div class="flex items-center gap-4">
@@ -530,7 +502,6 @@
                     </div>
                 </div>
 
-                <!-- AGENDA -->
                 <div id="content-agenda" class="profile-content hidden animate-fade-in">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Tu Agenda</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
@@ -542,7 +513,6 @@
                     </div>
                 </div>
 
-                <!-- AYUDA Y PREGUNTAS FRECUENTES -->
                 <div id="content-ayuda" class="profile-content hidden animate-fade-in">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Centro de Ayuda</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
@@ -560,7 +530,6 @@
                         <button onclick="openContactModal()" class="bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md transition-colors uppercase tracking-widest text-sm shadow-md whitespace-nowrap">Contactar por Correo</button>
                     </div>
 
-                    <!-- PREGUNTAS FRECUENTES -->
                     <h3 class="text-xl font-bold text-zinc-300 mb-6 uppercase tracking-widest border-l-4 border-red-600 pl-3">Preguntas Frecuentes (FAQ)</h3>
                     
                     <div class="space-y-4">
@@ -603,10 +572,8 @@
                     </div>
                 </div>
 
-                <!-- FOROS COMUNITARIOS -->
                 <div id="content-foros" class="profile-content hidden animate-fade-in flex-col md:flex-row gap-6 h-[600px]">
                     
-                    <!-- Lado A: Lista de Foros -->
                     <div class="w-full md:w-1/3 bg-zinc-950 border border-zinc-800 rounded-xl flex flex-col overflow-hidden shadow-inner h-64 md:h-full">
                         <div class="p-4 border-b border-zinc-800 flex justify-between items-center bg-zinc-900/50">
                             <h3 class="font-bold text-white uppercase tracking-wider text-sm">Lista de Foros</h3>
@@ -619,25 +586,20 @@
                         </div>
                     </div>
 
-                    <!-- Lado C/D/E: Área de Chat -->
                     <div class="w-full md:w-2/3 bg-zinc-950 border border-zinc-800 rounded-xl flex flex-col overflow-hidden relative shadow-inner h-[500px] md:h-full">
                         
-                        <!-- Placeholder si no hay foro seleccionado -->
                         <div id="forum-chat-placeholder" class="flex-1 flex flex-col items-center justify-center text-zinc-600 p-6 text-center">
                             <svg class="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
                             <p class="uppercase tracking-widest font-bold">Selecciona un foro</p>
                             <p class="text-xs mt-2">Lee lo que otros jugadores tienen para decir, o crea tu propio canal de difusión.</p>
                         </div>
 
-                        <!-- Chat Activo -->
                         <div id="forum-active-chat" class="hidden flex flex-col h-full w-full">
-                            <!-- Cabecera del Foro -->
                             <div class="p-3 sm:p-4 border-b border-zinc-800 bg-zinc-900/80 flex items-center justify-between relative shadow-md">
                                 <div class="flex items-center gap-4 flex-1 min-w-0">
                                     <div class="relative flex-shrink-0 group/head">
                                         <img id="chat-header-avatar" src="./Inquisitor.png" alt="Avatar Creador" class="w-12 h-12 rounded-full object-cover border border-zinc-700 cursor-pointer relative z-10 transition-colors group-hover/head:border-red-500" onerror="this.onerror=null; this.src='./Inquisitor.png';">
                                         
-                                        <!-- Tooltip de Stats del Creador -->
                                         <div id="chat-header-tooltip" class="absolute left-14 top-0 bg-zinc-950 border border-red-800 p-4 rounded-xl opacity-0 invisible group-hover/head:opacity-100 group-hover/head:visible transition-all duration-300 z-[9999] w-52 shadow-[0_0_20px_rgba(220,38,38,0.2)] pointer-events-none flex flex-col gap-2">
                                             <p class="text-zinc-500 text-xs text-center font-bold uppercase tracking-widest">Buscando...</p>
                                         </div>
@@ -648,19 +610,15 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Botón de Configuración de Privacidad (Solo visible para el creador) -->
                                 <button id="btn-forum-privacy" onclick="toggleForumPrivacy()" class="hidden p-2 rounded-md transition-colors border flex-shrink-0 ml-2" title="Cambiar Privacidad del Foro">
                                     <svg id="icon-privacy-private" class="w-5 h-5 text-zinc-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                                     <svg id="icon-privacy-public" class="w-5 h-5 text-green-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
                                 </button>
                             </div>
 
-                            <!-- Contenedor de Mensajes -->
                             <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 space-y-4 bg-[#0a0a0c] custom-scroll">
-                                <!-- Los mensajes aparecerán aquí -->
-                            </div>
+                                </div>
 
-                            <!-- Barra de Input -->
                             <div id="chat-input-area" class="p-3 border-t border-zinc-800 bg-zinc-900/50 hidden">
                                 <div class="flex gap-2">
                                     <input type="text" id="chat-input-text" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-full px-4 py-3 text-sm text-white focus:border-red-500 focus:outline-none transition-colors" placeholder="Escribe un mensaje..." onkeypress="if(event.key === 'Enter') sendForumMessage()">
@@ -674,7 +632,6 @@
                     </div>
                 </div>
 
-                <!-- CONTENIDO REGALOS DIARIOS -->
                 <div id="content-regalos" class="profile-content hidden animate-fade-in flex-col gap-6">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Regalo Diario</h2>
                     <div class="w-full h-1 bg-red-600 mb-8 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
@@ -702,12 +659,10 @@
                     </div>
                 </div>
 
-                <!-- CONFIGURACIÓN -->
                 <div id="content-config" class="profile-content hidden animate-fade-in space-y-8">
                     <h2 class="text-3xl font-black text-white mb-2 uppercase tracking-wider">Configuración de Cuenta</h2>
                     <div class="w-full h-1 bg-red-600 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)] mb-8"></div>
                     
-                    <!-- Sección de Seguridad -->
                     <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-6 shadow-md transition-all hover:border-zinc-700">
                         <h3 class="text-xl font-bold text-zinc-200 mb-4 uppercase tracking-widest border-l-4 border-red-600 pl-3">Seguridad</h3>
                         <p class="text-zinc-400 text-sm mb-4">Actualiza tu contraseña para mantener tu cuenta segura.</p>
@@ -723,7 +678,6 @@
                         <p id="password-msg" class="text-xs font-bold uppercase tracking-widest mt-3 hidden"></p>
                     </div>
 
-                    <!-- Sección de Privacidad de Stats -->
                     <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-6 shadow-md transition-all hover:border-yellow-500/50 group">
                         <h3 class="text-xl font-bold text-zinc-200 mb-4 uppercase tracking-widest border-l-4 border-yellow-500 pl-3">Privacidad</h3>
                         <div class="flex items-center justify-between">
@@ -738,7 +692,6 @@
                         </div>
                     </div>
 
-                    <!-- Sección de Conexión de Discord -->
                     <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-6 shadow-md transition-all hover:border-[#5865F2]/50 group">
                         <h3 class="text-xl font-bold text-zinc-200 mb-4 uppercase tracking-widest border-l-4 border-[#5865F2] pl-3 flex items-center gap-2">
                             <svg class="w-5 h-5 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
@@ -757,7 +710,6 @@
                         <p id="discord-msg" class="text-xs font-bold uppercase tracking-widest mt-3 hidden"></p>
                     </div>
 
-                    <!-- Sección de Conexión de Roblox -->
                     <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-6 shadow-md transition-all hover:border-zinc-700">
                         <h3 class="text-xl font-bold text-zinc-200 mb-4 uppercase tracking-widest border-l-4 border-blue-500 pl-3">Conexión de Roblox</h3>
                         <p class="text-zinc-400 text-sm mb-4">Si vinculaste una cuenta incorrecta, puedes desvincularla aquí. Perderás temporalmente la vista a tus estadísticas hasta que vuelvas a conectarte.</p>
@@ -769,14 +721,8 @@
                 </div>
             </div>
         </div>
-    </div> <!-- FIN DE VISTA 2 -->
-
-    <!-- ========================================================================= -->
-    <!-- VISTA 3: PÁGINA DE GANADORES (TIEMPO REAL FIREBASE Y TOPS) -->
-    <!-- ========================================================================= -->
-    <div id="view-ganadores" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-[85vh]">
+    </div> <div id="view-ganadores" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-[85vh]">
         <div class="text-center mb-16 relative">
-            <!-- Elementos decorativos de fondo -->
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-600/20 rounded-full blur-[80px] pointer-events-none"></div>
             
             <h2 class="text-5xl md:text-6xl font-black text-white mb-4 uppercase tracking-tighter glow-red relative z-10">
@@ -789,7 +735,6 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <!-- IZQUIERDA: TOP 3 PUNTOS -->
             <div class="bg-zinc-950/90 rounded-xl border border-red-900/50 p-6 shadow-[0_0_30px_rgba(220,38,38,0.1)] flex flex-col gap-4 relative overflow-hidden group hover:border-yellow-600/50 transition-colors">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl transition-opacity group-hover:opacity-100 opacity-50 pointer-events-none"></div>
                 <h3 class="text-xl font-black text-yellow-500 uppercase tracking-widest text-center border-b border-zinc-800 pb-3 flex items-center justify-center gap-2">
@@ -801,7 +746,6 @@
                 </div>
             </div>
 
-            <!-- CENTRO: TODOS LOS GANADORES -->
             <div class="lg:col-span-2 bg-zinc-900/80 rounded-xl border border-zinc-800 p-6 shadow-2xl relative">
                 <h3 class="text-xl font-bold text-white uppercase tracking-wider text-center border-b border-red-900/50 pb-3 mb-6">
                     Registro General de Ganadores
@@ -811,7 +755,6 @@
                 </div>
             </div>
 
-            <!-- DERECHA: TOP VICTORIAS -->
             <div class="bg-zinc-950/90 rounded-xl border border-red-900/50 p-6 shadow-[0_0_30px_rgba(220,38,38,0.1)] flex flex-col gap-4 relative overflow-hidden group hover:border-red-600/50 transition-colors">
                 <div class="absolute -top-10 -left-10 w-32 h-32 bg-red-600/10 rounded-full blur-2xl transition-opacity group-hover:opacity-100 opacity-50 pointer-events-none"></div>
                 <h3 class="text-xl font-black text-red-500 uppercase tracking-widest text-center border-b border-zinc-800 pb-3 flex items-center justify-center gap-2">
@@ -823,12 +766,7 @@
                 </div>
             </div>
         </div>
-    </div> <!-- FIN DE VISTA 3 -->
-
-    <!-- ========================================== -->
-    <!-- FOOTER -->
-    <!-- ========================================== -->
-    <footer class="border-t border-zinc-800 bg-[#0f0f11] mt-12">
+    </div> <footer class="border-t border-zinc-800 bg-[#0f0f11] mt-12">
         <div class="max-w-7xl mx-auto px-4 py-8 text-center flex flex-col md:flex-row justify-between items-center">
             <div class="flex items-center justify-center mb-4 md:mb-0 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
                 <img src="./Inquisitor.png" alt="Logo mini" class="w-8 h-8 mr-3">
@@ -838,11 +776,9 @@
         </div>
     </footer>
 
-    <!-- SCRIPTS DE ANIMACIONES (AOS) -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init({ once: true, offset: 100 });</script>
 
-    <!-- SCRIPTS DE LA INTERFAZ -->
     <script>
         const modal = document.getElementById('auth-modal');
         const formLogin = document.getElementById('form-login');
@@ -882,6 +818,18 @@
                 if(window.loadFirebaseGanadores) window.loadFirebaseGanadores(); // Dispara la lectura general
             }
         }
+
+        // REDIRECCIÓN AL BANCO CON SEGURIDAD
+        window.goToBanco = () => {
+            const isLinked = window.currentUserData && window.currentUserData.isLinked;
+            
+            if (!isLinked) {
+                alert("🔒 ACCESO DENEGADO\n\nDebes vincular tu cuenta de Roblox en la pestaña 'Información' para acceder a Finanzas.");
+                return;
+            }
+            
+            window.location.href = '/banco';
+        };
 
         function switchProfileTab(tabName) {
             // VERIFICACIÓN DE SEGURIDAD: Solo 'info' es accesible sin vincular
@@ -1057,10 +1005,9 @@
 
     </script>
 
-    <!-- SCRIPT DE FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
- 	import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, updatePassword, applyActionCode } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+	import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification, updatePassword, applyActionCode } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, addDoc, updateDoc, serverTimestamp, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1477,7 +1424,6 @@
                             <div class="relative group/avatar mt-1 flex-shrink-0">
                                 <img src="${msgAuthorAvatar}" onerror="this.onerror=null; this.src='./Inquisitor.png';" class="w-10 h-10 rounded-full object-cover border-2 border-zinc-800 cursor-pointer relative z-10 transition-colors group-hover/avatar:border-red-500" onmouseover="window.fetchTooltipData('${msg.authorId}', '${tooltipId}', '${msgAuthorName}')">
                                 
-                                <!-- Tooltip del autor del mensaje -->
                                 <div id="${tooltipId}" class="absolute left-14 bottom-0 bg-zinc-950 border border-red-800 p-4 rounded-xl opacity-0 invisible group-hover/avatar:opacity-100 group-hover/avatar:visible transition-all duration-300 z-[9999] w-52 shadow-[0_0_20px_rgba(220,38,38,0.3)] pointer-events-none flex flex-col gap-1">
                                     <p class="text-zinc-500 text-xs text-center font-bold uppercase tracking-widest mt-2">Buscando...</p>
                                 </div>
@@ -1486,7 +1432,6 @@
                                 <span class="text-[10px] font-black text-red-400 uppercase tracking-widest block mb-1.5">${msgAuthorName}</span>
                                 <p class="text-sm leading-relaxed break-words">${escapeHTML(msg.text)}</p>
                                 
-                                <!-- BOTÓN DE LIKES Y HORA -->
                                 <div class="flex items-center justify-end gap-3 mt-2 border-t border-zinc-700/50 pt-2">
                                     <button onclick="toggleMessageLike('${msg.id}', ${hasLiked})" class="flex items-center gap-1 text-[11px] font-bold ${hasLiked ? 'text-red-500' : 'text-zinc-500 hover:text-red-400'} transition-colors cursor-pointer pointer-events-auto">
                                         <svg class="w-3.5 h-3.5" fill="${hasLiked ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
