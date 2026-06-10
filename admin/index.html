@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <link rel="icon" type="image/png" href="../Inquisitor.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Panel CEO | Proyecto Sawer</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        body { background-color: #0f0f11; color: #e5e5e5; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f0f11; }
+        ::-webkit-scrollbar-thumb { background: #991b1b; border-radius: 4px; }
+        
+        .glow-red { text-shadow: 0 0 15px rgba(220, 38, 38, 0.5); }
+        .input-dark {
+            background-color: #050505;
+            border: 2px solid #27272a;
+            transition: all 0.3s ease;
+        }
+        .input-dark:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-red-800 selection:text-white pt-24 relative">
+
+    <div class="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-950/20 via-[#0f0f11] to-[#0f0f11] -z-10 pointer-events-none"></div>
+
+    <nav class="fixed top-0 left-0 w-full z-40 bg-[#0f0f11]/90 backdrop-blur-md border-b border-red-900/50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <img src="../Inquisitor.png" alt="Logo" class="w-10 h-10 object-contain drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]">
+                    <span class="font-black text-xl tracking-widest uppercase text-white glow-red hidden sm:block">Proyecto Sawer</span>
+                    <span class="font-bold text-red-500 uppercase tracking-widest text-sm ml-2 border-l border-red-700/50 pl-2">Admin Panel</span>
+                </div>
+                <div>
+                    <a href="../" class="flex items-center bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 font-bold py-2 px-4 rounded-md transition-colors text-sm uppercase tracking-wider shadow-md">
+                        Volver al Menú
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <div class="text-center mb-10" data-aos="fade-down">
+            <h1 class="text-4xl font-black text-white uppercase tracking-wider mb-2 glow-red">Terminal de Gestión</h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent mx-auto rounded-full"></div>
+        </div>
+
+        <div id="auth-loading" class="text-center py-20 text-zinc-500 font-bold uppercase tracking-widest">
+            Verificando credenciales de administrador...
+        </div>
+
+        <div id="admin-content" class="hidden space-y-8" data-aos="fade-up">
+            
+            <div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-8 shadow-xl">
+                <h2 class="text-lg font-bold text-zinc-300 uppercase tracking-widest mb-4 border-l-4 border-red-600 pl-3">Buscar Jugador</h2>
+                <div class="flex gap-4">
+                    <input type="text" id="search-username" class="input-dark flex-1 p-4 rounded-xl text-white font-bold" placeholder="Ingresa el nombre exacto de Roblox">
+                    <button onclick="searchPlayer()" id="btn-search" class="bg-red-700 hover:bg-red-600 text-white font-black px-8 rounded-xl transition-all uppercase tracking-widest shadow-lg">
+                        Buscar
+                    </button>
+                </div>
+                <p id="search-msg" class="text-sm font-bold uppercase tracking-widest mt-4 hidden"></p>
+            </div>
+
+            <div id="player-card" class="hidden bg-zinc-900 border-2 border-red-900/40 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-20 -top-20 w-64 h-64 bg-red-600/5 rounded-full blur-[80px] pointer-events-none"></div>
+
+                <div class="flex items-center gap-6 mb-8 border-b border-zinc-800 pb-6">
+                    <img id="target-avatar" src="../Inquisitor.png" class="w-20 h-20 rounded-xl object-cover border-2 border-zinc-700">
+                    <div>
+                        <h3 id="target-name" class="text-2xl font-black text-white uppercase tracking-wider">Cargando...</h3>
+                        <p class="text-zinc-400 text-xs uppercase tracking-widest">Saldo Actual: <strong id="target-balance" class="text-yellow-500 text-lg ml-1">0</strong> <span class="text-yellow-500">Robuxs</span></p>
+                    </div>
+                </div>
+
+                <div class="space-y-6 relative z-10">
+                    <h3 class="text-sm font-bold text-red-400 uppercase tracking-widest mb-4 border-l-2 border-red-600 pl-2">Nueva Transacción</h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Monto (Robux)</label>
+                            <input type="number" id="trans-amount" class="input-dark w-full p-3 rounded-lg text-white font-bold" placeholder="Ej: 150 o -50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Motivo del abono/descuento</label>
+                            <input type="text" id="trans-reason" class="input-dark w-full p-3 rounded-lg text-white font-bold" placeholder="Ej: Ganador Ronda B">
+                        </div>
+                    </div>
+
+                    <button onclick="executeTransaction()" id="btn-transact" class="w-full bg-green-700 hover:bg-green-600 text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest shadow-xl mt-4">
+                        Ejecutar Transacción
+                    </button>
+                    <p id="trans-msg" class="text-center text-sm font-bold uppercase tracking-widest mt-4 hidden"></p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ once: true, offset: 50 });</script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, doc, updateDoc, addDoc, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
+            authDomain: "proyecto-sawer.firebaseapp.com",
+            projectId: "proyecto-sawer",
+            storageBucket: "proyecto-sawer.firebasestorage.app",
+            messagingSenderId: "770496172923",
+            appId: "1:770496172923:web:79782a0ddbdca6561e23de"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // CONFIGURACIÓN DE SEGURIDAD
+        const ADMIN_EMAIL = "nier302@gmail.com"; 
+        
+        let targetUserDocId = null;
+        let targetRobloxId = null;
+
+        onAuthStateChanged(auth, (user) => {
+            const loader = document.getElementById('auth-loading');
+            const content = document.getElementById('admin-content');
+
+            if (user) {
+                if (user.email === ADMIN_EMAIL) {
+                    // Si es el admin, quitamos la pantalla de carga y mostramos el panel
+                    loader.classList.add('hidden');
+                    content.classList.remove('hidden');
+                } else {
+                    alert("⛔ ACCESO RESTRINGIDO. Área solo para Administración.");
+                    window.location.href = '../';
+                }
+            } else {
+                window.location.href = '../';
+            }
+        });
+
+        // 1. BUSCAR AL JUGADOR
+        window.searchPlayer = async () => {
+            const usernameInput = document.getElementById('search-username').value.trim();
+            const msgObj = document.getElementById('search-msg');
+            const card = document.getElementById('player-card');
+            const btn = document.getElementById('btn-search');
+
+            if(!usernameInput) return;
+
+            msgObj.classList.add('hidden');
+            card.classList.add('hidden');
+            btn.innerText = "...";
+            btn.disabled = true;
+
+            try {
+                // Buscamos en Firebase el documento que tenga ese robloxUsername
+                const q = query(collection(db, "users"), where("robloxUsername", "==", usernameInput));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    msgObj.innerText = "❌ Jugador no encontrado o no ha vinculado su cuenta.";
+                    msgObj.className = "text-sm font-bold uppercase tracking-widest mt-4 text-red-500 block";
+                } else {
+                    // Tomamos el primer resultado
+                    const userDoc = querySnapshot.docs[0];
+                    const data = userDoc.data();
+                    targetUserDocId = userDoc.id; // Guardamos la ID del documento para actualizarlo luego
+                    targetRobloxId = data.robloxUserId;
+
+                    document.getElementById('target-name').innerText = data.robloxUsername;
+                    document.getElementById('target-balance').innerText = data.stats?.robux || 0;
+                    
+                    // Cargar su foto
+                    if(targetRobloxId) {
+                        fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${targetRobloxId}&size=150x150&format=Png&isCircular=false`)
+                            .then(res => res.json())
+                            .then(json => {
+                                if (json && json.data && json.data.length > 0) {
+                                    document.getElementById('target-avatar').src = json.data[0].imageUrl;
+                                }
+                            });
+                    }
+
+                    card.classList.remove('hidden');
+                    card.classList.add('animate-fade-in');
+                }
+            } catch (error) {
+                msgObj.innerText = "❌ Error en la base de datos.";
+                msgObj.className = "text-sm font-bold uppercase tracking-widest mt-4 text-red-500 block";
+            }
+
+            btn.innerText = "Buscar";
+            btn.disabled = false;
+        };
+
+        // 2. EJECUTAR LA TRANSACCIÓN (Abonar/Descontar y Guardar Historial)
+        window.executeTransaction = async () => {
+            const amountInput = document.getElementById('trans-amount');
+            const reasonInput = document.getElementById('trans-reason');
+            const msgObj = document.getElementById('trans-msg');
+            const btn = document.getElementById('btn-transact');
+
+            const amount = parseInt(amountInput.value);
+            const reason = reasonInput.value.trim();
+
+            if (!targetUserDocId) return;
+            if (isNaN(amount) || amount === 0) {
+                alert("Ingresa un monto válido distinto a cero.");
+                return;
+            }
+            if (!reason) {
+                alert("Debes ingresar un motivo para el historial.");
+                return;
+            }
+
+            // Confirmación de seguridad
+            const actionText = amount > 0 ? "ABONAR" : "DESCONTAR";
+            const confirmacion = confirm(`¿Estás seguro que deseas ${actionText} ${Math.abs(amount)} Robux a este jugador?`);
+            if(!confirmacion) return;
+
+            btn.innerText = "Procesando...";
+            btn.disabled = true;
+            msgObj.classList.add('hidden');
+
+            try {
+                const userRef = doc(db, "users", targetUserDocId);
+
+                // A) Actualizamos el saldo usando la función "increment" de Firebase
+                // Esto suma si es positivo, o resta si el número que pusiste lleva el signo menos (-)
+                await updateDoc(userRef, {
+                    "stats.robux": increment(amount)
+                });
+
+                // B) Guardamos el registro en su subcolección "historial"
+                await addDoc(collection(db, "users", targetUserDocId, "historial"), {
+                    monto: amount,
+                    motivo: reason,
+                    fecha: serverTimestamp(),
+                    tipo: amount > 0 ? "ingreso" : "retiro"
+                });
+
+                // C) Actualizamos la vista local
+                const currentBalance = parseInt(document.getElementById('target-balance').innerText);
+                document.getElementById('target-balance').innerText = currentBalance + amount;
+
+                msgObj.innerText = "✅ ¡Transacción Ejecutada con Éxito!";
+                msgObj.className = "text-center text-sm font-bold uppercase tracking-widest mt-4 text-green-500 block";
+                
+                amountInput.value = "";
+                reasonInput.value = "";
+
+            } catch (error) {
+                msgObj.innerText = "❌ Error al ejecutar transacción: " + error.message;
+                msgObj.className = "text-center text-sm font-bold uppercase tracking-widest mt-4 text-red-500 block";
+            }
+
+            btn.innerText = "Ejecutar Transacción";
+            btn.disabled = false;
+        };
+    </script>
+</body>
+</html>
