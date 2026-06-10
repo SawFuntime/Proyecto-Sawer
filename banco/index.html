@@ -33,7 +33,7 @@
             <div class="flex justify-between items-center h-20">
                 
                 <div class="flex items-center gap-3">
-                    <img src="../Inquisitor.png" alt="Logo Proyecto Sawer" class="w-10 h-10 object-contain drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]">
+                    <img src="../Inquisitor.png" alt="Logo Proyecto Sawer" class="w-10 h-10 object-contain drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/SawFuntime/Proyecto-Sawer/main/Inquisitor.png';">
                     <span class="font-black text-xl tracking-widest uppercase text-white glow-red hidden sm:block">Proyecto Sawer</span>
                     <span class="font-bold text-red-500 uppercase tracking-widest text-sm ml-2 border-l border-zinc-700 pl-2">Banco</span>
                 </div>
@@ -60,9 +60,9 @@
 
             <div class="flex flex-col items-center text-center md:text-left md:items-start md:w-1/3 z-10">
                 <div class="relative mb-4 group">
-                    <img id="bank-user-avatar" src="../Inquisitor.png" alt="Foto de perfil" class="w-28 h-28 rounded-full object-cover border-4 border-zinc-800 shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-colors group-hover:border-red-600" onerror="this.onerror=null; this.src='../Inquisitor.png';">
+                    <img id="bank-user-avatar" src="../Inquisitor.png" alt="Foto de perfil" class="w-28 h-28 rounded-full object-cover border-4 border-zinc-800 shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-colors group-hover:border-red-600" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/SawFuntime/Proyecto-Sawer/main/Inquisitor.png';">
                 </div>
-                <h2 id="bank-user-name" class="text-2xl font-black text-white uppercase tracking-wider break-words w-full">Jugador Sawer</h2>
+                <h2 id="bank-user-name" class="text-2xl font-black text-white uppercase tracking-wider break-words w-full">Cargando...</h2>
                 <p class="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Cuenta Vinculada</p>
             </div>
 
@@ -77,7 +77,7 @@
                 
                 <div class="bg-zinc-950 border-2 border-yellow-600/40 rounded-xl p-5 sm:p-6 flex items-center justify-between shadow-[0_0_30px_rgba(234,179,8,0.05)]">
                     <span id="bank-robux-amount" class="text-5xl sm:text-6xl font-black text-yellow-500 tracking-tighter glow-gold">150</span>
-                    <img src="../robuxs.png" alt="Robux Icon" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] transform hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='../Inquisitor.png';">
+                    <img src="../robux.png" alt="Robux Icon" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] transform hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/SawFuntime/Proyecto-Sawer/main/robuxs.png';">
                 </div>
             </div>
         </div>
@@ -87,6 +87,61 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ once: true, offset: 50 });
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        // Misma configuración de tu página principal
+        const firebaseConfig = {
+            apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
+            authDomain: "proyecto-sawer.firebaseapp.com",
+            projectId: "proyecto-sawer",
+            storageBucket: "proyecto-sawer.firebasestorage.app",
+            messagingSenderId: "770496172923",
+            appId: "1:770496172923:web:79782a0ddbdca6561e23de"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Si el usuario está logueado, buscamos sus datos en la base de datos
+                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        
+                        // Si no ha vinculado su cuenta de Roblox, lo devolvemos al inicio por seguridad
+                        if(!data.isLinked) {
+                            window.location.href = '../';
+                            return;
+                        }
+
+                        // 1. Ponemos su nombre real de Roblox
+                        const nameEl = document.getElementById('bank-user-name');
+                        if(nameEl) nameEl.innerText = data.robloxUsername || "Usuario";
+
+                        // 2. Traemos su foto de perfil directamente desde los servidores de Roblox
+                        if (data.robloxUserId) {
+                            fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${data.robloxUserId}&size=420x420&format=Png&isCircular=false`)
+                                .then(res => res.json())
+                                .then(json => {
+                                    if (json && json.data && json.data.length > 0 && json.data[0].imageUrl) {
+                                        document.getElementById('bank-user-avatar').src = json.data[0].imageUrl;
+                                    }
+                                }).catch(e => console.log("Aviso: Falló la carga del avatar"));
+                        }
+                    }
+                });
+            } else {
+                // Si alguien intenta entrar a la página sin iniciar sesión, lo devuelve a la página principal
+                window.location.href = '../';
+            }
+        });
     </script>
 </body>
 </html>
