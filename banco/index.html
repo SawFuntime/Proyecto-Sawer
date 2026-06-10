@@ -24,6 +24,17 @@
 
         .glow-red { text-shadow: 0 0 15px rgba(220, 38, 38, 0.5); }
         .glow-gold { text-shadow: 0 0 20px rgba(234, 179, 8, 0.6); }
+        
+        .input-dark {
+            background-color: #050505;
+            border: 2px solid #27272a;
+            transition: all 0.3s ease;
+        }
+        .input-dark:focus {
+            border-color: #b91c1c;
+            box-shadow: 0 0 15px rgba(185, 28, 28, 0.2);
+            outline: none;
+        }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-red-800 selection:text-white pt-24">
@@ -33,14 +44,14 @@
             <div class="flex justify-between items-center h-20">
                 
                 <div class="flex items-center gap-3">
-                    <img src="../Inquisitor.png" alt="Logo Proyecto Sawer" class="w-10 h-10 object-contain drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/SawFuntime/Proyecto-Sawer/main/Inquisitor.png';">
+                    <img src="../Inquisitor.png" alt="Logo" class="w-10 h-10 object-contain drop-shadow-[0_0_5px_rgba(220,38,38,0.5)]">
                     <span class="font-black text-xl tracking-widest uppercase text-white glow-red hidden sm:block">Proyecto Sawer</span>
                     <span class="font-bold text-red-500 uppercase tracking-widest text-sm ml-2 border-l border-zinc-700 pl-2">Banco</span>
                 </div>
 
                 <div>
-                    <a href="../" class="flex items-center bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 font-bold py-2 px-4 rounded-md transition-colors text-sm uppercase tracking-wider shadow-md group">
-                        <svg class="w-5 h-5 mr-2 text-zinc-500 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <a href="../" class="flex items-center bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-5 rounded-md transition-all text-sm uppercase tracking-wider shadow-lg shadow-red-900/20 group">
+                        <svg class="w-5 h-5 mr-2 text-white transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Volver al Menú
                     </a>
                 </div>
@@ -48,45 +59,85 @@
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10" data-aos="fade-up" data-aos-duration="800">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
-        <div class="text-center mb-10">
+        <div class="text-center mb-10" data-aos="fade-down">
             <h1 class="text-4xl font-black text-white uppercase tracking-wider mb-2">Finanzas Personales</h1>
             <div class="w-24 h-1 bg-red-600 mx-auto rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
         </div>
 
-        <div class="bg-zinc-900/80 rounded-xl border border-zinc-800 p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
+        <div class="bg-zinc-900/80 rounded-xl border border-zinc-800 p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center gap-8 mb-8" data-aos="fade-up">
             <div class="absolute -right-20 -top-20 w-64 h-64 bg-yellow-500/10 rounded-full blur-[80px] pointer-events-none"></div>
 
             <div class="flex flex-col items-center text-center md:text-left md:items-start md:w-1/3 z-10">
-                <div class="relative mb-4 group">
-                    <img id="bank-user-avatar" src="../Inquisitor.png" alt="Foto de perfil" class="w-28 h-28 rounded-full object-cover border-4 border-zinc-800 shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-colors group-hover:border-red-600" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/SawFuntime/Proyecto-Sawer/main/Inquisitor.png';">
+                <div class="relative mb-4">
+                    <img id="bank-user-avatar" src="../Inquisitor.png" alt="Avatar" class="w-28 h-28 rounded-full object-cover border-4 border-zinc-800 shadow-xl transition-colors">
                 </div>
                 <h2 id="bank-user-name" class="text-2xl font-black text-white uppercase tracking-wider break-words w-full">Cargando...</h2>
-                <p class="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Cuenta Vinculada</p>
+                <p class="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Usuario Verificado</p>
             </div>
 
             <div class="hidden md:block w-px h-32 bg-gradient-to-b from-transparent via-zinc-700 to-transparent"></div>
-            <div class="md:hidden w-full h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent"></div>
 
-            <div class="flex-1 w-full z-10 flex flex-col justify-center">
-                <h3 class="text-zinc-400 font-bold uppercase tracking-widest text-sm mb-3 ml-1 flex items-center gap-2">
-                    <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.64-2.25 1.64-1.74 0-2.1-.96-2.18-1.66H8.01c.09 1.7 1.36 2.66 2.89 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/></svg>
-                    Fondo Actual: Robuxs
+            <div class="flex-1 w-full z-10">
+                <h3 class="text-zinc-400 font-bold uppercase tracking-widest text-xs mb-3 flex items-center gap-2">
+                    <span class="text-yellow-500 text-lg">💰</span> Saldo en Cuenta
                 </h3>
                 
-                <div class="bg-zinc-950 border-2 border-yellow-600/40 rounded-xl p-5 sm:p-6 flex items-center justify-between shadow-[0_0_30px_rgba(234,179,8,0.05)]">
+                <div class="bg-zinc-950 border-2 border-yellow-600/40 rounded-xl p-6 flex items-center justify-between shadow-inner">
                     <span id="bank-robux-amount" class="text-5xl sm:text-6xl font-black text-yellow-500 tracking-tighter glow-gold">...</span>
-                    <img src="../robux.png" alt="Robux Icon" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] transform hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/SawFuntime/Proyecto-Sawer/main/robuxs.png';">
+                    <img src="../robux.png" alt="Robux" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_15px_rgba(234,179,8,0.4)]" onerror="this.onerror=null; this.src='../Inquisitor.png';">
                 </div>
             </div>
         </div>
+
+        <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 text-center mb-12" data-aos="fade-up" data-aos-delay="200">
+            <p class="text-zinc-400 text-sm mb-6 uppercase tracking-widest font-bold">¿Qué deseas realizar hoy?</p>
+            <div class="flex justify-center">
+                <button onclick="scrollToWithdraw()" class="bg-zinc-950 hover:bg-zinc-800 text-white border-2 border-red-700 font-black py-4 px-10 rounded-xl transition-all transform hover:scale-105 uppercase tracking-widest shadow-lg flex items-center gap-3">
+                    <span>🏧</span> Retirar Fondos
+                </button>
+            </div>
+        </div>
+
+        <section id="withdraw-section" class="pt-20 mb-20" data-aos="zoom-in">
+            <div class="bg-zinc-900 border-2 border-red-900/30 rounded-2xl p-8 max-w-2xl mx-auto shadow-2xl relative overflow-hidden">
+                <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-red-600/5 rounded-full blur-[80px] pointer-events-none"></div>
+
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-black text-white uppercase tracking-tighter mb-2">Solicitud de Retiro</h2>
+                    <p class="text-zinc-500 text-xs uppercase tracking-widest">Los fondos se enviarán a tu cuenta de Roblox vinculada</p>
+                </div>
+
+                <div class="space-y-6 relative z-10">
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2 ml-1">Monto a Retirar</label>
+                        <input type="number" id="withdraw-amount" class="input-dark w-full p-4 rounded-xl text-white text-xl font-bold placeholder:text-zinc-700" placeholder="Ingrese monto">
+                    </div>
+
+                    <div id="withdraw-error" class="hidden bg-red-900/20 border border-red-800 text-red-500 text-sm font-bold p-4 rounded-lg text-center uppercase tracking-wider animate-pulse">
+                        ⚠️ Saldo Insuficiente
+                    </div>
+
+                    <button onclick="processWithdrawal()" class="w-full bg-red-700 hover:bg-red-600 text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest shadow-xl shadow-red-900/20">
+                        Confirmar Retiro
+                    </button>
+                    
+                    <p class="text-[10px] text-zinc-600 text-center uppercase tracking-widest mt-4">El proceso de transferencia puede tardar unos minutos en reflejarse.</p>
+                </div>
+            </div>
+        </section>
 
     </main>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ once: true, offset: 50 });
+
+        // Función para desplazamiento suave
+        function scrollToWithdraw() {
+            document.getElementById('withdraw-section').scrollIntoView({ behavior: 'smooth' });
+        }
     </script>
 
     <script type="module">
@@ -107,45 +158,65 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        let userRobuxBalance = 0; // Variable global para validar el retiro
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         
-                        if(!data.isLinked) {
-                            window.location.href = '../';
-                            return;
-                        }
+                        if(!data.isLinked) { window.location.href = '../'; return; }
 
-                        // 1. Nombre real de Roblox
-                        const nameEl = document.getElementById('bank-user-name');
-                        if(nameEl) nameEl.innerText = data.robloxUsername || "Usuario";
+                        // 1. Nombre
+                        document.getElementById('bank-user-name').innerText = data.robloxUsername || "Usuario";
 
-                        // 2. Foto de perfil dinámica de Roblox
+                        // 2. Avatar
                         if (data.robloxUserId) {
                             fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${data.robloxUserId}&size=420x420&format=Png&isCircular=false`)
                                 .then(res => res.json())
                                 .then(json => {
-                                    if (json && json.data && json.data.length > 0 && json.data[0].imageUrl) {
+                                    if (json && json.data && json.data.length > 0) {
                                         document.getElementById('bank-user-avatar').src = json.data[0].imageUrl;
                                     }
-                                }).catch(e => console.log("Aviso: Falló la carga del avatar"));
+                                });
                         }
 
-                        // 3. Leer cantidad de Robux acumulados dinámicamente desde Firebase
-                        const robuxEl = document.getElementById('bank-robux-amount');
-                        if (robuxEl) {
-                            const stats = data.stats || {};
-                            // Si el campo 'robux' existe en Firebase lo muestra, si no hay registros pone 0
-                            robuxEl.innerText = stats.robux !== undefined ? stats.robux : 0;
-                        }
+                        // 3. Saldo Real
+                        userRobuxBalance = data.stats?.robux || 0;
+                        document.getElementById('bank-robux-amount').innerText = userRobuxBalance;
                     }
                 });
             } else {
                 window.location.href = '../';
             }
         });
+
+        // LÓGICA DE RETIRO
+        window.processWithdrawal = () => {
+            const amountInput = document.getElementById('withdraw-amount');
+            const errorBox = document.getElementById('withdraw-error');
+            const amount = parseInt(amountInput.value);
+
+            // Resetear error
+            errorBox.classList.add('hidden');
+
+            if (!amount || amount <= 0) {
+                alert("Por favor, ingrese un monto válido.");
+                return;
+            }
+
+            if (amount > userRobuxBalance) {
+                // CORRECCIÓN: Si el monto es mayor al saldo, mostramos el error
+                errorBox.innerText = "⚠️ Error: No tienes suficientes Robux";
+                errorBox.classList.remove('hidden');
+                amountInput.focus();
+            } else {
+                // Aquí en el futuro añadiremos la lógica para enviar el retiro a Firebase
+                alert("¡Solicitud enviada! Procesando retiro de " + amount + " Robux.");
+                amountInput.value = "";
+            }
+        };
     </script>
 </body>
 </html>
