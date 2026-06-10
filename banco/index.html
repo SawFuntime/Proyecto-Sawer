@@ -76,7 +76,7 @@
                 </h3>
                 
                 <div class="bg-zinc-950 border-2 border-yellow-600/40 rounded-xl p-5 sm:p-6 flex items-center justify-between shadow-[0_0_30px_rgba(234,179,8,0.05)]">
-                    <span id="bank-robux-amount" class="text-5xl sm:text-6xl font-black text-yellow-500 tracking-tighter glow-gold">150</span>
+                    <span id="bank-robux-amount" class="text-5xl sm:text-6xl font-black text-yellow-500 tracking-tighter glow-gold">...</span>
                     <img src="../robux.png" alt="Robux Icon" class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] transform hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/SawFuntime/Proyecto-Sawer/main/robuxs.png';">
                 </div>
             </div>
@@ -94,7 +94,6 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
         import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        // Misma configuración de tu página principal
         const firebaseConfig = {
             apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
             authDomain: "proyecto-sawer.firebaseapp.com",
@@ -110,22 +109,20 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Si el usuario está logueado, buscamos sus datos en la base de datos
                 onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         
-                        // Si no ha vinculado su cuenta de Roblox, lo devolvemos al inicio por seguridad
                         if(!data.isLinked) {
                             window.location.href = '../';
                             return;
                         }
 
-                        // 1. Ponemos su nombre real de Roblox
+                        // 1. Nombre real de Roblox
                         const nameEl = document.getElementById('bank-user-name');
                         if(nameEl) nameEl.innerText = data.robloxUsername || "Usuario";
 
-                        // 2. Traemos su foto de perfil directamente desde los servidores de Roblox
+                        // 2. Foto de perfil dinámica de Roblox
                         if (data.robloxUserId) {
                             fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${data.robloxUserId}&size=420x420&format=Png&isCircular=false`)
                                 .then(res => res.json())
@@ -135,10 +132,17 @@
                                     }
                                 }).catch(e => console.log("Aviso: Falló la carga del avatar"));
                         }
+
+                        // 3. Leer cantidad de Robux acumulados dinámicamente desde Firebase
+                        const robuxEl = document.getElementById('bank-robux-amount');
+                        if (robuxEl) {
+                            const stats = data.stats || {};
+                            // Si el campo 'robux' existe en Firebase lo muestra, si no hay registros pone 0
+                            robuxEl.innerText = stats.robux !== undefined ? stats.robux : 0;
+                        }
                     }
                 });
             } else {
-                // Si alguien intenta entrar a la página sin iniciar sesión, lo devuelve a la página principal
                 window.location.href = '../';
             }
         });
