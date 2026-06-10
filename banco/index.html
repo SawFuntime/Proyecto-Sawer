@@ -22,6 +22,11 @@
         ::-webkit-scrollbar-thumb { background: #991b1b; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
 
+        /* Scroll personalizado para la lista de movimientos */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+
         .glow-red { text-shadow: 0 0 15px rgba(220, 38, 38, 0.5); }
         .glow-red-strong { box-shadow: 0 0 25px rgba(220, 38, 38, 0.2); }
         .glow-gold { text-shadow: 0 0 20px rgba(234, 179, 8, 0.6); }
@@ -157,9 +162,9 @@
                     <p class="text-zinc-500 text-xs uppercase tracking-widest">Historial de tus transacciones de Robux</p>
                 </div>
 
-                <div class="space-y-4 relative z-10 min-h-[200px] flex items-center justify-center border border-zinc-800/50 rounded-xl bg-zinc-950/50 shadow-inner">
-                    <p class="text-zinc-600 font-bold uppercase tracking-widest text-sm text-center px-4">
-                        Aquí aparecerán tus movimientos próximamente...
+                <div id="history-list-container" class="relative z-10 max-h-[400px] overflow-y-auto custom-scroll flex flex-col gap-3 p-2 border border-zinc-800/50 rounded-xl bg-zinc-950/50 shadow-inner">
+                    <p class="text-zinc-600 font-bold uppercase tracking-widest text-sm text-center py-10 w-full">
+                        Cargando historial de movimientos...
                     </p>
                 </div>
             </div>
@@ -171,15 +176,11 @@
     <script>
         AOS.init({ once: true, offset: 50 });
 
-        // Función para mostrar RETIRO y ocultar HISTORIAL
         window.scrollToWithdraw = () => {
             const withdrawSec = document.getElementById('withdraw-section');
             const historySec = document.getElementById('history-section');
             
-            // Oculta historial si está abierto
             historySec.classList.add('hidden');
-            
-            // Muestra retiro
             withdrawSec.classList.remove('hidden');
             withdrawSec.classList.add('animate-fade-in');
 
@@ -189,15 +190,11 @@
             }, 100);
         }
 
-        // Función para mostrar HISTORIAL y ocultar RETIRO
         window.scrollToHistory = () => {
             const withdrawSec = document.getElementById('withdraw-section');
             const historySec = document.getElementById('history-section');
             
-            // Oculta retiro si está abierto
             withdrawSec.classList.add('hidden');
-            
-            // Muestra historial
             historySec.classList.remove('hidden');
             historySec.classList.add('animate-fade-in');
 
@@ -210,7 +207,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        // IMPORTACIONES AÑADIDAS: collection, query y orderBy para leer el historial
+        import { getFirestore, doc, onSnapshot, collection, query, orderBy } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
@@ -229,6 +227,7 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                // 1. Escuchar datos de perfil y saldo
                 onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
                         const data = docSnap.data();
@@ -251,6 +250,55 @@
                         document.getElementById('bank-robux-amount').innerText = userRobuxBalance;
                     }
                 });
+
+                // NUEVO: Lógica de escucha en tiempo real para la subcolección "historial"
+                const qHistory = query(collection(db, "users", user.uid, "historial"), orderBy("fecha", "desc"));
+                onSnapshot(qHistory, (snapshot) => {
+                    const historyContainer = document.getElementById('history-list-container');
+                    
+                    if (snapshot.empty) {
+                        historyContainer.innerHTML = '<p class="text-zinc-600 font-bold uppercase tracking-widest text-sm text-center py-10 w-full">Aún no registras movimientos de Robux.</p>';
+                        return;
+                    }
+
+                    let html = '';
+                    snapshot.forEach(docSnap => {
+                        const trans = docSnap.data();
+                        
+                        // Evaluar si es abono (ingreso) o retiro (descuento)
+                        const isIngreso = trans.tipo === "ingreso" || trans.monto > 0;
+                        const sign = isIngreso ? "+" : "";
+                        const colorClass = isIngreso ? "text-green-500" : "text-red-500";
+                        const bgClass = isIngreso ? "bg-green-500/10 border-green-500/20" : "bg-red-500/10 border-red-500/20";
+                        const icon = isIngreso ? "↓" : "↑";
+                        
+                        let dateStr = "Procesando...";
+                        if(trans.fecha) {
+                            const d = trans.fecha.toDate();
+                            dateStr = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        }
+
+                        html += `
+                            <div class="flex items-center justify-between p-4 rounded-xl border border-zinc-800/50 bg-zinc-900/80 hover:bg-zinc-800 transition-colors w-full animate-fade-in">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-full flex flex-shrink-0 items-center justify-center border ${bgClass} ${colorClass} font-black text-xl">
+                                        ${icon}
+                                    </div>
+                                    <div class="overflow-hidden">
+                                        <p class="text-white font-bold uppercase tracking-wider text-sm truncate">${trans.motivo}</p>
+                                        <p class="text-zinc-500 text-[10px] uppercase tracking-widest mt-0.5">${dateStr}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right pl-4">
+                                    <p class="${colorClass} font-black text-xl whitespace-nowrap">${sign}${trans.monto}</p>
+                                    <p class="text-zinc-600 text-[9px] uppercase tracking-widest">Robux</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    historyContainer.innerHTML = html;
+                });
+
             } else {
                 window.location.href = '../';
             }
