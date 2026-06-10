@@ -131,7 +131,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // CONFIGURACIÓN DE SEGURIDAD
+        // CONFIGURACIÓN DE SEGURIDAD CORREGIDA
         const ADMIN_EMAIL = "willem0711@gmail.com"; 
         
         let targetUserDocId = null;
@@ -143,7 +143,6 @@
 
             if (user) {
                 if (user.email === ADMIN_EMAIL) {
-                    // Si es el admin, quitamos la pantalla de carga y mostramos el panel
                     loader.classList.add('hidden');
                     content.classList.remove('hidden');
                 } else {
@@ -155,7 +154,6 @@
             }
         });
 
-        // 1. BUSCAR AL JUGADOR
         window.searchPlayer = async () => {
             const usernameInput = document.getElementById('search-username').value.trim();
             const msgObj = document.getElementById('search-msg');
@@ -170,7 +168,6 @@
             btn.disabled = true;
 
             try {
-                // Buscamos en Firebase el documento que tenga ese robloxUsername
                 const q = query(collection(db, "users"), where("robloxUsername", "==", usernameInput));
                 const querySnapshot = await getDocs(q);
 
@@ -178,16 +175,14 @@
                     msgObj.innerText = "❌ Jugador no encontrado o no ha vinculado su cuenta.";
                     msgObj.className = "text-sm font-bold uppercase tracking-widest mt-4 text-red-500 block";
                 } else {
-                    // Tomamos el primer resultado
                     const userDoc = querySnapshot.docs[0];
                     const data = userDoc.data();
-                    targetUserDocId = userDoc.id; // Guardamos la ID del documento para actualizarlo luego
+                    targetUserDocId = userDoc.id; 
                     targetRobloxId = data.robloxUserId;
 
                     document.getElementById('target-name').innerText = data.robloxUsername;
                     document.getElementById('target-balance').innerText = data.stats?.robux || 0;
                     
-                    // Cargar su foto
                     if(targetRobloxId) {
                         fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${targetRobloxId}&size=150x150&format=Png&isCircular=false`)
                             .then(res => res.json())
@@ -210,7 +205,6 @@
             btn.disabled = false;
         };
 
-        // 2. EJECUTAR LA TRANSACCIÓN (Abonar/Descontar y Guardar Historial)
         window.executeTransaction = async () => {
             const amountInput = document.getElementById('trans-amount');
             const reasonInput = document.getElementById('trans-reason');
@@ -230,7 +224,6 @@
                 return;
             }
 
-            // Confirmación de seguridad
             const actionText = amount > 0 ? "ABONAR" : "DESCONTAR";
             const confirmacion = confirm(`¿Estás seguro que deseas ${actionText} ${Math.abs(amount)} Robux a este jugador?`);
             if(!confirmacion) return;
@@ -242,13 +235,12 @@
             try {
                 const userRef = doc(db, "users", targetUserDocId);
 
-                // A) Actualizamos el saldo usando la función "increment" de Firebase
-                // Esto suma si es positivo, o resta si el número que pusiste lleva el signo menos (-)
+                // A) Actualizamos el saldo
                 await updateDoc(userRef, {
                     "stats.robux": increment(amount)
                 });
 
-                // B) Guardamos el registro en su subcolección "historial"
+                // B) Guardamos el registro en su historial
                 await addDoc(collection(db, "users", targetUserDocId, "historial"), {
                     monto: amount,
                     motivo: reason,
@@ -260,8 +252,14 @@
                 const currentBalance = parseInt(document.getElementById('target-balance').innerText);
                 document.getElementById('target-balance').innerText = currentBalance + amount;
 
-                msgObj.innerText = "✅ ¡Transacción Ejecutada con Éxito!";
-                msgObj.className = "text-center text-sm font-bold uppercase tracking-widest mt-4 text-green-500 block";
+                // LÓGICA DE COLOR DINÁMICO EN EL TEXTO DE ÉXITO
+                if (amount > 0) {
+                    msgObj.innerText = `✅ ¡Abono de ${amount} Robux ejecutado con éxito!`;
+                    msgObj.className = "text-center text-sm font-bold uppercase tracking-widest mt-4 text-green-500 block";
+                } else {
+                    msgObj.innerText = `✅ ¡Descuento de ${Math.abs(amount)} Robux ejecutado con éxito!`;
+                    msgObj.className = "text-center text-sm font-bold uppercase tracking-widest mt-4 text-red-500 block";
+                }
                 
                 amountInput.value = "";
                 reasonInput.value = "";
