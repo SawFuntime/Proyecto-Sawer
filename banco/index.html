@@ -41,12 +41,29 @@
             box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
             outline: none;
         }
+        
+        /* Validated states for inputs */
+        .input-valid {
+            border-color: #22c55e !important;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.2) !important;
+        }
+        .input-invalid {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2) !important;
+        }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        
+        /* Modal Backdrop blur animation */
+        @keyframes backdropFade {
+            from { backdrop-filter: blur(0px); background-color: rgba(0,0,0,0); }
+            to { backdrop-filter: blur(8px); background-color: rgba(0,0,0,0.7); }
+        }
+        .animate-backdrop { animation: backdropFade 0.3s ease-out forwards; }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-red-800 selection:text-white pt-24 relative">
@@ -131,24 +148,45 @@
 
                 <div class="text-center mb-8 relative z-10">
                     <h2 class="text-2xl font-black text-white uppercase tracking-tighter mb-2">Solicitud de Retiro</h2>
-                    <p class="text-red-400/80 text-xs uppercase tracking-widest">Los fondos se enviarán a tu cuenta de Roblox vinculada</p>
+                    <p class="text-red-400/80 text-xs uppercase tracking-widest">Configura tu solicitud de transferencia</p>
                 </div>
 
                 <div class="space-y-6 relative z-10">
+                    <!-- Monto -->
                     <div>
                         <label class="block text-xs font-bold text-red-500 uppercase tracking-widest mb-2 ml-1">Monto a Retirar</label>
-                        <input type="number" id="withdraw-amount" class="input-dark w-full p-4 rounded-xl text-white text-xl font-bold placeholder:text-zinc-700" placeholder="Ingrese la cantidad exacta">
+                        <input type="number" id="withdraw-amount" class="input-dark w-full p-4 rounded-xl text-white text-xl font-bold placeholder:text-zinc-700 transition-colors" placeholder="Ingrese la cantidad exacta">
                     </div>
 
-                    <div id="withdraw-error" class="hidden bg-red-950/50 border border-red-600 text-red-500 text-sm font-bold p-4 rounded-lg text-center uppercase tracking-wider animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.3)]">
-                        ⚠️ Saldo Insuficiente
+                    <!-- Métodos de retiro -->
+                    <div class="mt-4">
+                        <label class="block text-xs font-bold text-red-500 uppercase tracking-widest mb-2 ml-1">Método de Retiro</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="withdraw_method" value="direct" class="peer sr-only" checked>
+                                <div class="h-full p-4 rounded-xl border-2 border-zinc-800 peer-checked:border-red-600 peer-checked:bg-red-950/30 text-center transition-all hover:bg-zinc-900/50">
+                                    <span class="block text-white font-bold mb-1">Transferencia Directa</span>
+                                    <span class="text-[10px] text-zinc-500 uppercase tracking-wider">Vía Roblox Pluss</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer relative">
+                                <input type="radio" name="withdraw_method" value="gamepass" class="peer sr-only">
+                                <div class="h-full p-4 rounded-xl border-2 border-zinc-800 peer-checked:border-red-600 peer-checked:bg-red-950/30 text-center transition-all hover:bg-zinc-900/50">
+                                    <span class="block text-white font-bold mb-1">GamePass</span>
+                                    <span class="text-[10px] text-zinc-500 uppercase tracking-wider">Compra de pase VIP</span>
+                                </div>
+                            </label>
+                        </div>
                     </div>
 
-                    <button onclick="processWithdrawal()" class="w-full bg-red-700 hover:bg-red-600 text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest shadow-xl shadow-red-900/40 transform hover:-translate-y-1">
-                        Confirmar Retiro
+                    <div id="withdraw-error" class="hidden bg-red-950/50 border border-red-600 text-red-500 text-sm font-bold p-4 rounded-lg text-center uppercase tracking-wider shadow-[0_0_15px_rgba(220,38,38,0.3)]">
+                        ⚠️ Saldo Insuficiente o Monto Inválido
+                    </div>
+
+                    <button onclick="continueWithdrawal()" class="w-full bg-red-700 hover:bg-red-600 text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest shadow-xl shadow-red-900/40 transform hover:-translate-y-1">
+                        Continuar
                     </button>
                     
-                    <p class="text-[10px] text-zinc-500 text-center uppercase tracking-widest mt-4">El proceso de transferencia puede tardar unos minutos en reflejarse en los servidores de Roblox.</p>
                 </div>
             </div>
         </section>
@@ -172,10 +210,79 @@
 
     </main>
 
+    <!-- Modal de Detalles de Retiro -->
+    <div id="details-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black/80 animate-backdrop" onclick="closeModal('details-modal')"></div>
+        <div class="bg-[#0a0a0c] border border-red-800 rounded-2xl p-8 max-w-lg w-full shadow-[0_0_40px_rgba(220,38,38,0.2)] relative z-10 animate-fade-in">
+            <button onclick="closeModal('details-modal')" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <h3 class="text-2xl font-black text-white uppercase tracking-wider mb-6 text-center" id="modal-title">Detalles de Retiro</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2 ml-1">Inserte nombre de usuario en Roblox</label>
+                    <input type="text" id="roblox-username-input" class="input-dark w-full p-3 rounded-lg text-white font-bold" placeholder="Ej: Builderman123">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2 ml-1">Contacto (Usuario de Discord)</label>
+                    <input type="text" id="discord-username-input" class="input-dark w-full p-3 rounded-lg text-white font-bold" placeholder="Ej: usuario#1234">
+                </div>
+
+                <!-- Oculto por defecto, se muestra si es gamepass -->
+                <div id="gamepass-link-container" class="hidden">
+                    <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2 ml-1">Pegue enlace de Gamepass aquí</label>
+                    <input type="url" id="gamepass-link-input" class="input-dark w-full p-3 rounded-lg text-white font-bold" placeholder="https://www.roblox.com/game-pass/...">
+                </div>
+
+                <!-- Oculto por defecto, se muestra si es directa -->
+                <div id="direct-note-container" class="hidden mt-6 bg-red-950/40 border border-red-900 rounded-lg p-4">
+                    <p class="text-xs text-red-400 leading-relaxed font-semibold">
+                        <span class="font-bold text-red-500">Nota:</span> Asegúrate de cumplir los requerimientos de Roblox para recibir transferencias de Robuxs directas mediante Roblox Pluss.
+                    </p>
+                </div>
+
+                <div id="modal-error" class="hidden text-red-500 text-xs font-bold text-center mt-2 uppercase tracking-wider">
+                    Por favor, rellene todos los campos requeridos.
+                </div>
+
+                <button id="submit-btn" onclick="submitWithdrawal()" class="w-full mt-6 bg-red-700 hover:bg-red-600 text-white font-black py-3 rounded-lg transition-all uppercase tracking-widest flex justify-center items-center gap-2">
+                    Enviar Solicitud
+                    <svg id="btn-spinner" class="animate-spin h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Éxito -->
+    <div id="success-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black/80 animate-backdrop"></div>
+        <div class="bg-[#0a0a0c] border border-green-800 rounded-2xl p-8 max-w-md w-full shadow-[0_0_40px_rgba(34,197,94,0.2)] relative z-10 animate-fade-in text-center">
+            
+            <div class="w-20 h-20 bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/50">
+                <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+
+            <h3 class="text-2xl font-black text-white uppercase tracking-wider mb-4">¡Solicitud Exitosa!</h3>
+            
+            <p id="success-message" class="text-zinc-400 text-sm mb-8 leading-relaxed font-medium">
+                <!-- Se inyecta por JS -->
+            </p>
+
+            <button onclick="closeSuccessAndReset()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-lg transition-all uppercase tracking-widest">
+                Entendido
+            </button>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
     <script>
         AOS.init({ once: true, offset: 50 });
 
+        // Navegación UI básica
         window.scrollToWithdraw = () => {
             const withdrawSec = document.getElementById('withdraw-section');
             const historySec = document.getElementById('history-section');
@@ -202,13 +309,26 @@
                 historySec.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
         }
+
+        // Modals Logic
+        window.closeModal = (id) => {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        window.closeSuccessAndReset = () => {
+            document.getElementById('success-modal').classList.add('hidden');
+            document.getElementById('withdraw-section').classList.add('hidden');
+            document.getElementById('withdraw-amount').value = '';
+            document.getElementById('withdraw-amount').classList.remove('input-valid');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        // IMPORTACIONES AÑADIDAS: collection, query y orderBy para leer el historial
-        import { getFirestore, doc, onSnapshot, collection, query, orderBy } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        // Importamos updateDoc, addDoc y serverTimestamp para actualizar el balance y crear el historial
+        import { getFirestore, doc, onSnapshot, collection, query, orderBy, updateDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
@@ -224,9 +344,11 @@
         const db = getFirestore(app);
 
         let userRobuxBalance = 0; 
+        let currentUserId = null;
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                currentUserId = user.uid;
                 // 1. Escuchar datos de perfil y saldo
                 onSnapshot(doc(db, "users", user.uid), (docSnap) => {
                     if (docSnap.exists()) {
@@ -248,10 +370,13 @@
 
                         userRobuxBalance = data.stats?.robux || 0;
                         document.getElementById('bank-robux-amount').innerText = userRobuxBalance;
+                        
+                        // Validar el input en tiempo real si el balance cambia
+                        validateAmountInput();
                     }
                 });
 
-                // NUEVO: Lógica de escucha en tiempo real para la subcolección "historial"
+                // Lógica de escucha en tiempo real para la subcolección "historial"
                 const qHistory = query(collection(db, "users", user.uid, "historial"), orderBy("fecha", "desc"));
                 onSnapshot(qHistory, (snapshot) => {
                     const historyContainer = document.getElementById('history-list-container');
@@ -265,7 +390,6 @@
                     snapshot.forEach(docSnap => {
                         const trans = docSnap.data();
                         
-                        // Evaluar si es abono (ingreso) o retiro (descuento)
                         const isIngreso = trans.tipo === "ingreso" || trans.monto > 0;
                         const sign = isIngreso ? "+" : "";
                         const colorClass = isIngreso ? "text-green-500" : "text-red-500";
@@ -304,15 +428,32 @@
             }
         });
 
-        window.processWithdrawal = () => {
-            const amountInput = document.getElementById('withdraw-amount');
+        const amountInput = document.getElementById('withdraw-amount');
+        
+        function validateAmountInput() {
+            const val = parseInt(amountInput.value);
+            amountInput.classList.remove('input-valid', 'input-invalid');
+            
+            if (!isNaN(val) && val > 0) {
+                if (val <= userRobuxBalance) {
+                    amountInput.classList.add('input-valid');
+                } else {
+                    amountInput.classList.add('input-invalid');
+                }
+            }
+        }
+
+        amountInput.addEventListener('input', validateAmountInput);
+
+        window.continueWithdrawal = () => {
             const errorBox = document.getElementById('withdraw-error');
             const amount = parseInt(amountInput.value);
 
             errorBox.classList.add('hidden');
 
-            if (!amount || amount <= 0) {
-                alert("Por favor, ingrese un monto válido mayor a 0.");
+            if (isNaN(amount) || amount <= 0) {
+                errorBox.innerText = "⚠️ Por favor, ingrese un monto válido mayor a 0.";
+                errorBox.classList.remove('hidden');
                 return;
             }
 
@@ -320,13 +461,138 @@
                 errorBox.innerText = "⚠️ Error: No tienes suficientes Robux";
                 errorBox.classList.remove('hidden');
                 amountInput.focus();
+                return;
+            }
+
+            // Configurar modal de detalles según método
+            const method = document.querySelector('input[name="withdraw_method"]:checked').value;
+            
+            const gamepassContainer = document.getElementById('gamepass-link-container');
+            const directNoteContainer = document.getElementById('direct-note-container');
+            const modalTitle = document.getElementById('modal-title');
+
+            if (method === 'direct') {
+                modalTitle.innerText = "Transferencia Directa";
+                gamepassContainer.classList.add('hidden');
+                directNoteContainer.classList.remove('hidden');
             } else {
-                alert("¡Solicitud de retiro procesada! " + amount + " Robux.");
-                amountInput.value = "";
-                setTimeout(() => {
-                    document.getElementById('withdraw-section').classList.add('hidden');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 1500);
+                modalTitle.innerText = "Retiro por GamePass";
+                gamepassContainer.classList.remove('hidden');
+                directNoteContainer.classList.add('hidden');
+            }
+
+            // Mostrar modal
+            document.getElementById('details-modal').classList.remove('hidden');
+        };
+
+        window.submitWithdrawal = async () => {
+            const errorTxt = document.getElementById('modal-error');
+            const btn = document.getElementById('submit-btn');
+            const spinner = document.getElementById('btn-spinner');
+            
+            errorTxt.classList.add('hidden');
+
+            const amount = parseInt(amountInput.value);
+            const method = document.querySelector('input[name="withdraw_method"]:checked').value;
+            const rbxUser = document.getElementById('roblox-username-input').value.trim();
+            const discUser = document.getElementById('discord-username-input').value.trim();
+            const gpLink = document.getElementById('gamepass-link-input').value.trim();
+
+            // Validaciones
+            if (!rbxUser || !discUser) {
+                errorTxt.innerText = "Usuario de Roblox y Discord son obligatorios.";
+                errorTxt.classList.remove('hidden');
+                return;
+            }
+
+            if (method === 'gamepass' && !gpLink) {
+                errorTxt.innerText = "El enlace del GamePass es obligatorio para este método.";
+                errorTxt.classList.remove('hidden');
+                return;
+            }
+
+            // Prevención de doble click y UI Feedback
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            spinner.classList.remove('hidden');
+
+            try {
+                // 1. Actualizar balance en Firebase
+                const userRef = doc(db, "users", currentUserId);
+                const newBalance = userRobuxBalance - amount;
+                
+                await updateDoc(userRef, {
+                    "stats.robux": newBalance
+                });
+
+                // 2. Registrar en historial local de Firebase
+                const historyRef = collection(db, "users", currentUserId, "historial");
+                await addDoc(historyRef, {
+                    tipo: "retiro",
+                    monto: -amount,
+                    motivo: `Retiro (${method === 'direct' ? 'Directo' : 'GamePass'})`,
+                    fecha: serverTimestamp()
+                });
+
+                // 3. Enviar Webhook a Discord
+                const webhookUrl = "https://discordapp.com/api/webhooks/1525725876829028595/JCS89Nv_GWvyzLfjhOM3vWxfEGyuWjixmaHDKeQhPu06vWsmzrL0YTfnPY8735-O8Z0q";
+                
+                const methodText = method === 'direct' ? 'Transferencia Directa (Pluss)' : 'Compra de GamePass';
+                const embedColor = method === 'direct' ? 16711680 : 3447003; // Rojo o Azul
+
+                const payload = {
+                    content: `<@&1124808381182283920>`, // Opcional: Ping a un rol si es necesario, puedes borrar esta linea
+                    embeds: [{
+                        title: "💸 Nueva Solicitud de Retiro",
+                        description: `El usuario ha solicitado un retiro de fondos.`,
+                        color: embedColor,
+                        fields: [
+                            { name: "👤 Usuario Roblox", value: rbxUser, inline: true },
+                            { name: "💬 Contacto Discord", value: discUser, inline: true },
+                            { name: "💰 Monto a Retirar", value: `**${amount} R$**`, inline: true },
+                            { name: "🛠️ Método", value: methodText, inline: true }
+                        ],
+                        footer: { text: "Sistema de Banco Sawer" },
+                        timestamp: new Date().toISOString()
+                    }]
+                };
+
+                if (method === 'gamepass') {
+                    payload.embeds[0].fields.push({ name: "🔗 Enlace del GamePass", value: gpLink, inline: false });
+                }
+
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // 4. Mostrar mensaje de éxito
+                closeModal('details-modal');
+                
+                const successMsg = document.getElementById('success-message');
+                if (method === 'direct') {
+                    successMsg.innerHTML = "Solicitud de retiro realizada. La transferencia podría tomar <strong class='text-white'>1 día</strong> en verse reflejada en tu cuenta de Roblox mediante Pluss.";
+                } else {
+                    successMsg.innerHTML = "Solicitud enviada. La compra del GamePass puede tomar un día, pero por políticas de retención de Roblox, los Robuxs pueden tardar hasta <strong class='text-white'>7 días</strong> en verse reflejados.";
+                }
+
+                document.getElementById('success-modal').classList.remove('hidden');
+
+                // Limpiar inputs
+                document.getElementById('roblox-username-input').value = '';
+                document.getElementById('discord-username-input').value = '';
+                document.getElementById('gamepass-link-input').value = '';
+
+            } catch (error) {
+                console.error("Error al procesar el retiro:", error);
+                errorTxt.innerText = "Hubo un error al procesar la solicitud. Contacte a soporte.";
+                errorTxt.classList.remove('hidden');
+            } finally {
+                // Restaurar botón
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                spinner.classList.add('hidden');
             }
         };
     </script>
