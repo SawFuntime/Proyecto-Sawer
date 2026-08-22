@@ -30,7 +30,7 @@
         ::-webkit-scrollbar-thumb { background: #991b1b; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
         
-        /* Scrollbar interno para chats y listas */
+
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
@@ -819,7 +819,7 @@
             }
         }
 
-        // REDIRECCIÓN AL BANCO CON SEGURIDAD
+
         window.goToBanco = () => {
             const isLinked = window.currentUserData && window.currentUserData.isLinked;
             
@@ -832,7 +832,6 @@
         };
 
         function switchProfileTab(tabName) {
-            // VERIFICACIÓN DE SEGURIDAD: Solo 'info' es accesible sin vincular
             const isLinked = window.currentUserData && window.currentUserData.isLinked;
 
             if (tabName !== 'info' && !isLinked) {
@@ -847,7 +846,7 @@
             
             const selectedContent = document.getElementById('content-' + tabName);
             selectedContent.classList.remove('hidden');
-            // Si es foros o regalos, añadir flex display de nuevo
+
             if(tabName === 'foros' || tabName === 'regalos') {
                 selectedContent.classList.add('flex');
                 if(tabName === 'foros' && window.loadForums) window.loadForums();
@@ -887,7 +886,7 @@
             setTimeout(() => { msg.classList.add('hidden'); }, 3000);
         }
 
-        // ====== COPIAR CÓDIGO DIARIO ======
+
         window.copyDailyCode = () => {
             const codeEl = document.getElementById('daily-reward-code');
             if(!codeEl || codeEl.innerText === "CARGANDO...") return;
@@ -910,7 +909,7 @@
             });
         }
 
-        // ====== FORUM MODAL ======
+
         window.openForumModal = () => {
             if(!window.currentUserData || !window.currentUserData.isLinked) {
                 alert("Debes tener tu cuenta de Roblox vinculada para crear un Foro.");
@@ -927,22 +926,22 @@
             document.getElementById('create-forum-modal').classList.add('hidden');
         }
 
-        // TOOLTIP HELPER PARA MENSAJES DINÁMICOS
+
         window.fetchTooltipData = async (userId, tooltipId, username) => {
             const tooltip = document.getElementById(tooltipId);
             if(!tooltip) return;
             
-            // Filtro para mensajes antiguos de prueba (sin ID)
+
             if (!userId || userId === 'undefined' || userId === 'null') {
                 tooltip.innerHTML = '<p class="text-zinc-500 text-xs font-bold uppercase tracking-widest text-center mt-2">Mensaje Antiguo</p>';
                 return;
             }
 
-            // Si ya tiene datos (no dice Buscando), salimos
+
             if(!tooltip.innerHTML.includes("Buscando...")) return; 
             
             try {
-                // Importación dinámica
+  
                 const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
                 const db = getFirestore();
                 
@@ -958,7 +957,7 @@
                         `;
                     } else {
                         const stats = userData.stats || {};
-                        // DISEÑO DEL TOOLTIP
+
                         tooltip.innerHTML = `
                             <div class="text-center mb-2 border-b border-zinc-800 pb-2">
                                 <span class="text-white font-black text-sm uppercase tracking-wider block truncate px-1" title="${username}">${username}</span>
@@ -985,12 +984,12 @@
             }
         };
 
-        // INICIAR CONTADOR DE REGALO DIARIO
+
         if(!window.dailyTimerInterval) {
             window.dailyTimerInterval = setInterval(() => {
                 const now = new Date();
                 const tomorrow = new Date(now);
-                tomorrow.setUTCHours(24, 0, 0, 0); // Medianoche exacta
+                tomorrow.setUTCHours(24, 0, 0, 0);
                 const diff = tomorrow - now;
                 const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -1024,7 +1023,7 @@
         const db = getFirestore(app);
 
         window.currentUser = null;
-        window.currentUserData = null; // Guardar datos para crear foro
+        window.currentUserData = null; 
         let unsubscribeProfile = null;
         let firebaseGanadoresLoaded = false;
 
@@ -1033,9 +1032,6 @@
             document.getElementById('auth-error').classList.remove('hidden');
         }
 
-        // ===============================================
-        // REGISTRO Y LOGIN
-        // ===============================================
         document.getElementById('btn-reg-submit').addEventListener('click', async () => {
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value;
@@ -1058,7 +1054,7 @@
                     stats: { wins: 0, recordPuntos: 0, sawCoins: 0, diamantes: 0, items: "0/67" }
                 });
                 
-                // Configuramos el correo para que regrese a tu web
+
                 const actionCodeSettings = {
                     url: 'https://proyectosawer.com/',
                     handleCodeInApp: true,
@@ -1100,11 +1096,6 @@
             switchMainView('home'); 
         }
 
-        // ===============================================
-        // FUNCIONES DE LA PESTAÑA CONFIGURACIÓN
-        // ===============================================
-
-        // 1. Actualizar Contraseña
         document.getElementById('btn-update-password').addEventListener('click', async () => {
             if(!window.currentUser) return;
             const newPassInput = document.getElementById('config-new-password');
@@ -1133,7 +1124,6 @@
             }
         });
 
-        // 2. Desvincular Roblox
         document.getElementById('btn-unlink-roblox').addEventListener('click', async () => {
             if(!window.currentUser) return;
             const confirmacion = confirm("¿Estás seguro de que deseas desvincular tu cuenta de Roblox? Tus estadísticas se ocultarán de tu perfil hasta que vuelvas a vincularte.");
@@ -1153,7 +1143,7 @@
             }
         });
 
-        // 3. Guardar usuario de Discord
+
         document.getElementById('btn-update-discord').addEventListener('click', async () => {
             if(!window.currentUser) return;
             const discordUser = document.getElementById('config-discord-username').value.trim();
@@ -1170,7 +1160,7 @@
             }
         });
 
-        // 4. Actualizar Estado de Privacidad (Ocultar Stats)
+
         const toggleHideStats = document.getElementById('toggle-hide-stats');
         if(toggleHideStats) {
             toggleHideStats.addEventListener('change', async (e) => {
@@ -1180,12 +1170,12 @@
                     await updateDoc(doc(db, "users", window.currentUser.uid), { hideStats: isHidden });
                 } catch(error) {
                     console.error("Error cambiando privacidad", error);
-                    e.target.checked = !isHidden; // Revierte visualmente si hay error
+                    e.target.checked = !isHidden;
                 }
             });
         }
 
-        // 5. Dar Like a Mensajes del Foro
+
         window.toggleMessageLike = async (msgId, hasLiked) => {
             if(!window.currentUser || !window.currentForumId) {
                 alert("Debes iniciar sesión para interactuar con los mensajes.");
@@ -1218,15 +1208,12 @@
             }
         };
 
-        // =========================================================================
-        // LÓGICA DE FOROS COMUNITARIOS
-        // =========================================================================
         window.activeForumsListener = null;
         window.currentForumId = null;
         window.activeMessagesListener = null;
         window.isForumPublic = false;
 
-        // 1. Cargar Foros en la barra lateral
+
         window.loadForums = () => {
             if(window.activeForumsListener) return; 
             
@@ -1237,7 +1224,7 @@
                     forums.push({ id: doc.id, ...doc.data() });
                 });
                 
-                // Ordenar del más nuevo al más viejo
+
                 forums.sort((a,b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
 
                 const container = document.getElementById('forums-sidebar-list');
@@ -1264,7 +1251,7 @@
             });
         };
 
-        // 2. Crear un nuevo foro en Firebase
+
         window.submitNewForum = async () => {
             const titleInput = document.getElementById('new-forum-title');
             const descInput = document.getElementById('new-forum-desc');
@@ -1292,7 +1279,7 @@
                     creatorId: window.currentUser.uid,
                     creatorName: window.currentUserData.robloxUsername || "Usuario",
                     creatorAvatarUrl: avatarUrl,
-                    isPublic: false, // Por defecto cerrado (solo el dueño habla)
+                    isPublic: false,
                     createdAt: serverTimestamp()
                 });
                 
@@ -1304,7 +1291,7 @@
             }
         };
 
-        // 3. Cambiar Privacidad del Foro (Solo Creador)
+
         window.toggleForumPrivacy = async () => {
             if(!window.currentForumId || !window.currentUser) return;
             const newPrivacyState = !window.isForumPublic; 
@@ -1343,22 +1330,22 @@
             }
         }
 
-        // 4. Seleccionar y abrir un foro
+
         window.selectForum = async (forumId, title, desc, creatorId, creatorName, creatorAvatar, isPublic) => {
             window.currentForumId = forumId;
             window.isForumPublic = isPublic;
             const isCreator = window.currentUser && window.currentUser.uid === creatorId;
             
-            // UI Alternar a Chat Activo
+
             document.getElementById('forum-chat-placeholder').classList.add('hidden');
             document.getElementById('forum-active-chat').classList.remove('hidden');
 
-            // Actualizar Cabecera
+
             document.getElementById('chat-header-title').innerText = title;
             document.getElementById('chat-header-desc').innerText = desc || "Un espacio de difusión de Proyecto Sawer.";
             document.getElementById('chat-header-avatar').src = creatorAvatar || "./Inquisitor.png";
 
-            // Mostrar/Configurar botón de privacidad
+
             const privacyBtn = document.getElementById('btn-forum-privacy');
             if (isCreator) {
                 privacyBtn.classList.remove('hidden');
@@ -1367,12 +1354,12 @@
                 privacyBtn.classList.add('hidden');
             }
 
-            // Resaltar en la lista
+
             document.querySelectorAll('.forum-list-item').forEach(el => el.classList.remove('border-red-600', 'bg-zinc-900'));
             const activeEl = document.getElementById(`forum-item-${forumId}`);
             if(activeEl) activeEl.classList.add('border-red-600', 'bg-zinc-900');
 
-            // Control de Permiso para escribir (Area E)
+
             if ((isCreator || isPublic) && window.currentUser) {
                 document.getElementById('chat-input-area').classList.remove('hidden');
                 const inputField = document.getElementById('chat-input-text');
@@ -1381,7 +1368,6 @@
                 document.getElementById('chat-input-area').classList.add('hidden');
             }
 
-            // TOOLTIP STATS: Preparar la cabecera
             const tooltip = document.getElementById('chat-header-tooltip');
             tooltip.innerHTML = '<p class="text-zinc-500 text-xs text-center font-bold uppercase tracking-widest mt-2">Buscando...</p>';
             const headerAvatar = document.getElementById('chat-header-avatar');
@@ -1389,7 +1375,6 @@
                 window.fetchTooltipData(creatorId, 'chat-header-tooltip', creatorName);
             };
 
-            // CARGAR MENSAJES DEL FORO (Chat)
             if(window.activeMessagesListener) window.activeMessagesListener();
             
             const msgRef = collection(db, "forums", forumId, "messages");
@@ -1413,12 +1398,12 @@
                     const msgAuthorName = escapeHTML(msg.authorName || "Desconocido");
                     const tooltipId = `msg-tooltip-${msg.id}`;
 
-                    // SISTEMA DE LIKES
+
                     const likesArray = msg.likes || [];
                     const likesCount = likesArray.length;
                     const hasLiked = window.currentUser ? likesArray.includes(window.currentUser.uid) : false;
 
-                    // DISEÑO CORREGIDO DEL TOOLTIP Y MENSAJES
+
                     msgHtml += `
                         <div class="flex items-start gap-3 w-full animate-fade-in group/msg">
                             <div class="relative group/avatar mt-1 flex-shrink-0">
@@ -1449,7 +1434,7 @@
             });
         };
 
-        // 5. Enviar Mensaje
+
         window.sendForumMessage = async () => {
             if(!window.currentForumId || !window.currentUser || !window.currentUserData) return;
             const input = document.getElementById('chat-input-text');
@@ -1478,7 +1463,6 @@
             }
         };
 
-        // Utilidad para seguridad
         function escapeHTML(str) {
             if(!str) return '';
             return str.replace(/[&<>'"]/g, 
@@ -1488,9 +1472,6 @@
             );
         }
 
-        // =========================================================================
-        // LECTURA DE GANADORES: 100% AUTOMÁTICA Y HÍBRIDA
-        // =========================================================================
         window.loadFirebaseGanadores = async () => {
             if(firebaseGanadoresLoaded) return; 
 
@@ -1593,9 +1574,6 @@
                 });
                 container.innerHTML = htmlContent;
 
-                // ===============================================
-                // CREAR EL TOP 3 DE PUNTOS
-                // ===============================================
                 let htmlTopPuntos = '';
                 topPuntosList.forEach((jugador, index) => {
                     let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
@@ -1614,9 +1592,6 @@
                 const cajaPuntos = document.getElementById('lista-top-puntos');
                 if(cajaPuntos) cajaPuntos.innerHTML = htmlTopPuntos;
 
-                // ===============================================
-                // CREAR EL TOP 3 DE VICTORIAS
-                // ===============================================
                 let htmlTopVictorias = '';
                 topVictoriasList.forEach((jugador, index) => {
                     let medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
@@ -1637,11 +1612,6 @@
 
                 firebaseGanadoresLoaded = true;
 
-                // ===============================================
-                // DESCARGAR LAS FOTOS Y NOMBRES FALTANTES
-                // ===============================================
-                
-                // 1. Fotos en Lote usando RoProxy (El estándar estable)
                 if (idsToFetchAvatar.length > 0) {
                     const batchIds = idsToFetchAvatar.join(',');
                     fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${batchIds}&size=150x150&format=Png&isCircular=false`)
@@ -1665,7 +1635,7 @@
                         .catch(err => console.log("Aviso: El servidor de imágenes de Roblox está tardando."));
                 }
 
-                // 2. Nombres Inteligentes en Lote usando RoProxy
+
                 if (idsToFetchName.length > 0) {
                     try {
                         let res = await fetch('https://users.roproxy.com/v1/users', {
@@ -1725,18 +1695,16 @@
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         
-                        // Guardar datos temporalmente para creación de foros y likes
+
                         window.currentUserData = data; 
 
-                        // ===============================================
-                        // NUEVO: SISTEMA DE BLOQUEO DE PESTAÑAS VISUAL
-                        // ===============================================
+
                         const activeTab = document.querySelector('.profile-content:not(.hidden)');
                         if (!data.isLinked) {
-                            // Forzar a la pestaña de información
+ 
                             switchProfileTab('info');
                         } else if (activeTab) {
-                            // Refrescar la pestaña actual para quitar los candados visuales
+
                             const tabId = activeTab.id.replace('content-', '');
                             switchProfileTab(tabId);
                         }
@@ -1752,7 +1720,7 @@
                             }
                         }
 
-                        // Actualizar el estado de Discord y Privacidad (UI)
+
                         if(data.discordUsername !== undefined && data.discordUsername !== null) {
                             document.getElementById('config-discord-username').value = data.discordUsername;
                         } else {
@@ -1767,9 +1735,9 @@
                         const navIconCustom = document.getElementById('nav-profile-icon-custom');
                         const navIconDefault = document.getElementById('nav-profile-icon-default');
 
-                        // LÓGICA DE FOTO DEL PERFIL
+
                         if (data.isLinked && data.robloxUserId) {
-                            // Ponemos el default visual en caso de que tarde
+
                             if(imgDisplay && imgDisplay.classList.contains('hidden')) {
                                 imgDisplay.src = './Inquisitor.png';
                                 imgDisplay.classList.remove('hidden'); 
@@ -1825,7 +1793,7 @@
                                 if(stItems) stItems.innerText = data.stats.items || "0/67";
                             }
 
-                            // DAILY REWARD LOGIC
+
                             const todayUTC = new Date().toISOString().split('T')[0];
                             if (!data.dailyReward || data.dailyReward.date !== todayUTC) {
                                 const newDailyCode = "SAW-" + Math.random().toString(36).substring(2, 6).toUpperCase() + "-" + user.uid.substring(0, 4).toUpperCase();
@@ -1875,12 +1843,12 @@
         const mode = urlParams.get('mode');
         const oobCode = urlParams.get('oobCode');
 
-        // Si detecta que la URL tiene un código de verificación...
+
         if (mode === 'verifyEmail' && oobCode) {
-            // Abre la ventana de verificación que creamos en el Paso 2
+
             document.getElementById('verify-email-modal').classList.remove('hidden');
             
-            // Le da la orden al botón
+
             document.getElementById('btn-confirm-verification').addEventListener('click', async () => {
                 const btn = document.getElementById('btn-confirm-verification');
                 const msg = document.getElementById('verify-msg');
@@ -1889,14 +1857,14 @@
                 btn.innerText = "Verificando...";
                 
                 try {
-                    // Aquí se consume el código real con Firebase
+
                     await applyActionCode(auth, oobCode);
                     msg.innerText = "¡Cuenta verificada con éxito! Ya puedes iniciar sesión.";
                     msg.classList.remove('text-zinc-400');
                     msg.classList.add('text-green-500', 'font-bold');
                     btn.style.display = 'none';
                     
-                    // Limpia la URL y te manda al login después de 3 segundos
+
                     setTimeout(() => {
                         window.history.replaceState({}, document.title, window.location.pathname);
                         document.getElementById('verify-email-modal').classList.add('hidden');
