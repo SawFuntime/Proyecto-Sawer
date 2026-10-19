@@ -460,14 +460,14 @@
             }
         }
 
-        window.handleProfileClick = () => {
-            if (window.currentUser) {
-                // REDIRIGE AL NUEVO ARCHIVO
-                window.location.href = './perfil.html';
-            } else {
-                openModal('login');
-            }
-        };
+window.handleProfileClick = () => {
+    if (window.currentUser) {
+        // Redirige a la carpeta 'perfil' limpia
+        window.location.href = '/perfil';
+    } else {
+        openModal('login');
+    }
+};
 
         function openContactModal() {
             document.getElementById('contact-modal').classList.remove('hidden');
