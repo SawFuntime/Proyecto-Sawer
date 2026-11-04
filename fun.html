@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sawer Admin Panel</title>
+    <title>Sawer Admin Panel - V2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -18,18 +18,29 @@
             }
         }
     </script>
+    <style>
+        /* Animaciones para cambiar de pantallas suavemente sin depender solo de JS */
+        .pantalla-activa { display: flex; animation: fadeIn 0.4s ease forwards; }
+        .pantalla-oculta { display: none; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="bg-sawerDark text-white font-sans h-screen overflow-hidden flex">
+<body class="bg-sawerDark text-white font-sans h-screen overflow-hidden flex select-none">
 
     <!-- BARRA LATERAL (SIDEBAR) -->
-    <aside class="w-72 bg-sawerGrey border-r border-sawerRed/40 flex flex-col justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-20">
+    <aside class="w-72 bg-sawerGrey border-r border-sawerRed/40 flex flex-col justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-20 relative">
         <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
-            <!-- Logo Inquisitor corregido -->
-            <img src="Inquisitor.png" alt="Proyecto Sawer" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/194,0,0/ffffff?text=Sawer'">
-            <h2 class="text-xl font-bold tracking-widest text-center uppercase">Comando<br><span class="text-sawerRed">Central</span></h2>
+            <img src="Inquisitor.png" alt="Proyecto Sawer" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/c20000/ffffff?text=Sawer'">
+            <h2 class="text-xl font-bold tracking-widest text-center uppercase leading-tight">Comando<br><span class="text-sawerRed">Central</span></h2>
+            <!-- TEXTO CLAVE PARA SABER SI SE ACTUALIZÓ -->
+            <span class="text-[10px] text-gray-500 mt-2 font-mono">Versión 2.0 (Tarjetas)</span>
         </div>
 
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-4">
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-2">
+            <!-- Botón Principal (Forzamos a que vuelva al inicio si le dan click) -->
             <button onclick="volverInicio()" class="sound-btn w-full flex items-center gap-4 bg-sawerRed/20 border border-sawerRed text-white px-5 py-4 rounded-xl font-bold transition-all shadow-[inset_4px_0_0_rgb(194,0,0)]">
                 <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                 Principal
@@ -57,29 +68,31 @@
     </aside>
 
     <!-- ÁREA PRINCIPAL -->
-    <main class="flex-1 p-10 overflow-y-auto relative flex flex-col z-10">
+    <main class="flex-1 p-10 overflow-y-auto relative z-10">
         <!-- Brillo de fondo -->
         <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none"></div>
 
         <!-- ============================================== -->
         <!-- VISTA 1: MENÚ PRINCIPAL (El de los 4 cuadrados) -->
         <!-- ============================================== -->
-        <div id="vista-principal" class="w-full flex-1 flex flex-col transition-opacity duration-300">
+        <div id="vista-principal" class="pantalla-activa flex-col w-full h-full max-w-4xl mx-auto">
             <header class="mb-10">
                 <h1 class="text-4xl font-black tracking-wide">VISIÓN GENERAL</h1>
                 <p class="text-gray-400 mt-2">Selecciona un módulo para gestionar la base de datos.</p>
             </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto w-full flex-1 content-start">
-                <!-- TARJETA 1: Jugadores (Al darle click abre la otra vista) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full content-start">
+                <!-- TARJETA 1: Jugadores (Al darle click abre la vista 2) -->
                 <div onclick="abrirJugadores()" class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     </div>
                     <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white transition-colors">Jugadores</h3>
+                    <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">CLICK PARA ABRIR TERMINAL</p>
                 </div>
-                <!-- Otras tarjetas... -->
+
+                <!-- Las otras 3 tarjetas -->
                 <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                     <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4"></path></svg></div>
                     <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Datos</h3>
@@ -98,10 +111,11 @@
         <!-- ============================================== -->
         <!-- VISTA 2: BASE DE DATOS JUGADORES (Oculto al inicio) -->
         <!-- ============================================== -->
-        <div id="vista-jugadores" class="hidden w-full flex-1 flex flex-col opacity-0 transition-opacity duration-300">
+        <div id="vista-jugadores" class="pantalla-oculta flex-col w-full">
             <header class="mb-10 flex items-center gap-6 border-b border-sawerRed/20 pb-6">
-                <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg transition-colors shadow-lg">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                <!-- Botón Volver -->
+                <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg transition-colors shadow-lg group">
+                    <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 </button>
                 <div>
                     <h1 class="text-4xl font-black tracking-wide">JUGADORES VERIFICADOS</h1>
@@ -110,111 +124,98 @@
             </header>
 
             <!-- GRID DE 4 TARJETAS DE IDENTIFICACIÓN -->
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 content-start">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 content-start w-full max-w-6xl mx-auto">
                 
-                <!-- ID CARD MOCKUP 1 -->
-                <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-[0_0_15px_rgba(0,0,0,0.5)] relative">
-                    <!-- Estado de Verificado -->
-                    <div class="absolute top-4 right-4 bg-green-900/40 border border-green-500 text-green-400 text-xs px-2 py-1 rounded font-bold">VERIFICADO</div>
+                <!-- TARJETA DE IDENTIDAD 1 (DISEÑO BASE) -->
+                <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-6 shadow-[0_0_15px_rgba(0,0,0,0.5)] relative flex flex-col">
+                    <!-- Etiqueta de Verificado -->
+                    <div class="absolute top-6 right-6 bg-green-900/40 border border-green-500 text-green-400 text-xs px-3 py-1 rounded font-bold shadow-[0_0_10px_rgba(0,255,0,0.2)]">VERIFICADO</div>
                     
-                    <!-- Foto y Nombre (1 y 2) -->
-                    <div class="flex items-center gap-4 mb-4 border-b border-gray-700 pb-4">
-                        <img src="https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/150/150/AvatarHeadshot/Png" alt="Avatar" class="w-16 h-16 rounded-lg border-2 border-sawerRed object-cover bg-sawerDark">
+                    <!-- 1 y 2: Foto y Nombre -->
+                    <div class="flex items-center gap-5 mb-5 border-b border-gray-700 pb-5">
+                        <img src="https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/150/150/AvatarHeadshot/Png" alt="Avatar" class="w-20 h-20 rounded-xl border-2 border-sawerRed object-cover bg-sawerDark shadow-lg">
                         <div>
-                            <p class="text-xs text-gray-400 uppercase tracking-widest">ID: 4803354</p>
-                            <h3 class="text-lg font-bold text-white leading-tight">SawFuntime</h3>
+                            <p class="text-sm text-sawerRed uppercase tracking-widest font-bold">ID: 4803354</p>
+                            <h3 class="text-2xl font-bold text-white leading-tight mt-1">SawFuntime</h3>
                         </div>
                     </div>
 
-                    <!-- Estadísticas en Cuadrícula (3 al 10) -->
-                    <div class="grid grid-cols-2 gap-y-3 gap-x-2 text-sm mb-4">
-                        <div class="bg-sawerDark p-2 rounded border border-gray-800">
-                            <span class="text-gray-400 text-xs block">Wins</span>
-                            <span class="font-bold text-white">150</span>
+                    <!-- Datos Numéricos (Grid interno) -->
+                    <div class="grid grid-cols-3 gap-3 text-sm mb-5">
+                        <!-- 3. Wins -->
+                        <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center">
+                            <span class="text-gray-400 text-xs block uppercase mb-1">Wins</span>
+                            <span class="font-bold text-white text-lg">150</span>
                         </div>
-                        <div class="bg-sawerDark p-2 rounded border border-gray-800">
-                            <span class="text-gray-400 text-xs block">Récord Pts</span>
-                            <span class="font-bold text-white">3,450</span>
+                        <!-- 4. Récord Puntos -->
+                        <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center">
+                            <span class="text-gray-400 text-xs block uppercase mb-1">Récord Pts</span>
+                            <span class="font-bold text-white text-lg">3,450</span>
                         </div>
-                        <div class="bg-sawerDark p-2 rounded border border-gray-800">
-                            <span class="text-gray-400 text-xs block">Sawcoins</span>
-                            <span class="font-bold text-yellow-500">4,100</span>
+                        <!-- 5. Sawcoins -->
+                        <div class="bg-sawerDark p-3 rounded-lg border border-sawerRed/50 text-center shadow-[inset_0_0_10px_rgba(194,0,0,0.2)]">
+                            <span class="text-gray-400 text-xs block uppercase mb-1">Sawcoins</span>
+                            <span class="font-bold text-yellow-500 text-lg">4,100</span>
                         </div>
-                        <div class="bg-sawerDark p-2 rounded border border-gray-800">
-                            <span class="text-gray-400 text-xs block">Diamantes</span>
-                            <span class="font-bold text-cyan-400">7/7</span>
+                        <!-- 6. Diamantes -->
+                        <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center">
+                            <span class="text-gray-400 text-xs block uppercase mb-1">Diamantes</span>
+                            <span class="font-bold text-cyan-400 text-lg">7/7</span>
                         </div>
-                        <div class="bg-sawerDark p-2 rounded border border-gray-800">
-                            <span class="text-gray-400 text-xs block">Items</span>
-                            <span class="font-bold text-white">45</span>
+                        <!-- 7. Items -->
+                        <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center">
+                            <span class="text-gray-400 text-xs block uppercase mb-1">Items</span>
+                            <span class="font-bold text-white text-lg">45</span>
                         </div>
-                        <div class="bg-sawerDark p-2 rounded border border-gray-800">
-                            <span class="text-gray-400 text-xs block">Tokens</span>
-                            <span class="font-bold text-purple-400">12</span>
-                        </div>
-                        <div class="bg-sawerDark p-2 rounded border border-gray-800 col-span-2">
-                            <span class="text-gray-400 text-xs block">Robuxs Pendientes</span>
-                            <span class="font-bold text-green-500">500 R$</span>
+                        <!-- 8. Tokens -->
+                        <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center">
+                            <span class="text-gray-400 text-xs block uppercase mb-1">Tokens</span>
+                            <span class="font-bold text-purple-400 text-lg">12</span>
                         </div>
                     </div>
 
-                    <!-- Datos Externos (11 y 12) -->
-                    <div class="border-t border-gray-700 pt-3 space-y-2">
-                        <div class="flex items-center gap-2 text-sm">
-                            <svg class="w-4 h-4 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-                            <span class="text-gray-300">sawfuntime</span>
+                    <!-- 9. Robuxs -->
+                    <div class="bg-sawerDark p-3 rounded-lg border border-green-500/30 text-center mb-5">
+                        <span class="text-gray-400 text-xs uppercase">Robuxs Pendientes de Entrega</span>
+                        <div class="font-black text-green-500 text-xl mt-1">500 R$</div>
+                    </div>
+
+                    <!-- 10 y 11: Discord y Correo -->
+                    <div class="mt-auto space-y-3 bg-sawerDark p-4 rounded-xl border border-gray-700">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                            <span class="text-gray-300 font-medium">sawfuntime</span>
                         </div>
-                        <div class="flex items-center gap-2 text-sm">
-                            <svg class="w-4 h-4 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <span class="text-gray-300">admin@proyectosawer.com</span>
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span class="text-gray-300 font-medium">admin@proyectosawer.com</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tarjetas 2, 3 y 4 clonadas estéticamente para visualización -->
-                <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-[0_0_15px_rgba(0,0,0,0.5)] opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-not-allowed">
-                    <div class="flex items-center gap-4 mb-4 border-b border-gray-700 pb-4">
-                        <div class="w-16 h-16 rounded-lg border-2 border-sawerRed bg-sawerDark flex items-center justify-center text-gray-500">?</div>
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase tracking-widest">ID: ---</p>
-                            <h3 class="text-lg font-bold text-white leading-tight">Jugador 2</h3>
-                        </div>
-                    </div>
-                    <p class="text-center text-sm text-gray-400 mt-10">Esperando datos de la DB...</p>
-                </div>
-                
-                <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-[0_0_15px_rgba(0,0,0,0.5)] opacity-50 grayscale cursor-not-allowed">
-                    <div class="flex items-center gap-4 mb-4 border-b border-gray-700 pb-4">
-                        <div class="w-16 h-16 rounded-lg border-2 border-sawerRed bg-sawerDark"></div>
-                        <div><p class="text-xs text-gray-400">ID: ---</p><h3 class="text-lg font-bold text-white">Jugador 3</h3></div>
-                    </div>
-                </div>
-
-                <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-[0_0_15px_rgba(0,0,0,0.5)] opacity-50 grayscale cursor-not-allowed">
-                    <div class="flex items-center gap-4 mb-4 border-b border-gray-700 pb-4">
-                        <div class="w-16 h-16 rounded-lg border-2 border-sawerRed bg-sawerDark"></div>
-                        <div><p class="text-xs text-gray-400">ID: ---</p><h3 class="text-lg font-bold text-white">Jugador 4</h3></div>
-                    </div>
+                <!-- TARJETA 2 (Clon decorativo para la visualización del layout) -->
+                <div class="bg-sawerGrey border border-sawerRed/10 rounded-2xl p-6 shadow-[0_0_15px_rgba(0,0,0,0.5)] opacity-50 hover:opacity-100 transition-opacity flex flex-col justify-center items-center">
+                    <div class="w-20 h-20 rounded-xl border-2 border-sawerRed/30 bg-sawerDark flex items-center justify-center text-gray-600 mb-4 text-2xl font-bold">?</div>
+                    <p class="text-gray-500 font-bold uppercase tracking-widest mb-2">Slot Disponible</p>
+                    <p class="text-sm text-gray-600 text-center">Esperando conexión de datos en tiempo real...</p>
                 </div>
 
             </div>
         </div>
     </main>
 
-    <!-- SCRIPT DE NAVEGACIÓN Y SONIDOS SINTETIZADOS -->
+    <!-- SCRIPT LOGICA Y SONIDO -->
     <script>
-        // ==========================================
-        // 1. SISTEMA DE AUDIO SINTETIZADO (Sin archivos externos)
-        // ==========================================
+        // --- 1. SINTETIZADOR DE AUDIO ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playHoverSound() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (audioCtx.state === 'suspended') return;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'sine'; // Sonido suave
-            osc.frequency.setValueAtTime(800, audioCtx.currentTime); // Tono agudo
-            gain.gain.setValueAtTime(0.02, audioCtx.currentTime); // Volumen muy bajo
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
@@ -226,9 +227,9 @@
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'square'; // Sonido digital/tecnológico
-            osc.frequency.setValueAtTime(400, audioCtx.currentTime); // Tono más grave
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime); // Volumen un poco más alto
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
@@ -236,41 +237,32 @@
             osc.stop(audioCtx.currentTime + 0.1);
         }
 
-        // Asignar los sonidos a los botones y tarjetas
-        document.querySelectorAll('.sound-btn, .sound-card').forEach(elemento => {
-            elemento.addEventListener('mouseenter', playHoverSound);
-            elemento.addEventListener('mousedown', playClickSound);
+        // Eventos de ratón para sonido
+        document.body.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
+        
+        document.querySelectorAll('.sound-btn, .sound-card').forEach(el => {
+            el.addEventListener('mouseenter', playHoverSound);
+            el.addEventListener('mousedown', playClickSound);
         });
 
-        // ==========================================
-        // 2. SISTEMA DE NAVEGACIÓN DE VISTAS
-        // ==========================================
+        // --- 2. NAVEGACIÓN ENTRE VISTAS ---
         const vistaPrincipal = document.getElementById('vista-principal');
         const vistaJugadores = document.getElementById('vista-jugadores');
 
         function abrirJugadores() {
-            // Desvanecer menú principal
-            vistaPrincipal.classList.add('opacity-0');
-            setTimeout(() => {
-                vistaPrincipal.classList.add('hidden');
-                
-                // Mostrar vista jugadores
-                vistaJugadores.classList.remove('hidden');
-                // Pequeño delay para que la transición de opacidad funcione
-                setTimeout(() => vistaJugadores.classList.remove('opacity-0'), 50);
-            }, 300);
+            vistaPrincipal.classList.remove('pantalla-activa');
+            vistaPrincipal.classList.add('pantalla-oculta');
+            
+            vistaJugadores.classList.remove('pantalla-oculta');
+            vistaJugadores.classList.add('pantalla-activa');
         }
 
         function volverInicio() {
-            // Desvanecer vista jugadores
-            vistaJugadores.classList.add('opacity-0');
-            setTimeout(() => {
-                vistaJugadores.classList.add('hidden');
-                
-                // Mostrar menú principal
-                vistaPrincipal.classList.remove('hidden');
-                setTimeout(() => vistaPrincipal.classList.remove('opacity-0'), 50);
-            }, 300);
+            vistaJugadores.classList.remove('pantalla-activa');
+            vistaJugadores.classList.add('pantalla-oculta');
+            
+            vistaPrincipal.classList.remove('pantalla-oculta');
+            vistaPrincipal.classList.add('pantalla-activa');
         }
     </script>
 </body>
