@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sawer Admin Panel</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,116 +18,116 @@
             }
         }
     </script>
-    <!-- Firebase SDK Compat -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
-<body class="bg-sawerDark text-white font-sans min-h-screen flex flex-col items-center justify-center">
+<body class="bg-sawerDark text-white font-sans h-screen overflow-hidden flex">
 
-    <!-- PANTALLA DE LOGIN -->
-    <div id="login-screen" class="bg-sawerGrey p-8 rounded-lg shadow-[0_0_15px_rgba(155,0,0,0.5)] w-96 text-center">
-        <!-- Puedes cambiar el src por la URL real del logo de Proyecto Sawer -->
-        <img src="https://via.placeholder.com/100/9b0000/ffffff?text=Sawer" alt="Proyecto Sawer" class="w-24 h-24 mx-auto mb-4 rounded-full border-2 border-sawerRed">
-        <h2 class="text-2xl font-bold mb-6 tracking-wider">ACCESO LÍDER</h2>
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <aside class="w-72 bg-sawerGrey border-r border-sawerRed/40 flex flex-col justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-10">
         
-        <input type="email" id="email" placeholder="Correo de acceso" class="w-full mb-4 p-3 bg-sawerDark border border-sawerRed rounded text-white focus:outline-none focus:ring-2 focus:ring-sawerRed">
-        <input type="password" id="password" placeholder="Contraseña" class="w-full mb-6 p-3 bg-sawerDark border border-sawerRed rounded text-white focus:outline-none focus:ring-2 focus:ring-sawerRed">
-        
-        <button onclick="login()" class="w-full bg-sawerRed hover:bg-red-800 text-white font-bold py-3 rounded transition-colors">
-            ENTRAR AL SISTEMA
-        </button>
-        <p id="error-msg" class="text-red-500 mt-4 hidden text-sm"></p>
-    </div>
+        <!-- Zona del Logo -->
+        <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
+            <!-- Referencia al logo de tu web -->
+            <img src="inquisitor.png" alt="Proyecto Sawer" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(155,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/9b0000/ffffff?text=Sawer'">
+            <h2 class="text-xl font-bold tracking-widest text-center uppercase">Comando<br><span class="text-sawerRed">Central</span></h2>
+        </div>
 
-    <!-- PANEL DE ADMINISTRACIÓN (Oculto por defecto) -->
-    <div id="admin-panel" class="hidden w-full max-w-6xl p-8">
-        <div class="flex justify-between items-center mb-8 bg-sawerGrey p-4 rounded border-l-4 border-sawerRed">
-            <h1 class="text-3xl font-bold">Panel de Control: Proyecto Sawer</h1>
-            <button onclick="logout()" class="bg-sawerDark border border-sawerRed hover:bg-sawerRed text-white px-4 py-2 rounded transition-colors">
+        <!-- Menú de Navegación -->
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-4">
+            <!-- 1. Principal (Activo) -->
+            <a href="#" class="flex items-center gap-4 bg-sawerRed/20 border border-sawerRed text-white px-5 py-4 rounded-xl font-bold transition-all shadow-[inset_4px_0_0_rgb(155,0,0)]">
+                <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Principal
+            </a>
+            
+            <!-- 2. Aplicación (Standby) -->
+            <a href="#" class="flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors opacity-50 cursor-not-allowed" title="En desarrollo">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                Aplicación
+            </a>
+
+            <!-- 3. Análisis (Standby) -->
+            <a href="#" class="flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors opacity-50 cursor-not-allowed" title="En desarrollo">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Análisis
+            </a>
+
+            <!-- 4. Mantenciones (Standby) -->
+            <a href="#" class="flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors opacity-50 cursor-not-allowed" title="En desarrollo">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Mantenciones
+            </a>
+
+            <!-- 5. Otros -->
+            <a href="#" class="flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+                Otros
+            </a>
+        </nav>
+
+        <!-- Botón Inferior -->
+        <div class="p-6 border-t border-sawerRed/20">
+            <button class="w-full flex items-center justify-center gap-2 border border-sawerRed text-sawerRed hover:bg-sawerRed hover:text-white font-bold py-3 rounded-lg transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                 Cerrar Sesión
             </button>
         </div>
-        
-        <div class="bg-sawerGrey p-6 rounded shadow-lg">
-            <h3 class="text-xl font-bold mb-4 border-b border-sawerRed pb-2">Bienvenido, Líder. El sistema está en línea.</h3>
-            <p class="text-gray-400">Pronto conectaremos la terminal de búsqueda de jugadores aquí...</p>
+    </aside>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="flex-1 p-10 overflow-y-auto relative">
+        <!-- Efecto de iluminación de fondo -->
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <header class="mb-10">
+            <h1 class="text-4xl font-black tracking-wide">VISIÓN GENERAL</h1>
+            <p class="text-gray-400 mt-2">Selecciona un módulo para gestionar la base de datos.</p>
+        </header>
+
+        <!-- GRID DE LAS 4 TARJETAS CUADRADAS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <!-- TARJETA 1: Jugadores -->
+            <div class="group bg-sawerGrey aspect-square rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(155,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <!-- Ícono esquina superior derecha -->
+                <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-300 group-hover:text-white transition-colors">Jugadores</h3>
+            </div>
+
+            <!-- TARJETA 2: Datos -->
+            <div class="group bg-sawerGrey aspect-square rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(155,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <!-- Ícono esquina superior derecha -->
+                <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-300 group-hover:text-white transition-colors">Datos</h3>
+            </div>
+
+            <!-- TARJETA 3: Rondas -->
+            <div class="group bg-sawerGrey aspect-square rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(155,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <!-- Ícono esquina superior derecha -->
+                <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-300 group-hover:text-white transition-colors">Rondas</h3>
+            </div>
+
+            <!-- TARJETA 4: Controles -->
+            <div class="group bg-sawerGrey aspect-square rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(155,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <!-- Ícono esquina superior derecha -->
+                <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-300 group-hover:text-white transition-colors">Controles</h3>
+            </div>
+
         </div>
-    </div>
+    </main>
 
-    <script>
-        // ⚠️ REEMPLAZA ESTO CON TU CORREO EXACTO DE ADMINISTRADOR
-        const CORREO_ADMIN = "proyectosawermain@gmail.com";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
-            authDomain: "proyecto-sawer.firebaseapp.com",
-            databaseURL: "https://proyecto-sawer-default-rtdb.firebaseio.com",
-            projectId: "proyecto-sawer",
-            storageBucket: "proyecto-sawer.firebasestorage.app",
-            messagingSenderId: "770496172923",
-            appId: "1:770496172923:web:79782a0ddbdca6561e23de",
-            measurementId: "G-XX2DH8WCJM"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
-
-        const loginScreen = document.getElementById('login-screen');
-        const adminPanel = document.getElementById('admin-panel');
-        const errorMsg = document.getElementById('error-msg');
-
-        function login() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Validar si el usuario es el líder
-                    if (userCredential.user.email === CORREO_ADMIN) {
-                        loginScreen.classList.add('hidden');
-                        adminPanel.classList.remove('hidden');
-                        errorMsg.classList.add('hidden');
-                    } else {
-                        // Si es un impostor, lo echamos de inmediato
-                        auth.signOut();
-                        errorMsg.textContent = "Acceso denegado: No tienes permisos de administrador.";
-                        errorMsg.classList.remove('hidden');
-                    }
-                })
-                .catch((error) => {
-                    errorMsg.textContent = "Acceso denegado: " + error.message;
-                    errorMsg.classList.remove('hidden');
-                });
-        }
-
-        function logout() {
-            auth.signOut().then(() => {
-                loginScreen.classList.remove('hidden');
-                adminPanel.classList.add('hidden');
-                document.getElementById('email').value = '';
-                document.getElementById('password').value = '';
-            });
-        }
-
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // Validar la sesión activa guardada en caché
-                if (user.email === CORREO_ADMIN) {
-                    loginScreen.classList.add('hidden');
-                    adminPanel.classList.remove('hidden');
-                } else {
-                    // Si la sesión guardada es de otra persona, la cerramos
-                    auth.signOut();
-                    loginScreen.classList.remove('hidden');
-                    adminPanel.classList.add('hidden');
-                }
-            } else {
-                loginScreen.classList.remove('hidden');
-                adminPanel.classList.add('hidden');
-            }
-        });
-    </script>
 </body>
 </html>
