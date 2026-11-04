@@ -10,7 +10,8 @@
             theme: {
                 extend: {
                     colors: {
-                        sawerRed: 'rgb(155, 0, 0)',
+                        // Rojo 25% más claro (antes 155, ahora 194)
+                        sawerRed: 'rgb(194, 0, 0)',
                         sawerGrey: 'rgb(25, 25, 25)',
                         sawerDark: 'rgb(15, 15, 15)'
                     }
@@ -26,15 +27,15 @@
         
         <!-- Zona del Logo -->
         <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
-            <!-- Referencia al logo de tu web -->
-            <img src="inquisitor.png" alt="Proyecto Sawer" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(155,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/9b0000/ffffff?text=Sawer'">
+            <!-- Logo Inquisitor -->
+            <img src="inquisitor.png" alt="Proyecto Sawer" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover">
             <h2 class="text-xl font-bold tracking-widest text-center uppercase">Comando<br><span class="text-sawerRed">Central</span></h2>
         </div>
 
         <!-- Menú de Navegación -->
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-4">
             <!-- 1. Principal (Activo) -->
-            <a href="#" class="flex items-center gap-4 bg-sawerRed/20 border border-sawerRed text-white px-5 py-4 rounded-xl font-bold transition-all shadow-[inset_4px_0_0_rgb(155,0,0)]">
+            <a href="#" class="flex items-center gap-4 bg-sawerRed/20 border border-sawerRed text-white px-5 py-4 rounded-xl font-bold transition-all shadow-[inset_4px_0_0_rgb(194,0,0)]">
                 <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                 Principal
             </a>
@@ -74,7 +75,7 @@
     </aside>
 
     <!-- ÁREA PRINCIPAL -->
-    <main class="flex-1 p-10 overflow-y-auto relative">
+    <main class="flex-1 p-10 overflow-y-auto relative flex flex-col">
         <!-- Efecto de iluminación de fondo -->
         <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none"></div>
 
@@ -83,47 +84,44 @@
             <p class="text-gray-400 mt-2">Selecciona un módulo para gestionar la base de datos.</p>
         </header>
 
-        <!-- GRID DE LAS 4 TARJETAS CUADRADAS -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- GRID DE LAS 4 TARJETAS CUADRADAS (Organizadas 2x2) -->
+        <!-- Se ajustó grid-cols-2 y se centró el contenedor limitando su ancho -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto w-full flex-1 content-start">
             
             <!-- TARJETA 1: Jugadores -->
-            <div class="group bg-sawerGrey aspect-square rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(155,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+            <div class="group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <!-- Ícono esquina superior derecha -->
                 <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-300 group-hover:text-white transition-colors">Jugadores</h3>
+                <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white transition-colors">Jugadores</h3>
             </div>
 
             <!-- TARJETA 2: Datos -->
-            <div class="group bg-sawerGrey aspect-square rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(155,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+            <div class="group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <!-- Ícono esquina superior derecha -->
                 <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-300 group-hover:text-white transition-colors">Datos</h3>
+                <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white transition-colors">Datos</h3>
             </div>
 
             <!-- TARJETA 3: Rondas -->
-            <div class="group bg-sawerGrey aspect-square rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(155,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+            <div class="group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <!-- Ícono esquina superior derecha -->
                 <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-300 group-hover:text-white transition-colors">Rondas</h3>
+                <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white transition-colors">Rondas</h3>
             </div>
 
             <!-- TARJETA 4: Controles -->
-            <div class="group bg-sawerGrey aspect-square rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(155,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+            <div class="group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <!-- Ícono esquina superior derecha -->
                 <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all">
                     <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-300 group-hover:text-white transition-colors">Controles</h3>
+                <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white transition-colors">Controles</h3>
             </div>
 
         </div>
