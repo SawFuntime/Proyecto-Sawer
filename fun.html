@@ -31,11 +31,21 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* Scrollbar personalizada */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #0f0f0f; rounded: 8px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgb(194, 0, 0); border-radius: 8px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #ff3333; }
+        
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; margin: 0; 
+        }
     </style>
 </head>
 <body class="bg-sawerDark text-white font-sans h-screen overflow-hidden flex select-none items-center justify-center">
 
-    <!-- BÓVEDA DE SEGURIDAD (LOGIN) -->
+    <!-- LOGIN -->
     <div id="login-screen" class="bg-sawerGrey p-8 rounded-2xl shadow-[0_0_20px_rgba(194,0,0,0.4)] w-96 text-center border border-sawerRed/30 relative z-50">
         <img src="Inquisitor.png" alt="Proyecto Sawer" class="w-24 h-24 mx-auto mb-4 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.5)] object-cover" onerror="this.src='https://via.placeholder.com/150/c20000/ffffff?text=Sawer'">
         <h2 class="text-2xl font-black mb-6 tracking-widest uppercase">Acceso Líder</h2>
@@ -49,39 +59,21 @@
         <p id="error-msg" class="text-red-500 mt-4 hidden text-sm font-bold"></p>
     </div>
 
-    <!-- APLICACIÓN PRINCIPAL -->
+    <!-- APP PRINCIPAL -->
     <div id="app-container" class="hidden w-full h-full flex">
         
-        <!-- BARRA LATERAL (SIDEBAR) -->
+        <!-- SIDEBAR -->
         <aside class="w-72 bg-sawerGrey border-r border-sawerRed/40 flex flex-col justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-20 relative">
             <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
                 <img src="Inquisitor.png" alt="Proyecto Sawer" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/c20000/ffffff?text=Sawer'">
                 <h2 class="text-xl font-bold tracking-widest text-center uppercase leading-tight">Comando<br><span class="text-sawerRed">Central</span></h2>
             </div>
-
-            <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-2">
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-2 custom-scroll">
                 <button onclick="volverInicio()" class="sound-btn w-full flex items-center gap-4 bg-sawerRed/20 border border-sawerRed text-white px-5 py-4 rounded-xl font-bold transition-all shadow-[inset_4px_0_0_rgb(194,0,0)]">
                     <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     Principal
                 </button>
-                <button class="sound-btn w-full flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors opacity-50 cursor-not-allowed">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    Aplicación
-                </button>
-                <button class="sound-btn w-full flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors opacity-50 cursor-not-allowed">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                    Análisis
-                </button>
-                <button class="sound-btn w-full flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors opacity-50 cursor-not-allowed">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Mantenciones
-                </button>
-                <button class="sound-btn w-full flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
-                    Otros
-                </button>
             </nav>
-
             <div class="p-6 border-t border-sawerRed/20">
                 <button onclick="logout()" class="sound-btn w-full flex items-center justify-center gap-2 border border-sawerRed text-sawerRed hover:bg-sawerRed hover:text-white font-bold py-3 rounded-lg transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -90,70 +82,88 @@
             </div>
         </aside>
 
-        <!-- ÁREA PRINCIPAL -->
-        <main class="flex-1 p-10 overflow-y-auto relative z-10">
+        <!-- MAIN -->
+        <main class="flex-1 p-10 overflow-hidden relative z-10 flex flex-col">
             <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-            <!-- VISTA 1: MENÚ PRINCIPAL -->
-            <div id="vista-principal" class="pantalla-activa flex-col w-full h-full max-w-4xl mx-auto">
+            <!-- VISTA 1: MENÚ -->
+            <div id="vista-principal" class="pantalla-activa flex-col w-full h-full max-w-4xl mx-auto overflow-y-auto custom-scroll">
                 <header class="mb-10">
                     <h1 class="text-4xl font-black tracking-wide">VISIÓN GENERAL</h1>
                     <p class="text-gray-400 mt-2">Selecciona un módulo para gestionar la base de datos.</p>
                 </header>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full content-start">
-                    <div onclick="abrirJugadores()" class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+                    <!-- BOTÓN JUGADORES -->
+                    <div onclick="abrirJugadores()" class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed group-hover:scale-110 transition-all"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
-                        <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white transition-colors">Jugadores</h3>
+                        <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
+                        <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Jugadores</h3>
                         <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">CLICK PARA ABRIR TERMINAL</p>
                     </div>
-                    <!-- Tarjetas restantes (Datos, Rondas, Controles)... -->
-                    <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+                    <!-- BOTÓN DATOS (NUEVO) -->
+                    <div onclick="abrirDatos()" class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4"></path></svg></div>
                         <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Datos</h3>
+                        <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">EDITAR ESTADÍSTICAS</p>
                     </div>
-                    <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
-                        <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581"></path></svg></div>
-                        <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Rondas</h3>
-                    </div>
-                    <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed hover:shadow-[0_0_20px_rgba(194,0,0,0.3)] transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
-                        <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg></div>
-                        <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Controles</h3>
-                    </div>
+                    <!-- Rondas & Controles -->
+                    <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed cursor-pointer flex flex-col justify-end overflow-hidden"><h3 class="text-3xl font-bold text-gray-300">Rondas</h3></div>
+                    <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed cursor-pointer flex flex-col justify-end overflow-hidden"><h3 class="text-3xl font-bold text-gray-300">Controles</h3></div>
                 </div>
             </div>
 
-            <!-- VISTA 2: BASE DE DATOS JUGADORES (Se llenará dinámicamente) -->
-            <div id="vista-jugadores" class="pantalla-oculta flex-col w-full">
+            <!-- VISTA 2: JUGADORES LECTURA -->
+            <div id="vista-jugadores" class="pantalla-oculta flex-col w-full h-full overflow-y-auto custom-scroll pr-4">
                 <header class="mb-10 flex items-center gap-6 border-b border-sawerRed/20 pb-6">
-                    <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg transition-colors shadow-lg group">
+                    <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg shadow-lg group">
                         <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     </button>
                     <div>
                         <h1 class="text-4xl font-black tracking-wide">JUGADORES VERIFICADOS</h1>
-                        <p class="text-gray-400 mt-2">Terminal de datos sincronizada con Firestore y RoProxy.</p>
+                        <p class="text-gray-400 mt-2">Terminal de datos sincronizada. Solo lectura.</p>
+                    </div>
+                </header>
+                <div id="contenedor-tarjetas-jugadores" class="grid grid-cols-1 xl:grid-cols-2 gap-8 content-start w-full max-w-6xl mx-auto pb-10"></div>
+            </div>
+
+            <!-- VISTA 3: DATOS Y EDICIÓN -->
+            <div id="vista-datos" class="pantalla-oculta flex-col w-full h-full">
+                <header class="mb-6 flex items-center gap-6 border-b border-sawerRed/20 pb-6 flex-shrink-0">
+                    <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg shadow-lg group">
+                        <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </button>
+                    <div>
+                        <h1 class="text-4xl font-black tracking-wide text-sawerRed">PANEL DE DATOS</h1>
+                        <p class="text-gray-400 mt-2">Modifica las estadísticas manualmente. Notificará por DM.</p>
                     </div>
                 </header>
 
-                <!-- ESTE ES EL CONTENEDOR VACÍO DONDE ENTRARÁN LAS TARJETAS -->
-                <div id="contenedor-tarjetas-jugadores" class="grid grid-cols-1 xl:grid-cols-2 gap-8 content-start w-full max-w-6xl mx-auto">
-                    <div class="text-center text-zinc-500 font-bold py-10 w-full col-span-2">
-                        <svg class="animate-spin h-10 w-10 text-sawerRed mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        Descargando base de datos...
+                <div class="flex flex-row gap-6 flex-1 min-h-0">
+                    <!-- Left: Lista de Usuarios -->
+                    <div class="w-1/3 bg-sawerGrey border border-sawerRed/30 rounded-2xl flex flex-col overflow-hidden shadow-lg">
+                        <div class="bg-sawerDark p-4 border-b border-sawerRed/20 font-bold uppercase tracking-widest text-sm text-center">Selecciona un Jugador</div>
+                        <div id="lista-edicion" class="flex-1 overflow-y-auto custom-scroll p-3 space-y-2">
+                            <p class="text-center text-gray-500 mt-10">Cargando base de datos...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Editor de Tarjeta -->
+                    <div id="editor-tarjeta" class="w-2/3 bg-sawerGrey border border-sawerRed/50 rounded-2xl p-8 flex flex-col shadow-[0_0_20px_rgba(194,0,0,0.15)] relative hidden overflow-y-auto custom-scroll">
+                        <!-- Se llena mediante JS -->
+                    </div>
+                    <div id="editor-placeholder" class="w-2/3 border-2 border-dashed border-gray-700 rounded-2xl flex items-center justify-center text-gray-500 uppercase tracking-widest font-bold">
+                        Selecciona un usuario de la lista
                     </div>
                 </div>
             </div>
+
         </main>
     </div>
 
     <!-- SCRIPTS -->
     <script>
-        // ==========================================
-        // 1. SEGURIDAD Y CONEXIÓN A FIREBASE
-        // ==========================================
         const CORREO_ADMIN = "willem0711@gmail.com";
-
         const firebaseConfig = {
             apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
             authDomain: "proyecto-sawer.firebaseapp.com",
@@ -163,218 +173,244 @@
             messagingSenderId: "770496172923",
             appId: "1:770496172923:web:79782a0ddbdca6561e23de"
         };
-
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // Variables Globales
+        let usuariosCache = {}; 
+        let usuarioEditando = null;
+
+        // Login Logic (Igual)
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
         const errorMsg = document.getElementById('error-msg');
-        const bodyTag = document.body;
-
         function login() {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    if (userCredential.user.email === CORREO_ADMIN) {
-                        loginScreen.classList.add('hidden');
-                        appContainer.classList.remove('hidden');
-                        bodyTag.classList.remove('justify-center');
-                        errorMsg.classList.add('hidden');
-                    } else {
-                        auth.signOut();
-                        errorMsg.textContent = "Acceso denegado: Correo no autorizado.";
-                        errorMsg.classList.remove('hidden');
-                    }
-                })
-                .catch((error) => {
-                    errorMsg.textContent = "Error: " + error.message;
-                    errorMsg.classList.remove('hidden');
-                });
+            auth.signInWithEmailAndPassword(document.getElementById('email').value.trim(), document.getElementById('password').value)
+                .then(u => {
+                    if (u.user.email === CORREO_ADMIN) { loginScreen.classList.add('hidden'); appContainer.classList.remove('hidden'); document.body.classList.remove('justify-center'); } 
+                    else { auth.signOut(); errorMsg.textContent = "Correo no autorizado."; errorMsg.classList.remove('hidden'); }
+                }).catch(e => { errorMsg.textContent = "Error: " + e.message; errorMsg.classList.remove('hidden'); });
         }
-
-        function logout() {
-            auth.signOut().then(() => {
-                loginScreen.classList.remove('hidden');
-                appContainer.classList.add('hidden');
-                bodyTag.classList.add('justify-center');
-                document.getElementById('email').value = '';
-                document.getElementById('password').value = '';
-            });
-        }
-
-        auth.onAuthStateChanged((user) => {
-            if (user && user.email === CORREO_ADMIN) {
-                loginScreen.classList.add('hidden');
-                appContainer.classList.remove('hidden');
-                bodyTag.classList.remove('justify-center');
-            } else {
-                if (user) auth.signOut();
-                loginScreen.classList.remove('hidden');
-                appContainer.classList.add('hidden');
-                bodyTag.classList.add('justify-center');
-            }
+        function logout() { auth.signOut().then(() => location.reload()); }
+        auth.onAuthStateChanged(u => {
+            if (u && u.email === CORREO_ADMIN) { loginScreen.classList.add('hidden'); appContainer.classList.remove('hidden'); document.body.classList.remove('justify-center'); } 
+            else if(u) { auth.signOut(); }
         });
 
-        // ==========================================
-        // 2. SINTETIZADOR DE AUDIO
-        // ==========================================
+        // Audio Logic
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function playHoverSound() {
-            if (audioCtx.state === 'suspended') return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(900, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.05);
-        }
-
-        function playClickSound() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(450, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
-        }
-
+        function playHoverSound() { if (audioCtx.state === 'suspended') return; const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(900, audioCtx.currentTime); gain.gain.setValueAtTime(0.015, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05); }
+        function playClickSound() { if (audioCtx.state === 'suspended') audioCtx.resume(); const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'square'; osc.frequency.setValueAtTime(450, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
         document.body.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
-        
-        // Agregar sonido a elementos dinámicos
         function reasignarSonidos() {
-            document.querySelectorAll('.sound-btn, .sound-card').forEach(el => {
-                el.removeEventListener('mouseenter', playHoverSound);
-                el.removeEventListener('mousedown', playClickSound);
-                el.addEventListener('mouseenter', playHoverSound);
-                el.addEventListener('mousedown', playClickSound);
-            });
+            document.querySelectorAll('.sound-btn, .sound-card').forEach(el => { el.removeEventListener('mouseenter', playHoverSound); el.removeEventListener('mousedown', playClickSound); el.addEventListener('mouseenter', playHoverSound); el.addEventListener('mousedown', playClickSound); });
         }
         reasignarSonidos();
 
-        // ==========================================
-        // 3. LÓGICA DINÁMICA DE JUGADORES
-        // ==========================================
-        async function cargarJugadoresVerificados() {
-            const contenedor = document.getElementById('contenedor-tarjetas-jugadores');
-            
-            try {
-                // Descargamos de Firestore solo los usuarios con cuenta vinculada
-                const querySnapshot = await db.collection("users").where("isLinked", "==", true).get();
-                
-                if (querySnapshot.empty) {
-                    contenedor.innerHTML = '<p class="text-gray-400 text-center w-full col-span-2 font-bold text-lg">No hay jugadores verificados en la base de datos.</p>';
-                    return;
-                }
+        // Navegación
+        const vPrincipal = document.getElementById('vista-principal');
+        const vJugadores = document.getElementById('vista-jugadores');
+        const vDatos = document.getElementById('vista-datos');
 
-                let tarjetasHTML = '';
-                const usuarios = [];
-                
-                querySnapshot.forEach((doc) => {
-                    usuarios.push({ uid: doc.id, ...doc.data() });
-                });
-
-                // Construimos el HTML base de cada tarjeta
-                for (const user of usuarios) {
-                    const stats = user.stats || {};
-                    const discordUser = user.discordUsername || "No vinculado";
-                    // Firebase Auth permite extraer el correo si lo guardaste en el documento. Si no, mostramos el UID oculto.
-                    const correo = user.email || user.uid.substring(0,10) + "..."; 
-                    
-                    tarjetasHTML += `
-                        <div class="sound-card bg-sawerGrey border border-sawerRed/30 rounded-2xl p-6 shadow-[0_0_15px_rgba(0,0,0,0.5)] relative flex flex-col hover:border-sawerRed transition-colors">
-                            <div class="absolute top-6 right-6 bg-green-900/40 border border-green-500 text-green-400 text-xs px-3 py-1 rounded font-bold shadow-[0_0_10px_rgba(0,255,0,0.2)]">VERIFICADO</div>
-                            
-                            <div class="flex items-center gap-5 mb-5 border-b border-gray-700 pb-5">
-                                <img id="avatar-${user.robloxUserId}" src="./Inquisitor.png" class="w-20 h-20 rounded-xl border-2 border-sawerRed object-cover bg-sawerDark shadow-lg" onerror="this.src='./Inquisitor.png'">
-                                <div class="overflow-hidden">
-                                    <p class="text-sm text-sawerRed uppercase tracking-widest font-bold truncate">ID: ${user.robloxUserId}</p>
-                                    <h3 class="text-2xl font-bold text-white leading-tight mt-1 truncate" title="${user.robloxUsername}">${user.robloxUsername}</h3>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-3 gap-3 text-sm mb-5">
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] sm:text-xs block uppercase mb-1">Wins</span><span class="font-bold text-white text-lg">${stats.wins || 0}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] sm:text-xs block uppercase mb-1">Récord Pts</span><span class="font-bold text-white text-lg">${stats.recordPuntos || 0}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-sawerRed/50 text-center shadow-[inset_0_0_10px_rgba(194,0,0,0.2)]"><span class="text-gray-400 text-[10px] sm:text-xs block uppercase mb-1">Sawcoins</span><span class="font-bold text-yellow-500 text-lg">${stats.sawCoins || 0}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] sm:text-xs block uppercase mb-1">Diamantes</span><span class="font-bold text-cyan-400 text-lg">${stats.diamantes || '0/7'}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] sm:text-xs block uppercase mb-1">Items</span><span class="font-bold text-white text-lg">${stats.items || 0}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] sm:text-xs block uppercase mb-1">Tokens</span><span class="font-bold text-purple-400 text-lg">${stats.tokens || 0}</span></div>
-                            </div>
-
-                            <div class="bg-sawerDark p-3 rounded-lg border border-green-500/30 text-center mb-5">
-                                <span class="text-gray-400 text-xs uppercase">Robuxs Pendientes de Entrega</span>
-                                <div class="font-black text-green-500 text-xl mt-1">${stats.robux || 0} R$</div>
-                            </div>
-
-                            <div class="mt-auto space-y-3 bg-sawerDark p-4 rounded-xl border border-gray-700">
-                                <div class="flex items-center gap-3">
-                                    <svg class="w-5 h-5 flex-shrink-0 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-                                    <span class="text-gray-300 font-medium truncate" title="${discordUser}">${discordUser}</span>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <svg class="w-5 h-5 flex-shrink-0 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                    <span class="text-gray-300 font-medium truncate" title="${correo}">${correo}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                // Pintamos las tarjetas en la pantalla
-                contenedor.innerHTML = tarjetasHTML;
-                reasignarSonidos(); // Para que las tarjetas nuevas tengan sonido al tocarlas
-
-                // Invocamos a RoProxy para cargar cada foto asíncronamente sin trabar la página
-                usuarios.forEach(user => {
-                    if(!user.robloxUserId) return;
-                    fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${user.robloxUserId}&size=420x420&format=Png&isCircular=false`)
-                        .then(res => res.json())
-                        .then(json => {
-                            if (json && json.data && json.data.length > 0 && json.data[0].imageUrl) {
-                                const imgObj = document.getElementById(`avatar-${user.robloxUserId}`);
-                                if(imgObj) imgObj.src = json.data[0].imageUrl;
-                            }
-                        }).catch(err => console.log("Carga de avatar fallida para: " + user.robloxUserId));
-                });
-
-            } catch (error) {
-                console.error("Error crítico cargando Firebase: ", error);
-                contenedor.innerHTML = '<p class="text-red-500 text-center w-full col-span-2 font-bold bg-red-900/20 p-4 rounded-lg border border-red-500">Error al conectar con Firestore. Revisa la consola.</p>';
-            }
-        }
-
-        const vistaPrincipal = document.getElementById('vista-principal');
-        const vistaJugadores = document.getElementById('vista-jugadores');
-
-        function abrirJugadores() {
-            vistaPrincipal.classList.remove('pantalla-activa');
-            vistaPrincipal.classList.add('pantalla-oculta');
-            vistaJugadores.classList.remove('pantalla-oculta');
-            vistaJugadores.classList.add('pantalla-activa');
-            
-            // LA MAGIA OCURRE AQUÍ: Al abrir la vista, llamamos a la base de datos.
-            cargarJugadoresVerificados();
+        function cerrarVistas() {
+            vPrincipal.classList.replace('pantalla-activa', 'pantalla-oculta');
+            vJugadores.classList.replace('pantalla-activa', 'pantalla-oculta');
+            vDatos.classList.replace('pantalla-activa', 'pantalla-oculta');
         }
 
         function volverInicio() {
-            vistaJugadores.classList.remove('pantalla-activa');
-            vistaJugadores.classList.add('pantalla-oculta');
-            vistaPrincipal.classList.remove('pantalla-oculta');
-            vistaPrincipal.classList.add('pantalla-activa');
+            cerrarVistas();
+            vPrincipal.classList.replace('pantalla-oculta', 'pantalla-activa');
+        }
+
+        // ==========================================
+        // VISTA: JUGADORES (Lectura) - Texto "Robuxs" actualizado
+        // ==========================================
+        async function abrirJugadores() {
+            cerrarVistas(); vJugadores.classList.replace('pantalla-oculta', 'pantalla-activa');
+            const cont = document.getElementById('contenedor-tarjetas-jugadores');
+            cont.innerHTML = '<p class="text-gray-400 text-center col-span-2">Cargando...</p>';
+            try {
+                const snap = await db.collection("users").where("isLinked", "==", true).get();
+                let html = '';
+                snap.forEach(doc => {
+                    const u = doc.data(); const s = u.stats || {};
+                    html += `
+                        <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-6 shadow-lg relative flex flex-col">
+                            <div class="flex items-center gap-5 mb-5 border-b border-gray-700 pb-5">
+                                <img id="av-read-${u.robloxUserId}" src="./Inquisitor.png" class="w-20 h-20 rounded-xl border-2 border-sawerRed object-cover bg-sawerDark">
+                                <div><p class="text-sm text-sawerRed uppercase font-bold">ID: ${u.robloxUserId}</p><h3 class="text-2xl font-bold">${u.robloxUsername}</h3></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 text-sm mb-5">
+                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Wins</span><span class="font-bold text-lg">${s.wins||0}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Récord Pts</span><span class="font-bold text-lg">${s.recordPuntos||0}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-sawerRed/50 text-center"><span class="text-gray-400 text-[10px] block uppercase">Sawcoins</span><span class="font-bold text-yellow-500 text-lg">${s.sawCoins||0}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Diamantes</span><span class="font-bold text-cyan-400 text-lg">${s.diamantes||'0/7'}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Items</span><span class="font-bold text-lg">${s.items||0}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Tokens</span><span class="font-bold text-purple-400 text-lg">${s.tokens||0}</span></div>
+                            </div>
+                            <div class="bg-sawerDark p-3 rounded-lg border border-green-500/30 text-center">
+                                <span class="text-gray-400 text-xs uppercase">Robuxs</span>
+                                <div class="font-black text-green-500 text-xl">${s.robux||0} R$</div>
+                            </div>
+                        </div>`;
+                });
+                cont.innerHTML = html;
+                snap.forEach(doc => fetchAvatar(doc.data().robloxUserId, `av-read-${doc.data().robloxUserId}`));
+            } catch(e) { cont.innerHTML = '<p class="text-red-500 text-center">Error DB.</p>'; }
+        }
+
+        // ==========================================
+        // VISTA: DATOS (Edición con Inputs y Botones)
+        // ==========================================
+        async function abrirDatos() {
+            cerrarVistas(); vDatos.classList.replace('pantalla-oculta', 'pantalla-activa');
+            document.getElementById('editor-tarjeta').classList.add('hidden');
+            document.getElementById('editor-placeholder').classList.remove('hidden');
+            
+            const lista = document.getElementById('lista-edicion');
+            lista.innerHTML = '<p class="text-center text-gray-500 mt-10">Cargando...</p>';
+            try {
+                const snap = await db.collection("users").where("isLinked", "==", true).get();
+                let html = ''; usuariosCache = {};
+                snap.forEach(doc => {
+                    const u = doc.data(); usuariosCache[doc.id] = u;
+                    html += `
+                        <div onclick="seleccionarJugadorDatos('${doc.id}')" class="sound-btn flex items-center gap-3 p-3 rounded-xl bg-sawerDark border border-gray-800 hover:border-sawerRed cursor-pointer transition-colors group">
+                            <img id="av-list-${u.robloxUserId}" src="./Inquisitor.png" class="w-10 h-10 rounded-full border border-gray-600 group-hover:border-sawerRed object-cover">
+                            <div class="overflow-hidden">
+                                <h4 class="text-white font-bold text-sm truncate">${u.robloxUsername}</h4>
+                                <p class="text-xs text-gray-500 truncate">${u.discordUsername || 'Sin Discord'}</p>
+                            </div>
+                        </div>`;
+                });
+                lista.innerHTML = html; reasignarSonidos();
+                Object.values(usuariosCache).forEach(u => fetchAvatar(u.robloxUserId, `av-list-${u.robloxUserId}`));
+            } catch(e) { lista.innerHTML = '<p class="text-red-500 text-center">Error al cargar.</p>'; }
+        }
+
+        function seleccionarJugadorDatos(uid) {
+            usuarioEditando = uid;
+            const u = usuariosCache[uid];
+            const s = u.stats || {};
+            
+            document.getElementById('editor-placeholder').classList.add('hidden');
+            const editor = document.getElementById('editor-tarjeta');
+            editor.classList.remove('hidden');
+
+            // Generador de filas del editor (Input + Botones +/- + Guardar)
+            const crearFilaStat = (label, idInput, valor, colorBtn) => `
+                <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-gray-700 hover:border-gray-500 transition-colors">
+                    <span class="text-gray-400 uppercase font-bold text-xs w-24">${label}</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="cambiarInput('${idInput}', -1)" class="sound-btn bg-red-900/80 hover:bg-red-600 text-white w-8 h-8 rounded font-black text-lg transition-colors">-</button>
+                        <input type="number" id="${idInput}" value="${valor || 0}" class="w-20 bg-sawerGrey text-center text-white border border-gray-600 rounded p-1.5 focus:border-sawerRed focus:outline-none font-bold">
+                        <button onclick="cambiarInput('${idInput}', 1)" class="sound-btn bg-green-900/80 hover:bg-green-600 text-white w-8 h-8 rounded font-black text-lg transition-colors">+</button>
+                    </div>
+                    <button id="btn-save-${idInput}" onclick="guardarStat('${uid}', '${idInput}', '${label}', '${u.discordUserId}')" class="sound-btn bg-sawerRed hover:bg-red-700 text-white px-4 py-2 rounded font-bold text-xs uppercase transition-colors min-w-[80px]">Guardar</button>
+                </div>
+            `;
+
+            // Para Items (Solo lectura + Botón Gris)
+            const filaItems = `
+                <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-gray-700">
+                    <span class="text-gray-400 uppercase font-bold text-xs w-24">Items</span>
+                    <div class="flex items-center gap-4">
+                        <span class="text-white font-bold text-lg">${s.items || 0}</span>
+                        <button class="sound-btn bg-gray-600 hover:bg-gray-500 text-white w-8 h-8 rounded font-black text-lg transition-colors" title="Próximamente">+</button>
+                    </div>
+                    <div class="min-w-[80px]"></div> <!-- Espaciador -->
+                </div>
+            `;
+
+            // En "Diamantes" limpiamos si tiene un "/7" para que sea numérico
+            let diamantesClean = s.diamantes ? String(s.diamantes).split('/')[0] : 0;
+
+            editor.innerHTML = `
+                <div class="flex items-center gap-5 mb-6 border-b border-gray-700 pb-6">
+                    <img id="av-edit-${u.robloxUserId}" src="./Inquisitor.png" class="w-16 h-16 rounded-xl border-2 border-sawerRed object-cover bg-sawerDark shadow-lg">
+                    <div>
+                        <p class="text-xs text-sawerRed uppercase font-bold">MODIFICANDO A:</p>
+                        <h3 class="text-2xl font-bold">${u.robloxUsername}</h3>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    ${crearFilaStat('Wins', 'wins', s.wins)}
+                    ${crearFilaStat('Puntos', 'recordPuntos', s.recordPuntos)}
+                    ${crearFilaStat('SawCoins', 'sawCoins', s.sawCoins)}
+                    ${crearFilaStat('Diamantes', 'diamantes', diamantesClean)}
+                    ${crearFilaStat('Tokens', 'tokens', s.tokens)}
+                    ${filaItems}
+                </div>
+            `;
+            reasignarSonidos();
+            fetchAvatar(u.robloxUserId, `av-edit-${u.robloxUserId}`);
+        }
+
+        // Lógica de sumar/restar en el input
+        function cambiarInput(idInput, delta) {
+            const input = document.getElementById(idInput);
+            let val = parseInt(input.value) || 0;
+            input.value = val + delta;
+        }
+
+        // Lógica para guardar en Firebase y enviar señal de DM
+        async function guardarStat(uid, statNameFB, statLabel, discordId) {
+            const input = document.getElementById(statNameFB);
+            let nuevoValor = parseInt(input.value) || 0;
+            const btn = document.getElementById(`btn-save-${statNameFB}`);
+            
+            btn.innerText = "..."; btn.disabled = true;
+
+            // Formato especial para diamantes al guardar en Firestore
+            let valorGuardar = statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor;
+
+            try {
+                // 1. Actualizar el documento del jugador
+                await db.collection("users").doc(uid).set({
+                    stats: { [statNameFB]: valorGuardar }
+                }, { merge: true });
+
+                // 2. Crear una solicitud de DM para que el Bot de Discord la procese
+                if (discordId) {
+                    await db.collection("system_dms").add({
+                        discordId: discordId,
+                        statName: statLabel,
+                        newValue: valorGuardar,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+
+                // UI Feedback
+                btn.classList.replace('bg-sawerRed', 'bg-green-600');
+                btn.innerText = "¡Listo!";
+                
+                // Actualizar caché local
+                if(!usuariosCache[uid].stats) usuariosCache[uid].stats = {};
+                usuariosCache[uid].stats[statNameFB] = valorGuardar;
+
+                setTimeout(() => {
+                    btn.classList.replace('bg-green-600', 'bg-sawerRed');
+                    btn.innerText = "Guardar";
+                    btn.disabled = false;
+                }, 2000);
+
+            } catch (error) {
+                console.error("Error guardando:", error);
+                btn.classList.replace('bg-sawerRed', 'bg-red-900');
+                btn.innerText = "Error";
+                setTimeout(() => { btn.classList.replace('bg-red-900', 'bg-sawerRed'); btn.innerText = "Guardar"; btn.disabled = false; }, 2000);
+            }
+        }
+
+        function fetchAvatar(rblxId, imgId) {
+            if(!rblxId) return;
+            fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${rblxId}&size=420x420&format=Png&isCircular=false`)
+                .then(r => r.json()).then(j => {
+                    if (j.data && j.data.length > 0) { const el = document.getElementById(imgId); if(el) el.src = j.data[0].imageUrl; }
+                }).catch(()=>{});
         }
     </script>
 </body>
