@@ -187,7 +187,6 @@
         let usuariosCache = {}; 
         let usuarioEditando = null;
 
-        // Login Logic
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
         const errorMsg = document.getElementById('error-msg');
@@ -204,7 +203,6 @@
             else if(u) { auth.signOut(); }
         });
 
-        // Audio Logic
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playHoverSound() { if (audioCtx.state === 'suspended') return; const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(900, audioCtx.currentTime); gain.gain.setValueAtTime(0.015, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05); }
         function playClickSound() { if (audioCtx.state === 'suspended') audioCtx.resume(); const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'square'; osc.frequency.setValueAtTime(450, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
@@ -214,7 +212,6 @@
         }
         reasignarSonidos();
 
-        // Navegación
         const vPrincipal = document.getElementById('vista-principal');
         const vJugadores = document.getElementById('vista-jugadores');
         const vDatos = document.getElementById('vista-datos');
@@ -320,7 +317,6 @@
 
             const nombreDiscord = u.discordUsername ? u.discordUsername.replace(/'/g, "\\'") : '';
             
-            // Pasamos el 'valor viejo' directamente al botón de guardar
             const crearFilaStat = (label, idInput, valor) => `
                 <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-gray-700 hover:border-gray-500 transition-colors">
                     <span class="text-gray-400 uppercase font-bold text-xs w-24">${label}</span>
@@ -379,43 +375,42 @@
             const btn = document.getElementById(`btn-save-${statNameFB}`);
             
             btn.innerText = "..."; btn.disabled = true;
-            let valorGuardar = statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor;
 
-            // Traductor de variables (Minúsculas para Web -> Mayúsculas para Roblox)
+            // Traductor EXACTO a los nombres de variables que usas en Roblox
             const rtdbMap = {
                 'wins': 'Wins',
-                'recordPuntos': 'RecordPuntos',
-                'sawCoins': 'SawCoins',
-                'diamantes': 'Diamantes',
-                'items': 'Items',
-                'tokens': 'tokens'
+                'recordPuntos': 'MaxPuntos',
+                'sawCoins': 'Coins',
+                'diamantes': 'Diamantes'
             };
-            const rtdbKey = rtdbMap[statNameFB] || statNameFB;
-
+            
             try {
-                // 1. Guardar en FIRESTORE (Para el Panel Web y Perfiles)
+                // 1. Guardar en FIRESTORE (Para la web. Aquí sí agregamos el /7 visual si son diamantes)
+                let valorParaFirestore = statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor;
                 await db.collection("users").doc(uid).set({
-                    stats: { [statNameFB]: valorGuardar }
+                    stats: { [statNameFB]: valorParaFirestore }
                 }, { merge: true });
 
-                // 2. Guardar en REALTIME DATABASE (Para que Roblox lo lea correctamente)
-                if(robloxId) {
+                // 2. Guardar en REALTIME DATABASE (Para Roblox. Ruta exacta: DatosGlobales)
+                // OMITIMOS Tokens e Items, y nos aseguramos de enviar solo un Número Entero (nuevoValor)
+                if(robloxId && rtdbMap[statNameFB]) {
                     try {
-                        await rtdb.ref(`jugadores/${robloxId}/stats`).update({
-                            [rtdbKey]: valorGuardar
+                        const rtdbKey = rtdbMap[statNameFB];
+                        await rtdb.ref(`jugadores/User_${robloxId}/DatosGlobales`).update({
+                            [rtdbKey]: nuevoValor 
                         });
                     } catch(errRTDB) {
                         console.error("Aviso: No se pudo sync con Realtime Database", errRTDB);
                     }
                 }
 
-                // 3. Enviar aviso de DM capturando el Valor Viejo
+                // 3. Sistema de Notificación DM Discord
                 if (nombreDiscord && nombreDiscord.trim() !== "") {
                     await db.collection("system_dms").add({
                         discordUsername: nombreDiscord,
                         statName: statLabel,
                         oldValue: oldValue,
-                        newValue: valorGuardar,
+                        newValue: nuevoValor,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 }
@@ -423,7 +418,7 @@
                 btn.classList.replace('bg-sawerRed', 'bg-green-600');
                 btn.innerText = "¡Listo!";
                 if(!usuariosCache[uid].stats) usuariosCache[uid].stats = {};
-                usuariosCache[uid].stats[statNameFB] = valorGuardar;
+                usuariosCache[uid].stats[statNameFB] = valorParaFirestore;
 
                 setTimeout(() => {
                     btn.classList.replace('bg-green-600', 'bg-sawerRed');
