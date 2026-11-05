@@ -240,24 +240,44 @@
                 const snap = await db.collection("users").where("isLinked", "==", true).get({ source: 'server' });
                 let html = '';
                 snap.forEach(doc => {
-                    const u = doc.data(); const s = u.stats || {};
+                    const u = doc.data(); 
+                    const s = u.stats || {};
+                    const discordUser = u.discordUsername || "No vinculado";
+                    // Si el correo no está guardado en Firestore, mostramos "Privado"
+                    const correo = u.email || "Privado"; 
+
                     html += `
                         <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-6 shadow-lg relative flex flex-col">
+                            <div class="absolute top-6 right-6 bg-green-900/40 border border-green-500 text-green-400 text-xs px-3 py-1 rounded font-bold shadow-[0_0_10px_rgba(0,255,0,0.2)]">VERIFICADO</div>
+                            
                             <div class="flex items-center gap-5 mb-5 border-b border-gray-700 pb-5">
-                                <img id="av-read-${u.robloxUserId}" src="./Inquisitor.png" class="w-20 h-20 rounded-xl border-2 border-sawerRed object-cover bg-sawerDark">
-                                <div><p class="text-sm text-sawerRed uppercase font-bold">ID: ${u.robloxUserId}</p><h3 class="text-2xl font-bold">${u.robloxUsername}</h3></div>
+                                <img id="av-read-${u.robloxUserId}" src="./Inquisitor.png" class="w-20 h-20 rounded-xl border-2 border-sawerRed object-cover bg-sawerDark shadow-lg">
+                                <div><p class="text-sm text-sawerRed uppercase tracking-widest font-bold">ID: ${u.robloxUserId}</p><h3 class="text-2xl font-bold">${u.robloxUsername}</h3></div>
                             </div>
+                            
                             <div class="grid grid-cols-3 gap-3 text-sm mb-5">
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Wins</span><span class="font-bold text-lg">${s.wins||0}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Récord Pts</span><span class="font-bold text-lg">${s.recordPuntos||0}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-sawerRed/50 text-center"><span class="text-gray-400 text-[10px] block uppercase">Sawcoins</span><span class="font-bold text-yellow-500 text-lg">${s.sawCoins||0}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-sawerRed/50 text-center shadow-[inset_0_0_10px_rgba(194,0,0,0.2)]"><span class="text-gray-400 text-[10px] block uppercase">Sawcoins</span><span class="font-bold text-yellow-500 text-lg">${s.sawCoins||0}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Diamantes</span><span class="font-bold text-cyan-400 text-lg">${s.diamantes||'0/7'}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Items</span><span class="font-bold text-lg">${s.items||0}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Tokens</span><span class="font-bold text-purple-400 text-lg">${s.tokens||0}</span></div>
                             </div>
-                            <div class="bg-sawerDark p-3 rounded-lg border border-green-500/30 text-center">
+                            
+                            <div class="bg-sawerDark p-3 rounded-lg border border-green-500/30 text-center mb-5">
                                 <span class="text-gray-400 text-xs uppercase">Robuxs</span>
-                                <div class="font-black text-green-500 text-xl">${s.robux||0} R$</div>
+                                <div class="font-black text-green-500 text-xl mt-1">${s.robux||0} R$</div>
+                            </div>
+
+                            <div class="mt-auto space-y-3 bg-sawerDark p-4 rounded-xl border border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-5 h-5 flex-shrink-0 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                                    <span class="text-gray-300 font-medium truncate" title="${discordUser}">${discordUser}</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-5 h-5 flex-shrink-0 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    <span class="text-gray-300 font-medium truncate" title="${correo}">${correo}</span>
+                                </div>
                             </div>
                         </div>`;
                 });
