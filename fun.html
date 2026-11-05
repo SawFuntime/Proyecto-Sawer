@@ -31,16 +31,11 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* Scrollbar personalizada */
         .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-track { background: #0f0f0f; rounded: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgb(194, 0, 0); border-radius: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb:hover { background: #ff3333; }
-        
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; margin: 0; 
-        }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body class="bg-sawerDark text-white font-sans h-screen overflow-hidden flex select-none items-center justify-center">
@@ -62,18 +57,37 @@
     <!-- APP PRINCIPAL -->
     <div id="app-container" class="hidden w-full h-full flex">
         
-        <!-- SIDEBAR -->
+        <!-- SIDEBAR RESTAURADA -->
         <aside class="w-72 bg-sawerGrey border-r border-sawerRed/40 flex flex-col justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-20 relative">
             <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
                 <img src="Inquisitor.png" alt="Proyecto Sawer" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/c20000/ffffff?text=Sawer'">
                 <h2 class="text-xl font-bold tracking-widest text-center uppercase leading-tight">Comando<br><span class="text-sawerRed">Central</span></h2>
             </div>
+            
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-2 custom-scroll">
                 <button onclick="volverInicio()" class="sound-btn w-full flex items-center gap-4 bg-sawerRed/20 border border-sawerRed text-white px-5 py-4 rounded-xl font-bold transition-all shadow-[inset_4px_0_0_rgb(194,0,0)]">
                     <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     Principal
                 </button>
+                <!-- Botones Inactivos Restaurados -->
+                <button class="sound-btn w-full flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors opacity-50 cursor-not-allowed">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    Aplicación
+                </button>
+                <button class="sound-btn w-full flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors opacity-50 cursor-not-allowed">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    Análisis
+                </button>
+                <button class="sound-btn w-full flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors opacity-50 cursor-not-allowed">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Mantenciones
+                </button>
+                <button class="sound-btn w-full flex items-center gap-4 hover:bg-white/5 text-gray-400 hover:text-white px-5 py-4 rounded-xl font-semibold transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+                    Otros
+                </button>
             </nav>
+
             <div class="p-6 border-t border-sawerRed/20">
                 <button onclick="logout()" class="sound-btn w-full flex items-center justify-center gap-2 border border-sawerRed text-sawerRed hover:bg-sawerRed hover:text-white font-bold py-3 rounded-lg transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -93,27 +107,24 @@
                     <p class="text-gray-400 mt-2">Selecciona un módulo para gestionar la base de datos.</p>
                 </header>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full content-start">
-                    <!-- BOTÓN JUGADORES -->
                     <div onclick="abrirJugadores()" class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
                         <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Jugadores</h3>
                         <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">CLICK PARA ABRIR TERMINAL</p>
                     </div>
-                    <!-- BOTÓN DATOS (NUEVO) -->
                     <div onclick="abrirDatos()" class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4"></path></svg></div>
                         <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Datos</h3>
                         <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">EDITAR ESTADÍSTICAS</p>
                     </div>
-                    <!-- Rondas & Controles -->
                     <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed cursor-pointer flex flex-col justify-end overflow-hidden"><h3 class="text-3xl font-bold text-gray-300">Rondas</h3></div>
                     <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed cursor-pointer flex flex-col justify-end overflow-hidden"><h3 class="text-3xl font-bold text-gray-300">Controles</h3></div>
                 </div>
             </div>
 
-            <!-- VISTA 2: JUGADORES LECTURA -->
+            <!-- VISTA 2: JUGADORES (Lectura forzada) -->
             <div id="vista-jugadores" class="pantalla-oculta flex-col w-full h-full overflow-y-auto custom-scroll pr-4">
                 <header class="mb-10 flex items-center gap-6 border-b border-sawerRed/20 pb-6">
                     <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg shadow-lg group">
@@ -140,17 +151,13 @@
                 </header>
 
                 <div class="flex flex-row gap-6 flex-1 min-h-0">
-                    <!-- Left: Lista de Usuarios -->
                     <div class="w-1/3 bg-sawerGrey border border-sawerRed/30 rounded-2xl flex flex-col overflow-hidden shadow-lg">
                         <div class="bg-sawerDark p-4 border-b border-sawerRed/20 font-bold uppercase tracking-widest text-sm text-center">Selecciona un Jugador</div>
-                        <div id="lista-edicion" class="flex-1 overflow-y-auto custom-scroll p-3 space-y-2">
-                            <p class="text-center text-gray-500 mt-10">Cargando base de datos...</p>
-                        </div>
+                        <div id="lista-edicion" class="flex-1 overflow-y-auto custom-scroll p-3 space-y-2"></div>
                     </div>
                     
-                    <!-- Right: Editor de Tarjeta -->
                     <div id="editor-tarjeta" class="w-2/3 bg-sawerGrey border border-sawerRed/50 rounded-2xl p-8 flex flex-col shadow-[0_0_20px_rgba(194,0,0,0.15)] relative hidden overflow-y-auto custom-scroll">
-                        <!-- Se llena mediante JS -->
+                        <!-- Llenado por JS -->
                     </div>
                     <div id="editor-placeholder" class="w-2/3 border-2 border-dashed border-gray-700 rounded-2xl flex items-center justify-center text-gray-500 uppercase tracking-widest font-bold">
                         Selecciona un usuario de la lista
@@ -176,12 +183,12 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
+        const rtdb = firebase.database(); // Inicializamos Realtime Database
 
-        // Variables Globales
         let usuariosCache = {}; 
         let usuarioEditando = null;
 
-        // Login Logic (Igual)
+        // Login Logic
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
         const errorMsg = document.getElementById('error-msg');
@@ -224,15 +231,13 @@
             vPrincipal.classList.replace('pantalla-oculta', 'pantalla-activa');
         }
 
-        // ==========================================
-        // VISTA: JUGADORES (Lectura) - Texto "Robuxs" actualizado
-        // ==========================================
         async function abrirJugadores() {
             cerrarVistas(); vJugadores.classList.replace('pantalla-oculta', 'pantalla-activa');
             const cont = document.getElementById('contenedor-tarjetas-jugadores');
-            cont.innerHTML = '<p class="text-gray-400 text-center col-span-2">Cargando...</p>';
+            cont.innerHTML = '<p class="text-gray-400 text-center col-span-2">Leyendo base de datos del servidor...</p>';
             try {
-                const snap = await db.collection("users").where("isLinked", "==", true).get();
+                // Forzamos la lectura del servidor para asegurar que se vean los cambios
+                const snap = await db.collection("users").where("isLinked", "==", true).get({ source: 'server' });
                 let html = '';
                 snap.forEach(doc => {
                     const u = doc.data(); const s = u.stats || {};
@@ -261,9 +266,6 @@
             } catch(e) { cont.innerHTML = '<p class="text-red-500 text-center">Error DB.</p>'; }
         }
 
-        // ==========================================
-        // VISTA: DATOS (Edición con Inputs y Botones)
-        // ==========================================
         async function abrirDatos() {
             cerrarVistas(); vDatos.classList.replace('pantalla-oculta', 'pantalla-activa');
             document.getElementById('editor-tarjeta').classList.add('hidden');
@@ -272,7 +274,7 @@
             const lista = document.getElementById('lista-edicion');
             lista.innerHTML = '<p class="text-center text-gray-500 mt-10">Cargando...</p>';
             try {
-                const snap = await db.collection("users").where("isLinked", "==", true).get();
+                const snap = await db.collection("users").where("isLinked", "==", true).get({ source: 'server' });
                 let html = ''; usuariosCache = {};
                 snap.forEach(doc => {
                     const u = doc.data(); usuariosCache[doc.id] = u;
@@ -299,8 +301,10 @@
             const editor = document.getElementById('editor-tarjeta');
             editor.classList.remove('hidden');
 
-            // Generador de filas del editor (Input + Botones +/- + Guardar)
-            const crearFilaStat = (label, idInput, valor, colorBtn) => `
+            // ⚠️ Pasamos u.discordUsername EN VEZ del discordId porque Firebase solo tiene el nombre
+            const nombreDiscord = u.discordUsername ? u.discordUsername.replace(/'/g, "\\'") : '';
+            
+            const crearFilaStat = (label, idInput, valor) => `
                 <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-gray-700 hover:border-gray-500 transition-colors">
                     <span class="text-gray-400 uppercase font-bold text-xs w-24">${label}</span>
                     <div class="flex items-center gap-2">
@@ -308,11 +312,10 @@
                         <input type="number" id="${idInput}" value="${valor || 0}" class="w-20 bg-sawerGrey text-center text-white border border-gray-600 rounded p-1.5 focus:border-sawerRed focus:outline-none font-bold">
                         <button onclick="cambiarInput('${idInput}', 1)" class="sound-btn bg-green-900/80 hover:bg-green-600 text-white w-8 h-8 rounded font-black text-lg transition-colors">+</button>
                     </div>
-                    <button id="btn-save-${idInput}" onclick="guardarStat('${uid}', '${idInput}', '${label}', '${u.discordUserId}')" class="sound-btn bg-sawerRed hover:bg-red-700 text-white px-4 py-2 rounded font-bold text-xs uppercase transition-colors min-w-[80px]">Guardar</button>
+                    <button id="btn-save-${idInput}" onclick="guardarStat('${uid}', '${idInput}', '${label}', '${nombreDiscord}', '${u.robloxUserId}')" class="sound-btn bg-sawerRed hover:bg-red-700 text-white px-4 py-2 rounded font-bold text-xs uppercase transition-colors min-w-[80px]">Guardar</button>
                 </div>
             `;
 
-            // Para Items (Solo lectura + Botón Gris)
             const filaItems = `
                 <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-gray-700">
                     <span class="text-gray-400 uppercase font-bold text-xs w-24">Items</span>
@@ -320,11 +323,10 @@
                         <span class="text-white font-bold text-lg">${s.items || 0}</span>
                         <button class="sound-btn bg-gray-600 hover:bg-gray-500 text-white w-8 h-8 rounded font-black text-lg transition-colors" title="Próximamente">+</button>
                     </div>
-                    <div class="min-w-[80px]"></div> <!-- Espaciador -->
+                    <div class="min-w-[80px]"></div>
                 </div>
             `;
 
-            // En "Diamantes" limpiamos si tiene un "/7" para que sea numérico
             let diamantesClean = s.diamantes ? String(s.diamantes).split('/')[0] : 0;
 
             editor.innerHTML = `
@@ -335,7 +337,6 @@
                         <h3 class="text-2xl font-bold">${u.robloxUsername}</h3>
                     </div>
                 </div>
-
                 <div class="flex flex-col gap-3">
                     ${crearFilaStat('Wins', 'wins', s.wins)}
                     ${crearFilaStat('Puntos', 'recordPuntos', s.recordPuntos)}
@@ -349,45 +350,49 @@
             fetchAvatar(u.robloxUserId, `av-edit-${u.robloxUserId}`);
         }
 
-        // Lógica de sumar/restar en el input
         function cambiarInput(idInput, delta) {
             const input = document.getElementById(idInput);
             let val = parseInt(input.value) || 0;
             input.value = val + delta;
         }
 
-        // Lógica para guardar en Firebase y enviar señal de DM
-        async function guardarStat(uid, statNameFB, statLabel, discordId) {
+        async function guardarStat(uid, statNameFB, statLabel, nombreDiscord, robloxId) {
             const input = document.getElementById(statNameFB);
             let nuevoValor = parseInt(input.value) || 0;
             const btn = document.getElementById(`btn-save-${statNameFB}`);
             
             btn.innerText = "..."; btn.disabled = true;
-
-            // Formato especial para diamantes al guardar en Firestore
             let valorGuardar = statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor;
 
             try {
-                // 1. Actualizar el documento del jugador
+                // 1. Guardar en FIRESTORE (Para el Panel Web y Perfiles)
                 await db.collection("users").doc(uid).set({
                     stats: { [statNameFB]: valorGuardar }
                 }, { merge: true });
 
-                // 2. Crear una solicitud de DM para que el Bot de Discord la procese
-                if (discordId) {
+                // 2. Guardar en REALTIME DATABASE (Para Roblox)
+                if(robloxId) {
+                    try {
+                        await rtdb.ref(`jugadores/${robloxId}/stats`).update({
+                            [statNameFB]: valorGuardar
+                        });
+                    } catch(errRTDB) {
+                        console.error("Aviso: No se pudo sync con Realtime Database", errRTDB);
+                    }
+                }
+
+                // 3. Crear solicitud de DM usando el NOMBRE (discordUsername)
+                if (nombreDiscord && nombreDiscord.trim() !== "") {
                     await db.collection("system_dms").add({
-                        discordId: discordId,
+                        discordUsername: nombreDiscord, // <-- Cambio Clave
                         statName: statLabel,
                         newValue: valorGuardar,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 }
 
-                // UI Feedback
                 btn.classList.replace('bg-sawerRed', 'bg-green-600');
                 btn.innerText = "¡Listo!";
-                
-                // Actualizar caché local
                 if(!usuariosCache[uid].stats) usuariosCache[uid].stats = {};
                 usuariosCache[uid].stats[statNameFB] = valorGuardar;
 
