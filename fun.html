@@ -272,6 +272,7 @@
         });
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
         function playHoverSound() {
             if (audioCtx.state === 'suspended') return;
             const osc = audioCtx.createOscillator();
