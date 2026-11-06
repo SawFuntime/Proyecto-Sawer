@@ -218,18 +218,20 @@
         let usuariosCache = {}; 
         let usuarioEditando = null;
 
-        // Diccionario Maestro de Items
         const TODOS_LOS_ITEMS = [
-            "Amongus", "Cartel", "Globo", "Maxwell", "Floppa", "Goat", "Cuchillo", "Freddy", "Manzana",
-            "Cetro", "Diario", "Sans", "Moai", "Espada", "Radio", "Hamburguesa", "Paisaje", "Nivelinsano",
-            "Mqueen", "RGB", "Escudo", "Rolex", "Pou", "YoYaEstuve", "TV", "Patito", "Kitty", "Bendy", "LaRoca", "SawFigura", 
-            "CetroSawer", "OrbCoin", "Plasma", "Posion", "RadioSawer", "OjosLaser", "PelucheSayan", "SmartTV", "AudifonosSawer", "SawFantasma", "MegaPosion", "CalabazaMaligna", "PelucheFresita",
-            "Label", "LetreroSaw", "SawLight", "PerlaNegra", "Bomba", "Cohete", "Tierra", "UFO", "Guitarra", "SawerAward", "SawFiguraNavideña",
-            "ArmaLove", "Corazones", "RIP", "PelucheLenoideChill", "PelucheLenoide", "LoveSword", "arbol", "BombaPascua", "PosionConeja",
-            "Lanzador", "Visor", "Brazalete", "Maletin", "Piano", "Basket", "Satelite", "Afro", "DiscoBall", "Teclado", "PelucheCaporal",
-            "Oveja", "Avion", "PlasmaGun", "PelucheHikaru",
-            "Boomerang","Corchetera","Naipes","Pala","SSJ","Slime", "Astral", "ColorUsuario", "ColorArcoiris"
-        ].sort(); 
+            "Afro", "Amongus", "ArmaLove", "Astral", "AudifonosSawer", "Avion", "Basket", "Bendy", 
+            "Bomba", "BombaPascua", "Boomerang", "Brazalete", "CalabazaMaligna", "Cartel", "Cetro", 
+            "CetroSawer", "Cohete", "ColorArcoiris", "ColorUsuario", "Corazones", "Corchetera", 
+            "Cuchillo", "Diario", "DiscoBall", "Escudo", "Espada", "Floppa", "Freddy", "Globo", 
+            "Goat", "Guitarra", "Hamburguesa", "Kitty", "LaRoca", "Label", "Lanzador", "LetreroSaw", 
+            "LoveSword", "Maletin", "Manzana", "Maxwell", "MegaPosion", "Moai", "Mqueen", "Naipes", 
+            "Nivelinsano", "OjosLaser", "OrbCoin", "Oveja", "Paisaje", "Pala", "Patito", "PelucheCaporal", 
+            "PelucheFresita", "PelucheHikaru", "PelucheLenoide", "PelucheLenoideChill", "PelucheSayan", 
+            "PerlaNegra", "Piano", "Plasma", "PlasmaGun", "Posion", "PosionConeja", "Pou", "RGB", 
+            "RIP", "Radio", "RadioSawer", "Rolex", "SSJ", "Sans", "Satelite", "SawFantasma", 
+            "SawFigura", "SawFiguraNavideña", "SawLight", "SawerAward", "Slime", "SmartTV", "TV", 
+            "Teclado", "Tierra", "UFO", "Visor", "YoYaEstuve", "arbol"
+        ];
 
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
@@ -272,16 +274,13 @@
             vPrincipal.classList.replace('pantalla-oculta', 'pantalla-activa');
         }
 
-        // 🟢 MAGIA AQUÍ: Leemos Firestore (Web) + Realtime Database (Roblox) al mismo tiempo
         async function abrirJugadores() {
             cerrarVistas(); vJugadores.classList.replace('pantalla-oculta', 'pantalla-activa');
             const cont = document.getElementById('contenedor-tarjetas-jugadores');
             cont.innerHTML = '<p class="text-gray-400 text-center col-span-2">Sincronizando con los servidores de Roblox...</p>';
             
             try {
-                // Obtenemos los perfiles de la web
                 const snap = await db.collection("users").where("isLinked", "==", true).get();
-                // Obtenemos el progreso REAL de Roblox
                 const rtdbSnap = await rtdb.ref('jugadores').once('value');
                 const rtdbData = rtdbSnap.val() || {};
                 
@@ -289,8 +288,6 @@
                 
                 snap.forEach(doc => {
                     const u = doc.data(); 
-                    
-                    // Fusión de datos
                     const rblxData = rtdbData[`User_${u.robloxUserId}`] || {};
                     const globalData = rblxData.DatosGlobales || {};
                     const compras = globalData.Compras || {};
@@ -299,11 +296,11 @@
                     const recordPuntos = globalData.MaxPuntos || 0;
                     const sawCoins = globalData.Coins || 0;
                     const diamantes = globalData.Diamantes || "0/7";
-                    const cantItems = Object.values(compras).filter(v => v === true).length;
                     
-                    // Los tokens son de Discord, así que esos sí los leemos de la Web (Firestore)
+                    // Cuenta SOLO los items oficiales
+                    const cantItems = TODOS_LOS_ITEMS.filter(i => compras[i] === true).length;
+                    
                     const tokens = (u.stats && u.stats.tokens) ? u.stats.tokens : 0;
-                    
                     const discordUser = u.discordUsername || "No vinculado";
                     const correo = u.email || "Privado";
 
@@ -344,7 +341,10 @@
                 });
                 cont.innerHTML = html;
                 snap.forEach(doc => fetchAvatar(doc.data().robloxUserId, `av-read-${doc.data().robloxUserId}`));
-            } catch(e) { cont.innerHTML = '<p class="text-red-500 text-center">Error DB.</p>'; }
+            } catch(e) { 
+                console.error(e);
+                cont.innerHTML = '<p class="text-red-500 text-center p-4 text-xs font-bold">ERROR: ' + e.message + '</p>'; 
+            }
         }
 
         async function abrirDatos() {
@@ -366,7 +366,6 @@
                     const rblxData = rtdbData[`User_${u.robloxUserId}`] || {};
                     const globalData = rblxData.DatosGlobales || {};
                     
-                    // Guardamos la info de Roblox directamente en la Caché
                     usuariosCache[doc.id] = {
                         ...u,
                         rtdbWins: globalData.Wins || 0,
@@ -387,7 +386,10 @@
                 });
                 lista.innerHTML = html; reasignarSonidos();
                 Object.values(usuariosCache).forEach(u => fetchAvatar(u.robloxUserId, `av-list-${u.robloxUserId}`));
-            } catch(e) { lista.innerHTML = '<p class="text-red-500 text-center">Error al cargar.</p>'; }
+            } catch(e) { 
+                console.error(e);
+                lista.innerHTML = '<p class="text-red-500 text-center p-4 text-xs font-bold">ERROR: ' + e.message + '</p>'; 
+            }
         }
 
         function seleccionarJugadorDatos(uid) {
@@ -412,8 +414,8 @@
                 </div>
             `;
 
-            // Leemos los items directamente de la memoria de Roblox
-            const cantidadItems = Object.values(u.rtdbCompras).filter(v => v === true).length;
+            // Cuenta SOLO los items oficiales
+            const cantidadItems = TODOS_LOS_ITEMS.filter(i => u.rtdbCompras[i] === true).length;
             
             const filaItems = `
                 <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-green-900/50">
@@ -426,7 +428,6 @@
                 </div>
             `;
 
-            // Tokens sigue siendo de Firebase
             const tokensVal = (u.stats && u.stats.tokens) ? u.stats.tokens : 0;
 
             editor.innerHTML = `
@@ -450,9 +451,6 @@
             fetchAvatar(u.robloxUserId, `av-edit-${u.robloxUserId}`);
         }
 
-        // ==========================================
-        // 🟢 SISTEMA GESTOR DE INVENTARIO (MODAL)
-        // ==========================================
         const modalItems = document.getElementById('modal-gestor-items');
         const listaItemsDOM = document.getElementById('contenedor-lista-items');
         const subtitleModal = document.getElementById('modal-items-subtitle');
@@ -493,7 +491,6 @@
             modalItems.classList.add('hidden');
         }
 
-        // Modifica únicamente la base de datos de Roblox
         async function toggleItem(itemName) {
             const uid = usuarioEditandoInventario;
             const rblxId = robloxIdInventario;
@@ -509,12 +506,10 @@
             btn.disabled = true;
 
             try {
-                // Modificamos directamente el servidor de Roblox
                 await rtdb.ref(`jugadores/User_${rblxId}/DatosGlobales/Compras`).update({
                     [itemName]: nuevoEstado ? true : null 
                 });
 
-                // Actualizamos Caché y UI
                 inventario[itemName] = nuevoEstado;
                 
                 if(nuevoEstado) {
@@ -530,7 +525,7 @@
                 }
                 btn.disabled = false;
 
-                const cant = Object.values(inventario).filter(v => v === true).length;
+                const cant = TODOS_LOS_ITEMS.filter(i => inventario[i] === true).length;
                 document.getElementById('contador-items-tarjeta').innerText = `${cant}/${TODOS_LOS_ITEMS.length}`;
 
             } catch (error) {
@@ -540,9 +535,6 @@
             }
         }
 
-        // ==========================================
-        // GUARDADO DE ESTADÍSTICAS NUMÉRICAS
-        // ==========================================
         function cambiarInput(idInput, delta) {
             const input = document.getElementById(idInput);
             let val = parseInt(input.value) || 0;
@@ -564,22 +556,23 @@
             };
             
             try {
-                // Para el juego (Roblox)
+                // 🟢 AQUÍ ESTABA EL ERROR. 
+                // A Roblox se le envía el nuevoValor puro como Número. El "/7" se le envía a la web.
                 if(robloxId && rtdbMap[statNameFB]) {
                     const rtdbKey = rtdbMap[statNameFB];
                     await rtdb.ref(`jugadores/User_${robloxId}/DatosGlobales`).update({
-                        [rtdbKey]: (statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor)
+                        [rtdbKey]: nuevoValor 
                     });
                 }
 
-                // Para Discord (Tokens)
+                // A Firestore (Web) le enviamos el texto formateado
+                let valorParaFirestore = statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor;
                 if(statNameFB === 'tokens') {
-                    await db.collection("users").doc(uid).set({
-                        stats: { tokens: nuevoValor }
-                    }, { merge: true });
+                    await db.collection("users").doc(uid).set({ stats: { tokens: nuevoValor } }, { merge: true });
+                } else {
+                    await db.collection("users").doc(uid).set({ stats: { [statNameFB]: valorParaFirestore } }, { merge: true });
                 }
 
-                // Sistema de DM
                 if (nombreDiscord && nombreDiscord.trim() !== "") {
                     await db.collection("system_dms").add({
                         discordUsername: nombreDiscord,
@@ -593,7 +586,6 @@
                 btn.classList.replace('bg-sawerRed', 'bg-green-600');
                 btn.innerText = "¡Listo!";
                 
-                // Actualizamos Caché
                 if(statNameFB === 'tokens') {
                     if(!usuariosCache[uid].stats) usuariosCache[uid].stats = {};
                     usuariosCache[uid].stats.tokens = nuevoValor;
