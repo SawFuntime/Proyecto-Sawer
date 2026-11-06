@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sawer Admin Panel - DB Conectada</title>
+    <title>Sawer Admin Panel - DB Sincronizada</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -36,8 +36,6 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: rgb(194, 0, 0); border-radius: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb:hover { background: #ff3333; }
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        
-        /* Animación para el Modal */
         .modal-enter { animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes modalFadeIn {
             from { opacity: 0; transform: scale(0.95); }
@@ -171,11 +169,10 @@
                 </div>
             </div>
 
-            <!-- 🟩 MODAL GESTOR DE ITEMS (NUEVO) 🟩 -->
+            <!-- 🟩 MODAL GESTOR DE ITEMS 🟩 -->
             <div id="modal-gestor-items" class="hidden fixed inset-0 z-[100] bg-black/80 flex items-center justify-center backdrop-blur-sm">
                 <div class="modal-enter bg-sawerGrey border border-sawerRed w-full max-w-2xl h-[80vh] rounded-2xl flex flex-col shadow-[0_0_40px_rgba(194,0,0,0.3)]">
                     
-                    <!-- Header Modal -->
                     <div class="p-6 border-b border-sawerRed/30 flex items-center justify-between bg-sawerDark rounded-t-2xl">
                         <div>
                             <h2 class="text-2xl font-black text-sawerRed uppercase tracking-wide">Gestor de Inventario</h2>
@@ -186,14 +183,12 @@
                         </button>
                     </div>
 
-                    <!-- Lista de Items -->
                     <div class="flex-1 overflow-y-auto custom-scroll p-6 bg-sawerGrey">
                         <div class="grid grid-cols-2 gap-4" id="contenedor-lista-items">
                             <!-- Los items se inyectan aquí -->
                         </div>
                     </div>
                     
-                    <!-- Footer Modal -->
                     <div class="p-4 border-t border-sawerRed/30 bg-sawerDark rounded-b-2xl text-center">
                         <p class="text-xs text-gray-500 font-bold uppercase">Los cambios se guardan y sincronizan automáticamente con Roblox al hacer click.</p>
                     </div>
@@ -223,7 +218,7 @@
         let usuariosCache = {}; 
         let usuarioEditando = null;
 
-        // 🟢 EL DICCIONARIO MAESTRO DE ITEMS DE ROBLOX
+        // Diccionario Maestro de Items
         const TODOS_LOS_ITEMS = [
             "Amongus", "Cartel", "Globo", "Maxwell", "Floppa", "Goat", "Cuchillo", "Freddy", "Manzana",
             "Cetro", "Diario", "Sans", "Moai", "Espada", "Radio", "Hamburguesa", "Paisaje", "Nivelinsano",
@@ -234,7 +229,7 @@
             "Lanzador", "Visor", "Brazalete", "Maletin", "Piano", "Basket", "Satelite", "Afro", "DiscoBall", "Teclado", "PelucheCaporal",
             "Oveja", "Avion", "PlasmaGun", "PelucheHikaru",
             "Boomerang","Corchetera","Naipes","Pala","SSJ","Slime", "Astral", "ColorUsuario", "ColorArcoiris"
-        ].sort(); // Ordenados alfabéticamente para mayor orden en el modal
+        ].sort(); 
 
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
@@ -277,18 +272,38 @@
             vPrincipal.classList.replace('pantalla-oculta', 'pantalla-activa');
         }
 
+        // 🟢 MAGIA AQUÍ: Leemos Firestore (Web) + Realtime Database (Roblox) al mismo tiempo
         async function abrirJugadores() {
             cerrarVistas(); vJugadores.classList.replace('pantalla-oculta', 'pantalla-activa');
             const cont = document.getElementById('contenedor-tarjetas-jugadores');
-            cont.innerHTML = '<p class="text-gray-400 text-center col-span-2">Leyendo base de datos del servidor...</p>';
+            cont.innerHTML = '<p class="text-gray-400 text-center col-span-2">Sincronizando con los servidores de Roblox...</p>';
+            
             try {
-                const snap = await db.collection("users").where("isLinked", "==", true).get({ source: 'server' });
+                // Obtenemos los perfiles de la web
+                const snap = await db.collection("users").where("isLinked", "==", true).get();
+                // Obtenemos el progreso REAL de Roblox
+                const rtdbSnap = await rtdb.ref('jugadores').once('value');
+                const rtdbData = rtdbSnap.val() || {};
+                
                 let html = '';
+                
                 snap.forEach(doc => {
                     const u = doc.data(); 
-                    const s = u.stats || {};
-                    const inv = u.inventario || {}; // El diccionario de items
-                    const cantItems = Object.values(inv).filter(v => v === true).length;
+                    
+                    // Fusión de datos
+                    const rblxData = rtdbData[`User_${u.robloxUserId}`] || {};
+                    const globalData = rblxData.DatosGlobales || {};
+                    const compras = globalData.Compras || {};
+                    
+                    const wins = globalData.Wins || 0;
+                    const recordPuntos = globalData.MaxPuntos || 0;
+                    const sawCoins = globalData.Coins || 0;
+                    const diamantes = globalData.Diamantes || "0/7";
+                    const cantItems = Object.values(compras).filter(v => v === true).length;
+                    
+                    // Los tokens son de Discord, así que esos sí los leemos de la Web (Firestore)
+                    const tokens = (u.stats && u.stats.tokens) ? u.stats.tokens : 0;
+                    
                     const discordUser = u.discordUsername || "No vinculado";
                     const correo = u.email || "Privado";
 
@@ -302,17 +317,17 @@
                             </div>
                             
                             <div class="grid grid-cols-3 gap-3 text-sm mb-5">
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Wins</span><span class="font-bold text-lg">${s.wins||0}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Récord Pts</span><span class="font-bold text-lg">${s.recordPuntos||0}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-sawerRed/50 text-center shadow-[inset_0_0_10px_rgba(194,0,0,0.2)]"><span class="text-gray-400 text-[10px] block uppercase">Sawcoins</span><span class="font-bold text-yellow-500 text-lg">${s.sawCoins||0}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Diamantes</span><span class="font-bold text-cyan-400 text-lg">${s.diamantes||'0/7'}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Wins</span><span class="font-bold text-lg">${wins}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Récord Pts</span><span class="font-bold text-lg">${recordPuntos}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-sawerRed/50 text-center shadow-[inset_0_0_10px_rgba(194,0,0,0.2)]"><span class="text-gray-400 text-[10px] block uppercase">Sawcoins</span><span class="font-bold text-yellow-500 text-lg">${sawCoins}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Diamantes</span><span class="font-bold text-cyan-400 text-lg">${diamantes}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-green-900/50 text-center"><span class="text-gray-400 text-[10px] block uppercase">Items</span><span class="font-bold text-lg text-green-400">${cantItems}/${TODOS_LOS_ITEMS.length}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Tokens</span><span class="font-bold text-purple-400 text-lg">${s.tokens||0}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Tokens</span><span class="font-bold text-purple-400 text-lg">${tokens}</span></div>
                             </div>
                             
                             <div class="bg-sawerDark p-3 rounded-lg border border-green-500/30 text-center mb-5">
                                 <span class="text-gray-400 text-xs uppercase">Robuxs</span>
-                                <div class="font-black text-green-500 text-xl mt-1">${s.robux||0} R$</div>
+                                <div class="font-black text-green-500 text-xl mt-1">${u.stats?.robux||0} R$</div>
                             </div>
 
                             <div class="mt-auto space-y-3 bg-sawerDark p-4 rounded-xl border border-gray-700">
@@ -338,14 +353,28 @@
             document.getElementById('editor-placeholder').classList.remove('hidden');
             
             const lista = document.getElementById('lista-edicion');
-            lista.innerHTML = '<p class="text-center text-gray-500 mt-10">Cargando...</p>';
+            lista.innerHTML = '<p class="text-center text-gray-500 mt-10">Sincronizando con Roblox...</p>';
             try {
-                const snap = await db.collection("users").where("isLinked", "==", true).get({ source: 'server' });
+                const snap = await db.collection("users").where("isLinked", "==", true).get();
+                const rtdbSnap = await rtdb.ref('jugadores').once('value');
+                const rtdbData = rtdbSnap.val() || {};
+                
                 let html = ''; usuariosCache = {};
+                
                 snap.forEach(doc => {
                     const u = doc.data(); 
-                    if (!u.inventario) u.inventario = {}; // Aseguramos que la tabla exista en caché
-                    usuariosCache[doc.id] = u;
+                    const rblxData = rtdbData[`User_${u.robloxUserId}`] || {};
+                    const globalData = rblxData.DatosGlobales || {};
+                    
+                    // Guardamos la info de Roblox directamente en la Caché
+                    usuariosCache[doc.id] = {
+                        ...u,
+                        rtdbWins: globalData.Wins || 0,
+                        rtdbPuntos: globalData.MaxPuntos || 0,
+                        rtdbCoins: globalData.Coins || 0,
+                        rtdbDiamantes: globalData.Diamantes ? String(globalData.Diamantes).split('/')[0] : 0,
+                        rtdbCompras: globalData.Compras || {}
+                    };
                     
                     html += `
                         <div onclick="seleccionarJugadorDatos('${doc.id}')" class="sound-btn flex items-center gap-3 p-3 rounded-xl bg-sawerDark border border-gray-800 hover:border-sawerRed cursor-pointer transition-colors group">
@@ -364,7 +393,6 @@
         function seleccionarJugadorDatos(uid) {
             usuarioEditando = uid;
             const u = usuariosCache[uid];
-            const s = u.stats || {};
             
             document.getElementById('editor-placeholder').classList.add('hidden');
             const editor = document.getElementById('editor-tarjeta');
@@ -384,8 +412,8 @@
                 </div>
             `;
 
-            // 🟢 NUEVA LÓGICA DE ITEMS: Cuenta el diccionario de Firebase
-            const cantidadItems = Object.values(u.inventario).filter(v => v === true).length;
+            // Leemos los items directamente de la memoria de Roblox
+            const cantidadItems = Object.values(u.rtdbCompras).filter(v => v === true).length;
             
             const filaItems = `
                 <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-green-900/50">
@@ -398,7 +426,8 @@
                 </div>
             `;
 
-            let diamantesClean = s.diamantes ? String(s.diamantes).split('/')[0] : 0;
+            // Tokens sigue siendo de Firebase
+            const tokensVal = (u.stats && u.stats.tokens) ? u.stats.tokens : 0;
 
             editor.innerHTML = `
                 <div class="flex items-center gap-5 mb-6 border-b border-gray-700 pb-6">
@@ -409,11 +438,11 @@
                     </div>
                 </div>
                 <div class="flex flex-col gap-3">
-                    ${crearFilaStat('Wins', 'wins', s.wins)}
-                    ${crearFilaStat('Puntos', 'recordPuntos', s.recordPuntos)}
-                    ${crearFilaStat('SawCoins', 'sawCoins', s.sawCoins)}
-                    ${crearFilaStat('Diamantes', 'diamantes', diamantesClean)}
-                    ${crearFilaStat('Tokens', 'tokens', s.tokens)}
+                    ${crearFilaStat('Wins', 'wins', u.rtdbWins)}
+                    ${crearFilaStat('Puntos', 'recordPuntos', u.rtdbPuntos)}
+                    ${crearFilaStat('SawCoins', 'sawCoins', u.rtdbCoins)}
+                    ${crearFilaStat('Diamantes', 'diamantes', u.rtdbDiamantes)}
+                    ${crearFilaStat('Tokens', 'tokens', tokensVal)}
                     ${filaItems}
                 </div>
             `;
@@ -434,12 +463,11 @@
         function abrirModalItems(uid, robloxId, username) {
             usuarioEditandoInventario = uid;
             robloxIdInventario = robloxId;
-            const inventarioActual = usuariosCache[uid].inventario || {};
+            const inventarioActual = usuariosCache[uid].rtdbCompras || {};
 
             subtitleModal.innerText = `Sincronización en vivo para: ${username}`;
             listaItemsDOM.innerHTML = '';
 
-            // Generar todos los items del juego
             TODOS_LOS_ITEMS.forEach(itemName => {
                 const loTiene = inventarioActual[itemName] === true;
                 const bgClass = loTiene ? 'bg-green-900/30 border-green-500' : 'bg-sawerDark border-gray-700';
@@ -465,16 +493,14 @@
             modalItems.classList.add('hidden');
         }
 
-        // 🟢 LA MAGIA DE DAR/QUITAR EL ITEM EN ROBLOX Y LA WEB AL INSTANTE
+        // Modifica únicamente la base de datos de Roblox
         async function toggleItem(itemName) {
             const uid = usuarioEditandoInventario;
             const rblxId = robloxIdInventario;
-            const inventario = usuariosCache[uid].inventario;
+            const inventario = usuariosCache[uid].rtdbCompras;
             
-            // Invertimos el estado (Si lo tenía, lo quitamos. Si no, lo damos)
             const nuevoEstado = !(inventario[itemName] === true);
             
-            // Feedback Visual Inmediato
             const card = document.getElementById(`card-item-${itemName}`);
             const text = document.getElementById(`text-item-${itemName}`);
             const btn = document.getElementById(`btn-item-${itemName}`);
@@ -483,21 +509,12 @@
             btn.disabled = true;
 
             try {
-                // 1. Guardar en FIRESTORE (El perfil web)
-                await db.collection("users").doc(uid).set({
-                    inventario: { [itemName]: nuevoEstado }
-                }, { merge: true });
+                // Modificamos directamente el servidor de Roblox
+                await rtdb.ref(`jugadores/User_${rblxId}/DatosGlobales/Compras`).update({
+                    [itemName]: nuevoEstado ? true : null 
+                });
 
-                // 2. Guardar en REALTIME DATABASE (Para el servidor de Roblox)
-                try {
-                    await rtdb.ref(`jugadores/User_${rblxId}/DatosGlobales/Compras`).update({
-                        [itemName]: nuevoEstado ? true : null // En Lua, si le das null se elimina de la tabla
-                    });
-                } catch(errRTDB) {
-                    console.error("Aviso: No se pudo sync con Realtime Database", errRTDB);
-                }
-
-                // 3. Actualizar Caché y Visuales Locales
+                // Actualizamos Caché y UI
                 inventario[itemName] = nuevoEstado;
                 
                 if(nuevoEstado) {
@@ -513,7 +530,6 @@
                 }
                 btn.disabled = false;
 
-                // Actualizar el contador en la tarjeta que quedó de fondo
                 const cant = Object.values(inventario).filter(v => v === true).length;
                 document.getElementById('contador-items-tarjeta').innerText = `${cant}/${TODOS_LOS_ITEMS.length}`;
 
@@ -548,22 +564,22 @@
             };
             
             try {
-                let valorParaFirestore = statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor;
-                await db.collection("users").doc(uid).set({
-                    stats: { [statNameFB]: valorParaFirestore }
-                }, { merge: true });
-
+                // Para el juego (Roblox)
                 if(robloxId && rtdbMap[statNameFB]) {
-                    try {
-                        const rtdbKey = rtdbMap[statNameFB];
-                        await rtdb.ref(`jugadores/User_${robloxId}/DatosGlobales`).update({
-                            [rtdbKey]: nuevoValor 
-                        });
-                    } catch(errRTDB) {
-                        console.error("Aviso: No se pudo sync con Realtime Database", errRTDB);
-                    }
+                    const rtdbKey = rtdbMap[statNameFB];
+                    await rtdb.ref(`jugadores/User_${robloxId}/DatosGlobales`).update({
+                        [rtdbKey]: (statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor)
+                    });
                 }
 
+                // Para Discord (Tokens)
+                if(statNameFB === 'tokens') {
+                    await db.collection("users").doc(uid).set({
+                        stats: { tokens: nuevoValor }
+                    }, { merge: true });
+                }
+
+                // Sistema de DM
                 if (nombreDiscord && nombreDiscord.trim() !== "") {
                     await db.collection("system_dms").add({
                         discordUsername: nombreDiscord,
@@ -576,8 +592,15 @@
 
                 btn.classList.replace('bg-sawerRed', 'bg-green-600');
                 btn.innerText = "¡Listo!";
-                if(!usuariosCache[uid].stats) usuariosCache[uid].stats = {};
-                usuariosCache[uid].stats[statNameFB] = valorParaFirestore;
+                
+                // Actualizamos Caché
+                if(statNameFB === 'tokens') {
+                    if(!usuariosCache[uid].stats) usuariosCache[uid].stats = {};
+                    usuariosCache[uid].stats.tokens = nuevoValor;
+                } else {
+                    const capName = 'rtdb' + statNameFB.charAt(0).toUpperCase() + statNameFB.slice(1);
+                    usuariosCache[uid][capName] = nuevoValor;
+                }
 
                 setTimeout(() => {
                     btn.classList.replace('bg-green-600', 'bg-sawerRed');
