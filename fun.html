@@ -36,6 +36,13 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: rgb(194, 0, 0); border-radius: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb:hover { background: #ff3333; }
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        /* Animación para el Modal */
+        .modal-enter { animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
     </style>
 </head>
 <body class="bg-sawerDark text-white font-sans h-screen overflow-hidden flex select-none items-center justify-center">
@@ -57,7 +64,7 @@
     <!-- APP PRINCIPAL -->
     <div id="app-container" class="hidden w-full h-full flex">
         
-        <!-- SIDEBAR RESTAURADA -->
+        <!-- SIDEBAR -->
         <aside class="w-72 bg-sawerGrey border-r border-sawerRed/40 flex flex-col justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-20 relative">
             <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
                 <img src="Inquisitor.png" alt="Proyecto Sawer" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/c20000/ffffff?text=Sawer'">
@@ -116,14 +123,14 @@
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4"></path></svg></div>
                         <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Datos</h3>
-                        <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">EDITAR ESTADÍSTICAS</p>
+                        <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">EDITAR ESTADÍSTICAS E INVENTARIO</p>
                     </div>
                     <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed cursor-pointer flex flex-col justify-end overflow-hidden"><h3 class="text-3xl font-bold text-gray-300">Rondas</h3></div>
                     <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed cursor-pointer flex flex-col justify-end overflow-hidden"><h3 class="text-3xl font-bold text-gray-300">Controles</h3></div>
                 </div>
             </div>
 
-            <!-- VISTA 2: JUGADORES (Lectura forzada) -->
+            <!-- VISTA 2: JUGADORES -->
             <div id="vista-jugadores" class="pantalla-oculta flex-col w-full h-full overflow-y-auto custom-scroll pr-4">
                 <header class="mb-10 flex items-center gap-6 border-b border-sawerRed/20 pb-6">
                     <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg shadow-lg group">
@@ -145,7 +152,7 @@
                     </button>
                     <div>
                         <h1 class="text-4xl font-black tracking-wide text-sawerRed">PANEL DE DATOS</h1>
-                        <p class="text-gray-400 mt-2">Modifica las estadísticas manualmente. Notificará por DM.</p>
+                        <p class="text-gray-400 mt-2">Modifica las estadísticas e inventario. Sincronización en vivo.</p>
                     </div>
                 </header>
 
@@ -160,6 +167,35 @@
                     </div>
                     <div id="editor-placeholder" class="w-2/3 border-2 border-dashed border-gray-700 rounded-2xl flex items-center justify-center text-gray-500 uppercase tracking-widest font-bold">
                         Selecciona un usuario de la lista
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🟩 MODAL GESTOR DE ITEMS (NUEVO) 🟩 -->
+            <div id="modal-gestor-items" class="hidden fixed inset-0 z-[100] bg-black/80 flex items-center justify-center backdrop-blur-sm">
+                <div class="modal-enter bg-sawerGrey border border-sawerRed w-full max-w-2xl h-[80vh] rounded-2xl flex flex-col shadow-[0_0_40px_rgba(194,0,0,0.3)]">
+                    
+                    <!-- Header Modal -->
+                    <div class="p-6 border-b border-sawerRed/30 flex items-center justify-between bg-sawerDark rounded-t-2xl">
+                        <div>
+                            <h2 class="text-2xl font-black text-sawerRed uppercase tracking-wide">Gestor de Inventario</h2>
+                            <p class="text-gray-400 text-sm mt-1" id="modal-items-subtitle">Modificando a: Usuario</p>
+                        </div>
+                        <button onclick="cerrarModalItems()" class="sound-btn text-gray-500 hover:text-white bg-gray-800 hover:bg-red-600 p-2 rounded-lg transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <!-- Lista de Items -->
+                    <div class="flex-1 overflow-y-auto custom-scroll p-6 bg-sawerGrey">
+                        <div class="grid grid-cols-2 gap-4" id="contenedor-lista-items">
+                            <!-- Los items se inyectan aquí -->
+                        </div>
+                    </div>
+                    
+                    <!-- Footer Modal -->
+                    <div class="p-4 border-t border-sawerRed/30 bg-sawerDark rounded-b-2xl text-center">
+                        <p class="text-xs text-gray-500 font-bold uppercase">Los cambios se guardan y sincronizan automáticamente con Roblox al hacer click.</p>
                     </div>
                 </div>
             </div>
@@ -187,9 +223,23 @@
         let usuariosCache = {}; 
         let usuarioEditando = null;
 
+        // 🟢 EL DICCIONARIO MAESTRO DE ITEMS DE ROBLOX
+        const TODOS_LOS_ITEMS = [
+            "Amongus", "Cartel", "Globo", "Maxwell", "Floppa", "Goat", "Cuchillo", "Freddy", "Manzana",
+            "Cetro", "Diario", "Sans", "Moai", "Espada", "Radio", "Hamburguesa", "Paisaje", "Nivelinsano",
+            "Mqueen", "RGB", "Escudo", "Rolex", "Pou", "YoYaEstuve", "TV", "Patito", "Kitty", "Bendy", "LaRoca", "SawFigura", 
+            "CetroSawer", "OrbCoin", "Plasma", "Posion", "RadioSawer", "OjosLaser", "PelucheSayan", "SmartTV", "AudifonosSawer", "SawFantasma", "MegaPosion", "CalabazaMaligna", "PelucheFresita",
+            "Label", "LetreroSaw", "SawLight", "PerlaNegra", "Bomba", "Cohete", "Tierra", "UFO", "Guitarra", "SawerAward", "SawFiguraNavideña",
+            "ArmaLove", "Corazones", "RIP", "PelucheLenoideChill", "PelucheLenoide", "LoveSword", "arbol", "BombaPascua", "PosionConeja",
+            "Lanzador", "Visor", "Brazalete", "Maletin", "Piano", "Basket", "Satelite", "Afro", "DiscoBall", "Teclado", "PelucheCaporal",
+            "Oveja", "Avion", "PlasmaGun", "PelucheHikaru",
+            "Boomerang","Corchetera","Naipes","Pala","SSJ","Slime", "Astral", "ColorUsuario", "ColorArcoiris"
+        ].sort(); // Ordenados alfabéticamente para mayor orden en el modal
+
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
         const errorMsg = document.getElementById('error-msg');
+        
         function login() {
             auth.signInWithEmailAndPassword(document.getElementById('email').value.trim(), document.getElementById('password').value)
                 .then(u => {
@@ -237,6 +287,8 @@
                 snap.forEach(doc => {
                     const u = doc.data(); 
                     const s = u.stats || {};
+                    const inv = u.inventario || {}; // El diccionario de items
+                    const cantItems = Object.values(inv).filter(v => v === true).length;
                     const discordUser = u.discordUsername || "No vinculado";
                     const correo = u.email || "Privado";
 
@@ -254,7 +306,7 @@
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Récord Pts</span><span class="font-bold text-lg">${s.recordPuntos||0}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-sawerRed/50 text-center shadow-[inset_0_0_10px_rgba(194,0,0,0.2)]"><span class="text-gray-400 text-[10px] block uppercase">Sawcoins</span><span class="font-bold text-yellow-500 text-lg">${s.sawCoins||0}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Diamantes</span><span class="font-bold text-cyan-400 text-lg">${s.diamantes||'0/7'}</span></div>
-                                <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Items</span><span class="font-bold text-lg">${s.items||0}</span></div>
+                                <div class="bg-sawerDark p-3 rounded-lg border border-green-900/50 text-center"><span class="text-gray-400 text-[10px] block uppercase">Items</span><span class="font-bold text-lg text-green-400">${cantItems}/${TODOS_LOS_ITEMS.length}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Tokens</span><span class="font-bold text-purple-400 text-lg">${s.tokens||0}</span></div>
                             </div>
                             
@@ -291,7 +343,10 @@
                 const snap = await db.collection("users").where("isLinked", "==", true).get({ source: 'server' });
                 let html = ''; usuariosCache = {};
                 snap.forEach(doc => {
-                    const u = doc.data(); usuariosCache[doc.id] = u;
+                    const u = doc.data(); 
+                    if (!u.inventario) u.inventario = {}; // Aseguramos que la tabla exista en caché
+                    usuariosCache[doc.id] = u;
+                    
                     html += `
                         <div onclick="seleccionarJugadorDatos('${doc.id}')" class="sound-btn flex items-center gap-3 p-3 rounded-xl bg-sawerDark border border-gray-800 hover:border-sawerRed cursor-pointer transition-colors group">
                             <img id="av-list-${u.robloxUserId}" src="./Inquisitor.png" class="w-10 h-10 rounded-full border border-gray-600 group-hover:border-sawerRed object-cover">
@@ -329,12 +384,15 @@
                 </div>
             `;
 
+            // 🟢 NUEVA LÓGICA DE ITEMS: Cuenta el diccionario de Firebase
+            const cantidadItems = Object.values(u.inventario).filter(v => v === true).length;
+            
             const filaItems = `
-                <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-gray-700">
-                    <span class="text-gray-400 uppercase font-bold text-xs w-24">Items</span>
+                <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-green-900/50">
+                    <span class="text-green-400 uppercase font-bold text-xs w-24">Items</span>
                     <div class="flex items-center gap-4">
-                        <span class="text-white font-bold text-lg">${s.items || 0}</span>
-                        <button class="sound-btn bg-gray-600 hover:bg-gray-500 text-white w-8 h-8 rounded font-black text-lg transition-colors" title="Próximamente">+</button>
+                        <span class="text-white font-bold text-lg" id="contador-items-tarjeta">${cantidadItems}/${TODOS_LOS_ITEMS.length}</span>
+                        <button onclick="abrirModalItems('${uid}', '${u.robloxUserId}', '${u.robloxUsername}')" class="sound-btn bg-green-600 hover:bg-green-500 text-white w-8 h-8 rounded font-black text-lg transition-colors shadow-[0_0_10px_rgba(0,255,0,0.3)]" title="Gestionar Inventario">+</button>
                     </div>
                     <div class="min-w-[80px]"></div>
                 </div>
@@ -363,6 +421,112 @@
             fetchAvatar(u.robloxUserId, `av-edit-${u.robloxUserId}`);
         }
 
+        // ==========================================
+        // 🟢 SISTEMA GESTOR DE INVENTARIO (MODAL)
+        // ==========================================
+        const modalItems = document.getElementById('modal-gestor-items');
+        const listaItemsDOM = document.getElementById('contenedor-lista-items');
+        const subtitleModal = document.getElementById('modal-items-subtitle');
+        
+        let usuarioEditandoInventario = null;
+        let robloxIdInventario = null;
+
+        function abrirModalItems(uid, robloxId, username) {
+            usuarioEditandoInventario = uid;
+            robloxIdInventario = robloxId;
+            const inventarioActual = usuariosCache[uid].inventario || {};
+
+            subtitleModal.innerText = `Sincronización en vivo para: ${username}`;
+            listaItemsDOM.innerHTML = '';
+
+            // Generar todos los items del juego
+            TODOS_LOS_ITEMS.forEach(itemName => {
+                const loTiene = inventarioActual[itemName] === true;
+                const bgClass = loTiene ? 'bg-green-900/30 border-green-500' : 'bg-sawerDark border-gray-700';
+                const textClass = loTiene ? 'text-green-400' : 'text-gray-400';
+                const btnColor = loTiene ? 'bg-green-600 hover:bg-red-600' : 'bg-sawerRed hover:bg-green-600';
+                const btnIcon = loTiene ? '✓' : '✗';
+
+                listaItemsDOM.innerHTML += `
+                    <div id="card-item-${itemName}" class="flex items-center justify-between p-3 rounded-lg border transition-colors ${bgClass}">
+                        <span class="font-bold text-sm ${textClass}" id="text-item-${itemName}">${itemName}</span>
+                        <button onclick="toggleItem('${itemName}')" id="btn-item-${itemName}" class="sound-btn w-8 h-8 rounded font-black text-white ${btnColor} transition-colors flex items-center justify-center">
+                            ${btnIcon}
+                        </button>
+                    </div>
+                `;
+            });
+
+            modalItems.classList.remove('hidden');
+            reasignarSonidos();
+        }
+
+        function cerrarModalItems() {
+            modalItems.classList.add('hidden');
+        }
+
+        // 🟢 LA MAGIA DE DAR/QUITAR EL ITEM EN ROBLOX Y LA WEB AL INSTANTE
+        async function toggleItem(itemName) {
+            const uid = usuarioEditandoInventario;
+            const rblxId = robloxIdInventario;
+            const inventario = usuariosCache[uid].inventario;
+            
+            // Invertimos el estado (Si lo tenía, lo quitamos. Si no, lo damos)
+            const nuevoEstado = !(inventario[itemName] === true);
+            
+            // Feedback Visual Inmediato
+            const card = document.getElementById(`card-item-${itemName}`);
+            const text = document.getElementById(`text-item-${itemName}`);
+            const btn = document.getElementById(`btn-item-${itemName}`);
+            
+            btn.innerHTML = '<span class="text-xs">...</span>';
+            btn.disabled = true;
+
+            try {
+                // 1. Guardar en FIRESTORE (El perfil web)
+                await db.collection("users").doc(uid).set({
+                    inventario: { [itemName]: nuevoEstado }
+                }, { merge: true });
+
+                // 2. Guardar en REALTIME DATABASE (Para el servidor de Roblox)
+                try {
+                    await rtdb.ref(`jugadores/User_${rblxId}/DatosGlobales/Compras`).update({
+                        [itemName]: nuevoEstado ? true : null // En Lua, si le das null se elimina de la tabla
+                    });
+                } catch(errRTDB) {
+                    console.error("Aviso: No se pudo sync con Realtime Database", errRTDB);
+                }
+
+                // 3. Actualizar Caché y Visuales Locales
+                inventario[itemName] = nuevoEstado;
+                
+                if(nuevoEstado) {
+                    card.className = "flex items-center justify-between p-3 rounded-lg border transition-colors bg-green-900/30 border-green-500";
+                    text.className = "font-bold text-sm text-green-400";
+                    btn.className = "sound-btn w-8 h-8 rounded font-black text-white bg-green-600 hover:bg-red-600 transition-colors flex items-center justify-center";
+                    btn.innerHTML = '✓';
+                } else {
+                    card.className = "flex items-center justify-between p-3 rounded-lg border transition-colors bg-sawerDark border-gray-700";
+                    text.className = "font-bold text-sm text-gray-400";
+                    btn.className = "sound-btn w-8 h-8 rounded font-black text-white bg-sawerRed hover:bg-green-600 transition-colors flex items-center justify-center";
+                    btn.innerHTML = '✗';
+                }
+                btn.disabled = false;
+
+                // Actualizar el contador en la tarjeta que quedó de fondo
+                const cant = Object.values(inventario).filter(v => v === true).length;
+                document.getElementById('contador-items-tarjeta').innerText = `${cant}/${TODOS_LOS_ITEMS.length}`;
+
+            } catch (error) {
+                console.error("Error cambiando el item:", error);
+                btn.innerHTML = '⚠️';
+                setTimeout(() => { btn.innerHTML = nuevoEstado ? '✗' : '✓'; btn.disabled = false; }, 2000);
+            }
+        }
+
+        // ==========================================
+        // GUARDADO DE ESTADÍSTICAS NUMÉRICAS
+        // ==========================================
         function cambiarInput(idInput, delta) {
             const input = document.getElementById(idInput);
             let val = parseInt(input.value) || 0;
@@ -376,7 +540,6 @@
             
             btn.innerText = "..."; btn.disabled = true;
 
-            // Traductor EXACTO a los nombres de variables que usas en Roblox
             const rtdbMap = {
                 'wins': 'Wins',
                 'recordPuntos': 'MaxPuntos',
@@ -385,14 +548,11 @@
             };
             
             try {
-                // 1. Guardar en FIRESTORE (Para la web. Aquí sí agregamos el /7 visual si son diamantes)
                 let valorParaFirestore = statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor;
                 await db.collection("users").doc(uid).set({
                     stats: { [statNameFB]: valorParaFirestore }
                 }, { merge: true });
 
-                // 2. Guardar en REALTIME DATABASE (Para Roblox. Ruta exacta: DatosGlobales)
-                // OMITIMOS Tokens e Items, y nos aseguramos de enviar solo un Número Entero (nuevoValor)
                 if(robloxId && rtdbMap[statNameFB]) {
                     try {
                         const rtdbKey = rtdbMap[statNameFB];
@@ -404,7 +564,6 @@
                     }
                 }
 
-                // 3. Sistema de Notificación DM Discord
                 if (nombreDiscord && nombreDiscord.trim() !== "") {
                     await db.collection("system_dms").add({
                         discordUsername: nombreDiscord,
