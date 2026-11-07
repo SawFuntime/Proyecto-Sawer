@@ -44,7 +44,7 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Animación para el Leaderboard en vivo */
+        /* Estilos Leaderboard */
         .leaderboard-item { transition: transform 0.3s ease, background-color 0.2s ease; }
         .rank-1 { border-color: #fbbf24; box-shadow: inset 0 0 15px rgba(251, 191, 36, 0.2); }
         .rank-2 { border-color: #94a3b8; }
@@ -108,11 +108,11 @@
             </div>
         </aside>
 
-        <!-- MAIN CONTENT AREA -->
+        <!-- MAIN CONTENT -->
         <main class="flex-1 p-10 overflow-hidden relative z-10 flex flex-col">
             <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-            <!-- VISTA 1: MENÚ PRINCIPAL -->
+            <!-- VISTA 1: MENÚ -->
             <div id="vista-principal" class="pantalla-activa flex-col w-full h-full max-w-4xl mx-auto overflow-y-auto custom-scroll">
                 <header class="mb-10">
                     <h1 class="text-4xl font-black tracking-wide">VISIÓN GENERAL</h1>
@@ -125,55 +125,65 @@
                         <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Jugadores</h3>
                         <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">CLICK PARA ABRIR TERMINAL</p>
                     </div>
-                    
                     <div onclick="abrirDatos()" class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4"></path></svg></div>
                         <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Datos</h3>
                         <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">EDITAR ESTADÍSTICAS E INVENTARIO</p>
                     </div>
-                    
                     <div onclick="abrirRondas()" class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed transition-all cursor-pointer flex flex-col justify-end overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-sawerRed to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="absolute top-6 right-6 text-gray-500 group-hover:text-sawerRed"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
                         <h3 class="text-3xl font-bold text-gray-300 group-hover:text-white">Rondas</h3>
                         <p class="text-sawerRed mt-1 opacity-0 group-hover:opacity-100 transition-opacity font-bold">MONITOREO EN TIEMPO REAL</p>
                     </div>
-                    
                     <div class="sound-card group bg-sawerGrey aspect-video rounded-3xl p-6 relative border border-sawerRed/20 hover:border-sawerRed cursor-pointer flex flex-col justify-end overflow-hidden">
                         <h3 class="text-3xl font-bold text-gray-300">Controles</h3>
                     </div>
                 </div>
             </div>
 
-            <!-- VISTA 2: JUGADORES VERIFICADOS -->
+            <!-- VISTA 2: JUGADORES -->
             <div id="vista-jugadores" class="pantalla-oculta flex-col w-full h-full overflow-y-auto custom-scroll pr-4">
-                <!-- Se mantiene igual, omitido por brevedad visual. Reutilizaremos tus funciones JS abajo -->
                 <header class="mb-10 flex items-center gap-6 border-b border-sawerRed/20 pb-6">
-                    <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg shadow-lg group"><svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button>
-                    <div><h1 class="text-4xl font-black tracking-wide">JUGADORES VERIFICADOS</h1><p class="text-gray-400 mt-2">Terminal de datos sincronizada. Solo lectura.</p></div>
+                    <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg shadow-lg group">
+                        <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </button>
+                    <div>
+                        <h1 class="text-4xl font-black tracking-wide">JUGADORES VERIFICADOS</h1>
+                        <p class="text-gray-400 mt-2">Terminal de datos sincronizada. Solo lectura.</p>
+                    </div>
                 </header>
                 <div id="contenedor-tarjetas-jugadores" class="grid grid-cols-1 xl:grid-cols-2 gap-8 content-start w-full max-w-6xl mx-auto pb-10"></div>
             </div>
 
             <!-- VISTA 3: DATOS Y EDICIÓN -->
             <div id="vista-datos" class="pantalla-oculta flex-col w-full h-full">
-                <!-- Se mantiene igual -->
                 <header class="mb-6 flex items-center gap-6 border-b border-sawerRed/20 pb-6 flex-shrink-0">
-                    <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg shadow-lg group"><svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg></button>
-                    <div><h1 class="text-4xl font-black tracking-wide text-sawerRed">PANEL DE DATOS</h1><p class="text-gray-400 mt-2">Modifica las estadísticas e inventario. Sincronización en vivo.</p></div>
+                    <button onclick="volverInicio()" class="sound-btn bg-sawerGrey border border-sawerRed hover:bg-sawerRed text-white p-3 rounded-lg shadow-lg group">
+                        <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </button>
+                    <div>
+                        <h1 class="text-4xl font-black tracking-wide text-sawerRed">PANEL DE DATOS</h1>
+                        <p class="text-gray-400 mt-2">Modifica las estadísticas e inventario. Sincronización en vivo.</p>
+                    </div>
                 </header>
+
                 <div class="flex flex-row gap-6 flex-1 min-h-0">
                     <div class="w-1/3 bg-sawerGrey border border-sawerRed/30 rounded-2xl flex flex-col overflow-hidden shadow-lg">
                         <div class="bg-sawerDark p-4 border-b border-sawerRed/20 font-bold uppercase tracking-widest text-sm text-center">Selecciona un Jugador</div>
                         <div id="lista-edicion" class="flex-1 overflow-y-auto custom-scroll p-3 space-y-2"></div>
                     </div>
-                    <div id="editor-tarjeta" class="w-2/3 bg-sawerGrey border border-sawerRed/50 rounded-2xl p-8 flex flex-col shadow-[0_0_20px_rgba(194,0,0,0.15)] relative hidden overflow-y-auto custom-scroll"></div>
-                    <div id="editor-placeholder" class="w-2/3 border-2 border-dashed border-gray-700 rounded-2xl flex items-center justify-center text-gray-500 uppercase tracking-widest font-bold">Selecciona un usuario de la lista</div>
+                    <div id="editor-tarjeta" class="w-2/3 bg-sawerGrey border border-sawerRed/50 rounded-2xl p-8 flex flex-col shadow-[0_0_20px_rgba(194,0,0,0.15)] relative hidden overflow-y-auto custom-scroll">
+                        <!-- Generado por JS -->
+                    </div>
+                    <div id="editor-placeholder" class="w-2/3 border-2 border-dashed border-gray-700 rounded-2xl flex items-center justify-center text-gray-500 uppercase tracking-widest font-bold">
+                        Selecciona un usuario de la lista
+                    </div>
                 </div>
             </div>
 
-            <!-- 🟩 NUEVA VISTA 4: RONDAS (MONITOREO EN VIVO) 🟩 -->
+            <!-- VISTA 4: RONDAS (MONITOREO EN VIVO) -->
             <div id="vista-rondas" class="pantalla-oculta flex-col w-full h-full">
                 <header class="mb-6 flex items-center justify-between border-b border-sawerRed/20 pb-6 flex-shrink-0">
                     <div class="flex items-center gap-6">
@@ -184,19 +194,16 @@
                             <h1 class="text-4xl font-black tracking-wide text-sawerRed uppercase">Desempeño de Ronda</h1>
                             <p class="text-gray-400 mt-2 flex items-center gap-2">
                                 <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span></span>
-                                Leaderboard conectado a Servidor Activo. Sincronización en tiempo real.
+                                Leaderboard conectado a Servidor Activo.
                             </p>
                         </div>
                     </div>
-                    
                     <div class="flex gap-4">
                         <button class="sound-btn bg-sawerDark border border-sawerRed hover:bg-sawerRed text-white px-6 py-3 rounded-lg font-black tracking-widest uppercase transition-all shadow-lg flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                            Reiniciar Ronda
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Reiniciar Ronda
                         </button>
                         <button class="sound-btn bg-sawerRed hover:bg-red-800 border border-transparent text-white px-6 py-3 rounded-lg font-black tracking-widest uppercase transition-all shadow-lg flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                            Cancelar Ronda
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> Cancelar Ronda
                         </button>
                     </div>
                 </header>
@@ -209,27 +216,29 @@
                     </div>
                     
                     <div id="contenedor-leaderboard" class="flex-1 overflow-y-auto custom-scroll p-4 space-y-3 relative">
-                        <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 opacity-50" id="leaderboard-cargando">
-                            <svg class="animate-spin h-10 w-10 text-sawerRed mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            <p class="font-bold tracking-widest">ESTABLECIENDO CONEXIÓN</p>
-                        </div>
-                        <!-- Items insertados por JS -->
+                        <!-- Generado por JS -->
                     </div>
                 </div>
             </div>
 
             <!-- MODAL GESTOR DE ITEMS -->
             <div id="modal-gestor-items" class="hidden fixed inset-0 z-[100] bg-black/80 flex items-center justify-center backdrop-blur-sm">
-                <!-- Se mantiene igual -->
                 <div class="modal-enter bg-sawerGrey border border-sawerRed w-full max-w-2xl h-[80vh] rounded-2xl flex flex-col shadow-[0_0_40px_rgba(194,0,0,0.3)]">
                     <div class="p-6 border-b border-sawerRed/30 flex items-center justify-between bg-sawerDark rounded-t-2xl">
-                        <div><h2 class="text-2xl font-black text-sawerRed uppercase tracking-wide">Gestor de Inventario</h2><p class="text-gray-400 text-sm mt-1" id="modal-items-subtitle">Modificando a: Usuario</p></div>
-                        <button onclick="cerrarModalItems()" class="sound-btn text-gray-500 hover:text-white bg-gray-800 hover:bg-red-600 p-2 rounded-lg transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <div>
+                            <h2 class="text-2xl font-black text-sawerRed uppercase tracking-wide">Gestor de Inventario</h2>
+                            <p class="text-gray-400 text-sm mt-1" id="modal-items-subtitle">Modificando a: Usuario</p>
+                        </div>
+                        <button onclick="cerrarModalItems()" class="sound-btn text-gray-500 hover:text-white bg-gray-800 hover:bg-red-600 p-2 rounded-lg transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
                     </div>
                     <div class="flex-1 overflow-y-auto custom-scroll p-6 bg-sawerGrey">
                         <div class="grid grid-cols-2 gap-4" id="contenedor-lista-items"></div>
                     </div>
-                    <div class="p-4 border-t border-sawerRed/30 bg-sawerDark rounded-b-2xl text-center"><p class="text-xs text-gray-500 font-bold uppercase">Los cambios se guardan y sincronizan automáticamente con Roblox al hacer click.</p></div>
+                    <div class="p-4 border-t border-sawerRed/30 bg-sawerDark rounded-b-2xl text-center">
+                        <p class="text-xs text-gray-500 font-bold uppercase">Los cambios se guardan y sincronizan automáticamente con Roblox al hacer click.</p>
+                    </div>
                 </div>
             </div>
 
@@ -255,7 +264,7 @@
 
         let usuariosCache = {}; 
         let usuarioEditando = null;
-        let unsubscribeLeaderboard = null; // Para detener la escucha si cambias de pestaña
+        let unsubscribeLeaderboard = null; 
 
         const TODOS_LOS_ITEMS = [
             "Afro", "Amongus", "ArmaLove", "Astral", "AudifonosSawer", "Avion", "Basket", "Bendy", 
@@ -273,7 +282,7 @@
         ];
 
         /* ========================================================
-           SISTEMA DE AUTENTICACIÓN Y NAVEGACIÓN
+           SISTEMA DE AUTENTICACIÓN
            ======================================================== */
         const loginScreen = document.getElementById('login-screen');
         const appContainer = document.getElementById('app-container');
@@ -295,7 +304,7 @@
         });
 
         /* ========================================================
-           SISTEMA DE SONIDO (Botones)
+           SISTEMA DE SONIDO
            ======================================================== */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playHoverSound() {
@@ -322,7 +331,7 @@
         reasignarSonidos();
 
         /* ========================================================
-           SISTEMA DE VISTAS (Pestañas)
+           SISTEMA DE VISTAS (Navegación)
            ======================================================== */
         const vPrincipal = document.getElementById('vista-principal');
         const vJugadores = document.getElementById('vista-jugadores');
@@ -335,7 +344,7 @@
             vDatos.classList.replace('pantalla-activa', 'pantalla-oculta');
             vRondas.classList.replace('pantalla-activa', 'pantalla-oculta');
             
-            // Apagamos la escucha del Leaderboard en vivo si cambiamos de pestaña para ahorrar recursos
+            // Apagamos la escucha si salimos de la pestaña Rondas
             if(unsubscribeLeaderboard) {
                 rtdb.ref('jugadores').off('value', unsubscribeLeaderboard);
                 unsubscribeLeaderboard = null;
@@ -345,7 +354,7 @@
         function volverInicio() { cerrarVistas(); vPrincipal.classList.replace('pantalla-oculta', 'pantalla-activa'); }
 
         /* ========================================================
-           PESTAÑA 1: JUGADORES VERIFICADOS (Lectura)
+           VISTA 1: JUGADORES VERIFICADOS
            ======================================================== */
         async function abrirJugadores() {
             cerrarVistas(); vJugadores.classList.replace('pantalla-oculta', 'pantalla-activa');
@@ -379,10 +388,12 @@
                     html += `
                         <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-6 shadow-lg relative flex flex-col">
                             <div class="absolute top-6 right-6 bg-green-900/40 border border-green-500 text-green-400 text-xs px-3 py-1 rounded font-bold shadow-[0_0_10px_rgba(0,255,0,0.2)]">VERIFICADO</div>
+                            
                             <div class="flex items-center gap-5 mb-5 border-b border-gray-700 pb-5">
                                 <img id="av-read-${u.robloxUserId}" src="./Inquisitor.png" class="w-20 h-20 rounded-xl border-2 border-sawerRed object-cover bg-sawerDark shadow-lg">
                                 <div><p class="text-sm text-sawerRed uppercase tracking-widest font-bold">ID: ${u.robloxUserId}</p><h3 class="text-2xl font-bold">${u.robloxUsername}</h3></div>
                             </div>
+                            
                             <div class="grid grid-cols-3 gap-3 text-sm mb-5">
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Wins</span><span class="font-bold text-lg">${wins}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Récord Pts</span><span class="font-bold text-lg">${recordPuntos}</span></div>
@@ -391,10 +402,12 @@
                                 <div class="bg-sawerDark p-3 rounded-lg border border-green-900/50 text-center"><span class="text-gray-400 text-[10px] block uppercase">Items</span><span class="font-bold text-lg text-green-400">${cantItems}/${TODOS_LOS_ITEMS.length}</span></div>
                                 <div class="bg-sawerDark p-3 rounded-lg border border-gray-800 text-center"><span class="text-gray-400 text-[10px] block uppercase">Tokens</span><span class="font-bold text-purple-400 text-lg">${tokens}</span></div>
                             </div>
+                            
                             <div class="bg-sawerDark p-3 rounded-lg border border-green-500/30 text-center mb-5">
                                 <span class="text-gray-400 text-xs uppercase">Robuxs</span>
                                 <div class="font-black text-green-500 text-xl mt-1">${u.stats?.robux||0} R$</div>
                             </div>
+
                             <div class="mt-auto space-y-3 bg-sawerDark p-4 rounded-xl border border-gray-700">
                                 <div class="flex items-center gap-3">
                                     <svg class="w-5 h-5 flex-shrink-0 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
@@ -415,7 +428,7 @@
         }
 
         /* ========================================================
-           PESTAÑA 2: PANEL DE DATOS Y EDICIÓN 
+           VISTA 2: PANEL DE DATOS Y EDICIÓN
            ======================================================== */
         async function abrirDatos() {
             cerrarVistas(); vDatos.classList.replace('pantalla-oculta', 'pantalla-activa');
@@ -440,7 +453,7 @@
                     usuariosCache[doc.id] = {
                         ...u,
                         rtdbWins: globalData.Wins || 0,
-                        rtdbPuntos: globalData.MaxPuntos || 0, // En firebase está el Récord, no el puntaje en vivo
+                        rtdbPuntos: globalData.MaxPuntos || 0,
                         rtdbCoins: globalData.Coins || 0,
                         rtdbDiamantes: globalData.Diamantes ? String(globalData.Diamantes).split('/')[0] : 0,
                         rtdbCompras: globalData.Compras || {}
@@ -449,7 +462,10 @@
                     html += `
                         <div onclick="seleccionarJugadorDatos('${doc.id}')" class="sound-btn flex items-center gap-3 p-3 rounded-xl bg-sawerDark border border-gray-800 hover:border-sawerRed cursor-pointer transition-colors group">
                             <img id="av-list-${u.robloxUserId}" src="./Inquisitor.png" class="w-10 h-10 rounded-full border border-gray-600 group-hover:border-sawerRed object-cover">
-                            <div class="overflow-hidden"><h4 class="text-white font-bold text-sm truncate">${u.robloxUsername}</h4><p class="text-xs text-gray-500 truncate">${u.discordUsername || 'Sin Discord'}</p></div>
+                            <div class="overflow-hidden">
+                                <h4 class="text-white font-bold text-sm truncate">${u.robloxUsername}</h4>
+                                <p class="text-xs text-gray-500 truncate">${u.discordUsername || 'Sin Discord'}</p>
+                            </div>
                         </div>`;
                 });
                 
@@ -462,7 +478,6 @@
         function seleccionarJugadorDatos(uid) {
             usuarioEditando = uid;
             const u = usuariosCache[uid];
-            
             document.getElementById('editor-placeholder').classList.add('hidden');
             const editor = document.getElementById('editor-tarjeta');
             editor.classList.remove('hidden');
@@ -484,7 +499,10 @@
             const filaItems = `
                 <div class="flex items-center justify-between bg-sawerDark p-3 rounded-lg border border-green-900/50">
                     <span class="text-green-400 uppercase font-bold text-xs w-24">Items</span>
-                    <div class="flex items-center gap-4"><span class="text-white font-bold text-lg" id="contador-items-tarjeta">${cantidadItems}/${TODOS_LOS_ITEMS.length}</span><button onclick="abrirModalItems('${uid}', '${u.robloxUserId}', '${u.robloxUsername}')" class="sound-btn bg-green-600 hover:bg-green-500 text-white w-8 h-8 rounded font-black text-lg transition-colors shadow-[0_0_10px_rgba(0,255,0,0.3)]" title="Gestionar Inventario">+</button></div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-white font-bold text-lg" id="contador-items-tarjeta">${cantidadItems}/${TODOS_LOS_ITEMS.length}</span>
+                        <button onclick="abrirModalItems('${uid}', '${u.robloxUserId}', '${u.robloxUsername}')" class="sound-btn bg-green-600 hover:bg-green-500 text-white w-8 h-8 rounded font-black text-lg transition-colors shadow-[0_0_10px_rgba(0,255,0,0.3)]" title="Gestionar Inventario">+</button>
+                    </div>
                     <div class="min-w-[80px]"></div>
                 </div>
             `;
@@ -493,12 +511,22 @@
             editor.innerHTML = `
                 <div class="flex items-center gap-5 mb-6 border-b border-gray-700 pb-6">
                     <img id="av-edit-${u.robloxUserId}" src="./Inquisitor.png" class="w-16 h-16 rounded-xl border-2 border-sawerRed object-cover bg-sawerDark shadow-lg">
-                    <div class="flex-1"><p class="text-xs text-sawerRed uppercase font-bold">MODIFICANDO A:</p><h3 class="text-2xl font-bold">${u.robloxUsername}</h3></div>
+                    <div class="flex-1">
+                        <p class="text-xs text-sawerRed uppercase font-bold">MODIFICANDO A:</p>
+                        <h3 class="text-2xl font-bold">${u.robloxUsername}</h3>
+                    </div>
                     <button id="btn-refresh-stats" onclick="pedirDatosEnVivo('${u.robloxUserId}')" class="sound-btn bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-xs uppercase transition-colors shadow-lg">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Refrescar Stats
                     </button>
                 </div>
-                <div class="flex flex-col gap-3">${crearFilaStat('Wins', 'wins', u.rtdbWins)}${crearFilaStat('Puntos', 'recordPuntos', u.rtdbPuntos)}${crearFilaStat('SawCoins', 'sawCoins', u.rtdbCoins)}${crearFilaStat('Diamantes', 'diamantes', u.rtdbDiamantes)}${crearFilaStat('Tokens', 'tokens', tokensVal)}${filaItems}</div>
+                <div class="flex flex-col gap-3">
+                    ${crearFilaStat('Wins', 'wins', u.rtdbWins)}
+                    ${crearFilaStat('Puntos', 'recordPuntos', u.rtdbPuntos)}
+                    ${crearFilaStat('SawCoins', 'sawCoins', u.rtdbCoins)}
+                    ${crearFilaStat('Diamantes', 'diamantes', u.rtdbDiamantes)}
+                    ${crearFilaStat('Tokens', 'tokens', tokensVal)}
+                    ${filaItems}
+                </div>
             `;
             reasignarSonidos(); fetchAvatar(u.robloxUserId, `av-edit-${u.robloxUserId}`);
         }
@@ -512,7 +540,7 @@
             } catch(e) { console.error(e); btn.innerHTML = 'Error'; setTimeout(() => { seleccionarJugadorDatos(usuarioEditando); }, 1500); }
         }
 
-        /* Gestor de Items y Guardado */
+        // GESTOR DE ITEMS Y GUARDADO
         const modalItems = document.getElementById('modal-gestor-items');
         const listaItemsDOM = document.getElementById('contenedor-lista-items');
         const subtitleModal = document.getElementById('modal-items-subtitle');
@@ -571,21 +599,41 @@
 
 
         /* ========================================================
-           🟩 PESTAÑA 3: RONDAS (LEADERBOARD EN VIVO) 🟩
+           🟩 VISTA 3: RONDAS (LEADERBOARD EN VIVO Y API ROPROXY) 🟩
            ======================================================== */
-        
-        // Mapeo temporal para obtener Nombres de Roblox a partir del ID de Firebase
         let userNamesMap = {};
+        let pendingNameRequests = new Set(); 
 
         async function preCargarNombres() {
             if (Object.keys(userNamesMap).length > 0) return;
-            const snap = await db.collection("users").get();
-            snap.forEach(doc => {
-                const u = doc.data();
-                if(u.robloxUserId) {
-                    userNamesMap[u.robloxUserId] = u.robloxUsername;
+            try {
+                const snap = await db.collection("users").get();
+                snap.forEach(doc => {
+                    const u = doc.data();
+                    if(u.robloxUserId) {
+                        userNamesMap[u.robloxUserId] = u.robloxUsername;
+                    }
+                });
+            } catch(e) { console.error("Error precargando nombres:", e); }
+        }
+
+        async function obtenerNombreRobloxInesperado(rblxId) {
+            if (userNamesMap[rblxId] || pendingNameRequests.has(rblxId)) return;
+            pendingNameRequests.add(rblxId);
+            
+            try {
+                const response = await fetch(`https://users.roproxy.com/v1/users/${rblxId}`);
+                const data = await response.json();
+                if (data && data.name) {
+                    userNamesMap[rblxId] = data.name;
+                    const spanElement = document.getElementById(`name-round-${rblxId}`);
+                    if (spanElement) {
+                        spanElement.innerText = data.name;
+                    }
                 }
-            });
+            } catch (error) {
+                console.error(`No se pudo obtener el nombre para ${rblxId}:`, error);
+            }
         }
 
         async function abrirRondas() {
@@ -593,7 +641,6 @@
             vRondas.classList.replace('pantalla-oculta', 'pantalla-activa');
             const cont = document.getElementById('contenedor-leaderboard');
             
-            // Mostrar pantalla de carga
             cont.innerHTML = `
                 <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 opacity-50" id="leaderboard-cargando">
                     <svg class="animate-spin h-10 w-10 text-sawerRed mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -601,62 +648,52 @@
                 </div>
             `;
 
-            // Precargamos los nombres desde Firestore para no depender solo de IDs
             await preCargarNombres();
 
-            // 📡 CONEXIÓN EN TIEMPO REAL: Escuchamos el nodo completo de jugadores
             unsubscribeLeaderboard = rtdb.ref('jugadores').on('value', (snapshot) => {
                 const data = snapshot.val();
                 
-                // Si borramos el cartel de carga
                 const cargaMsg = document.getElementById('leaderboard-cargando');
                 if (cargaMsg) cargaMsg.remove();
 
                 if (!data) {
-                    cont.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-gray-500 font-bold tracking-widest">NO HAY JUGADORES REGISTRADOS EN EL SERVIDOR</div>';
+                    cont.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-gray-500 font-bold tracking-widest">NO HAY JUGADORES REGISTRADOS</div>';
                     return;
                 }
 
-                // Extraemos los jugadores y sus puntos ACTUALES DE LA RONDA
-                // Nota para ti: En tu script, ¿los puntos de la ronda actual se guardan en "DatosGlobales.Puntos" o en otra variable temporal?
-                // Asumiré que el script de Base Suprema lo guarda bajo "DatosGlobales.PuntosTemporales" o que lo extraemos del MaxPuntos para este prototipo. 
-                // Debes ajustar "puntosRonda" a la variable exacta de Firebase que usa tu script al jugar.
                 let leaderboardArr = [];
 
                 for (const key in data) {
-                    const rblxId = key.split('_')[1]; // Saca "123456" de "User_123456"
+                    const rblxId = key.split('_')[1];
                     const globalData = data[key].DatosGlobales || {};
                     
-                    // Aquí define de dónde lee los puntos de la partida actual. 
-                    // Por ahora usaré MaxPuntos como referencia si no tienes una variable "PuntosActuales"
-                    const puntosRonda = globalData.PuntosPartida || globalData.MaxPuntos || 0; 
+                    const puntosRonda = globalData.PuntosPartida || 0; 
+                    const estaOnline = globalData.IsOnline === true; 
 
-                    // Solo añadimos a los que tengan más de 0 puntos para no mostrar a gente desconectada o inactiva
-                    // (O quita este if si quieres mostrar a todos)
-                    if (puntosRonda > -1) {
+                    if (estaOnline) {
+                        if (!userNamesMap[rblxId]) {
+                            obtenerNombreRobloxInesperado(rblxId);
+                        }
+
                         leaderboardArr.push({
                             id: rblxId,
-                            nombre: userNamesMap[rblxId] || `Jugador_${rblxId}`,
+                            nombre: userNamesMap[rblxId] || `Cargando...`, 
                             puntos: puntosRonda
                         });
                     }
                 }
 
-                // ORDENAMIENTO (De mayor a menor)
                 leaderboardArr.sort((a, b) => b.puntos - a.puntos);
 
-                // DIBUJADO EN PANTALLA
                 let htmlList = '';
                 
                 if (leaderboardArr.length === 0) {
-                    cont.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-gray-500 font-bold tracking-widest">NINGÚN JUGADOR HA PUNTUADO AÚN</div>';
+                    cont.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-gray-500 font-bold tracking-widest uppercase">No hay jugadores en la ronda actual</div>';
                     return;
                 }
 
                 leaderboardArr.forEach((jugador, index) => {
                     const rank = index + 1;
-                    
-                    // Estilos para el Top 3
                     let rankStyle = "bg-sawerDark border-gray-700 text-gray-400";
                     let rankText = `#${rank}`;
                     
@@ -666,33 +703,24 @@
 
                     htmlList += `
                         <div class="leaderboard-item grid grid-cols-12 gap-4 items-center p-3 rounded-xl border border-gray-700 bg-sawerDark hover:border-sawerRed transition-colors">
-                            
-                            <!-- Rango -->
                             <div class="col-span-1 flex justify-center">
                                 <div class="w-10 h-10 rounded-lg border flex items-center justify-center text-sm ${rankStyle}">
                                     ${rankText}
                                 </div>
                             </div>
-                            
-                            <!-- Foto y Nombre -->
                             <div class="col-span-8 flex items-center gap-4 pl-4 border-l border-gray-800">
                                 <img id="av-round-${jugador.id}" src="./Inquisitor.png" class="w-12 h-12 rounded-lg border border-gray-600 object-cover bg-sawerGrey">
-                                <span class="font-bold text-lg text-gray-200 tracking-wide">${jugador.nombre}</span>
+                                <span id="name-round-${jugador.id}" class="font-bold text-lg text-gray-200 tracking-wide">${jugador.nombre}</span>
                             </div>
-                            
-                            <!-- Puntos -->
                             <div class="col-span-3 text-right pr-4">
                                 <span class="text-3xl font-black text-sawerRed font-mono tracking-tighter shadow-sm">${jugador.puntos}</span>
                                 <span class="text-[10px] text-gray-500 uppercase font-bold block -mt-1">Pts</span>
                             </div>
-
                         </div>
                     `;
                 });
 
                 cont.innerHTML = htmlList;
-                
-                // Cargar las fotos (Firebase ya nos da el ID directo)
                 leaderboardArr.forEach(j => fetchAvatar(j.id, `av-round-${j.id}`));
             });
         }
