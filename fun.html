@@ -337,7 +337,7 @@
             cont.innerHTML = '<p class="text-gray-400 text-center col-span-2">Sincronizando con los servidores de Roblox...</p>';
             
             try {
-                const snap = await db.collection("users").where("isLinked", "==", true).get();
+                const snap = await db.collection("users").get();
                 const rtdbSnap = await rtdb.ref('jugadores').once('value');
                 const rtdbData = rtdbSnap.val() || {};
                 
@@ -345,6 +345,8 @@
                 
                 snap.forEach(doc => {
                     const u = doc.data(); 
+                    if (!u.robloxUserId) return; // Filtro de seguridad
+                    
                     const rblxData = rtdbData[`User_${u.robloxUserId}`] || {};
                     const globalData = rblxData.DatosGlobales || {};
                     const compras = globalData.Compras || {};
@@ -415,7 +417,7 @@
             lista.innerHTML = '<p class="text-center text-gray-500 mt-10">Sincronizando con Roblox...</p>';
             
             try {
-                const snap = await db.collection("users").where("isLinked", "==", true).get();
+                const snap = await db.collection("users").get();
                 const rtdbSnap = await rtdb.ref('jugadores').once('value');
                 const rtdbData = rtdbSnap.val() || {};
                 
@@ -424,6 +426,8 @@
                 
                 snap.forEach(doc => {
                     const u = doc.data(); 
+                    if (!u.robloxUserId) return; // Filtro de seguridad
+                    
                     const rblxData = rtdbData[`User_${u.robloxUserId}`] || {};
                     const globalData = rblxData.DatosGlobales || {};
                     
@@ -493,13 +497,18 @@
             
             const tokensVal = (u.stats && u.stats.tokens) ? u.stats.tokens : 0;
             
+            // Botón de Refrescar agregado al lado del Nombre
             editor.innerHTML = `
                 <div class="flex items-center gap-5 mb-6 border-b border-gray-700 pb-6">
                     <img id="av-edit-${u.robloxUserId}" src="./Inquisitor.png" class="w-16 h-16 rounded-xl border-2 border-sawerRed object-cover bg-sawerDark shadow-lg">
-                    <div>
+                    <div class="flex-1">
                         <p class="text-xs text-sawerRed uppercase font-bold">MODIFICANDO A:</p>
                         <h3 class="text-2xl font-bold">${u.robloxUsername}</h3>
                     </div>
+                    <button id="btn-refresh-stats" onclick="pedirDatosEnVivo('${u.robloxUserId}')" class="sound-btn bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-xs uppercase transition-colors shadow-lg">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Refrescar Stats
+                    </button>
                 </div>
                 <div class="flex flex-col gap-3">
                     ${crearFilaStat('Wins', 'wins', u.rtdbWins)}
@@ -513,6 +522,39 @@
             
             reasignarSonidos();
             fetchAvatar(u.robloxUserId, `av-edit-${u.robloxUserId}`);
+        }
+
+        // NUEVA FUNCIÓN: Envía el comando de refrescar al bot
+        async function pedirDatosEnVivo(robloxId) {
+            const btn = document.getElementById('btn-refresh-stats');
+            btn.innerHTML = '<span class="animate-spin text-lg block leading-none">↻</span>';
+            btn.disabled = true;
+            
+            try {
+                // Disparamos la señal "refresh" a través de System DMs
+                await db.collection("system_dms").add({
+                    discordUsername: "RefreshRequest", // Nombre falso para que no envíe DM
+                    robloxId: robloxId,
+                    statLabel: "Refresh",
+                    statKey: "none",
+                    oldValue: 0,
+                    newValue: "0",
+                    isItem: false,
+                    isRefresh: true,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Esperamos 2 segundos a que el bot dispare el rayo y Roblox responda
+                setTimeout(async () => {
+                    await abrirDatos(); 
+                    seleccionarJugadorDatos(usuarioEditando); 
+                }, 2000);
+
+            } catch(e) {
+                console.error("Error pidiendo refresco:", e);
+                btn.innerHTML = 'Error';
+                setTimeout(() => { seleccionarJugadorDatos(usuarioEditando); }, 1500);
+            }
         }
 
         const modalItems = document.getElementById('modal-gestor-items');
@@ -569,12 +611,10 @@
             btn.disabled = true;
 
             try {
-                // Actualizamos Realtime Database
                 await rtdb.ref(`jugadores/User_${rblxId}/DatosGlobales/Compras`).update({ 
                     [itemName]: nuevoEstado ? true : null 
                 });
                 
-                // Disparo de Señal al Bot (Open Cloud + DM)
                 await db.collection("system_dms").add({
                     discordUsername: usuariosCache[uid].discordUsername || "",
                     robloxId: rblxId,
@@ -643,19 +683,16 @@
                     await db.collection("users").doc(uid).set({ stats: { [statNameFB]: statNameFB === 'diamantes' ? `${nuevoValor}/7` : nuevoValor } }, { merge: true });
                 }
 
-                // Disparo de Señal al Bot (Open Cloud + DM)
-                if (nombreDiscord && nombreDiscord.trim() !== "") {
-                    await db.collection("system_dms").add({
-                        discordUsername: nombreDiscord,
-                        robloxId: robloxId,
-                        statLabel: statLabel,
-                        statKey: rtdbMap[statNameFB] || statNameFB,
-                        oldValue: oldValue,
-                        newValue: nuevoValor,
-                        isItem: false,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
+                await db.collection("system_dms").add({
+                    discordUsername: nombreDiscord || "",
+                    robloxId: robloxId,
+                    statLabel: statLabel,
+                    statKey: rtdbMap[statNameFB] || statNameFB,
+                    oldValue: oldValue,
+                    newValue: nuevoValor,
+                    isItem: false,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
 
                 btn.classList.replace('bg-sawerRed', 'bg-green-600');
                 btn.innerText = "¡Listo!";
