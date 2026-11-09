@@ -48,21 +48,19 @@
                 <img src="../Inquisitor.png" class="w-10 h-10 rounded-full border border-sawerRed object-cover" onerror="this.src='https://via.placeholder.com/50/c20000/ffffff?text=S'">
                 <h2 class="text-lg font-black tracking-widest uppercase">Controles <span class="text-sawerRed">Globales</span></h2>
             </div>
-            <!-- Volver a fun.html con ../ -->
             <button onclick="window.location.href='../fun.html'" class="sound-btn text-sawerRed hover:text-white transition-colors p-2 bg-sawerDark rounded border border-sawerRed/30">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             </button>
         </div>
 
         <!-- SIDEBAR -->
-        <aside id="sidebar" class="hidden md:flex flex-col w-72 bg-sawerGrey border-r border-sawerRed/40 justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-50">
+        <aside id="sidebar" class="hidden md:flex flex-col w-72 bg-sawerGrey border-r border-sawerRed/40 justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-50 flex-shrink-0">
             <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
                 <img src="../Inquisitor.png" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/c20000/ffffff?text=Sawer'">
                 <h2 class="text-xl font-bold tracking-widest text-center uppercase leading-tight">Controles<br><span class="text-sawerRed">Globales</span></h2>
             </div>
             
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-2 custom-scroll">
-                <!-- Volver a fun.html con ../ -->
                 <button onclick="window.location.href='../fun.html'" class="sound-btn w-full flex items-center gap-4 bg-sawerDark border border-gray-700 hover:border-sawerRed hover:bg-sawerRed/20 text-white px-5 py-4 rounded-xl font-bold transition-all shadow-lg">
                     <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Volver al Comando Central
@@ -77,34 +75,132 @@
             </div>
         </aside>
 
-        <!-- ZONA DE CONTROLES -->
-        <main class="flex-1 p-4 md:p-10 overflow-hidden relative z-10 flex flex-col min-h-0 w-full">
+        <!-- ZONA DE CONTROLES (LAYOUT DIVIDIDO) -->
+        <main class="flex-1 p-4 md:p-8 overflow-hidden relative z-10 flex flex-col min-h-0 w-full bg-sawerDark">
             <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none hidden md:block"></div>
 
-            <div class="flex-col w-full h-full max-w-5xl mx-auto overflow-y-auto custom-scroll pb-10 md:pb-0">
-                <header class="mb-6 md:mb-10">
-                    <h1 class="text-2xl md:text-4xl font-black tracking-wide">PANEL DE CONTROLES</h1>
-                    <p class="text-gray-400 mt-1 md:mt-2 text-sm md:text-base">Ejecuta acciones que afectan a todo el servidor de Roblox.</p>
-                </header>
-
-                <!-- AQUÍ IRAREMOS PONIENDO TUS CONTROLES -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full content-start">
-                    
-                    <!-- Tarjeta de Ejemplo -->
-                    <div class="sound-card bg-sawerGrey rounded-2xl md:rounded-3xl p-5 md:p-6 border border-sawerRed/20 flex flex-col justify-between shadow-lg h-48 md:h-56">
+            <div class="flex flex-col lg:flex-row gap-6 w-full h-full max-w-7xl mx-auto overflow-y-auto lg:overflow-hidden custom-scroll pb-10 md:pb-0">
+                
+                <!-- ============================================== -->
+                <!-- FRAME 1: CONTROL DE JUGADORES (Lista en vivo)  -->
+                <!-- ============================================== -->
+                <div class="flex-1 flex flex-col bg-sawerGrey border border-sawerRed/30 rounded-2xl overflow-hidden shadow-lg h-[60vh] lg:h-full min-h-[400px]">
+                    <div class="p-4 border-b border-sawerRed/20 bg-sawerDark flex-shrink-0 flex items-center justify-between">
                         <div>
-                            <div class="flex items-center gap-3 mb-2">
-                                <svg class="w-6 h-6 md:w-8 md:h-8 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
-                                <h3 class="text-xl md:text-2xl font-bold">Anuncio Global</h3>
-                            </div>
-                            <p class="text-gray-400 text-xs md:text-sm">Envía un mensaje en pantalla gigante a todos los jugadores conectados.</p>
+                            <h2 class="text-lg md:text-xl font-black text-sawerRed uppercase tracking-wide">Control de Jugadores</h2>
+                            <p class="text-[10px] md:text-xs text-gray-400 mt-1 flex items-center gap-2">
+                                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
+                                Jugadores activos en el servidor
+                            </p>
                         </div>
-                        <button class="sound-btn bg-sawerRed hover:bg-red-800 text-white font-black tracking-widest uppercase py-3 rounded-lg w-full transition-colors text-xs md:text-sm mt-4">
-                            Ejecutar Comando
-                        </button>
+                    </div>
+
+                    <!-- Contenedor del Leaderboard Mockup -->
+                    <div class="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 custom-scroll" id="contenedor-jugadores-activos">
+                        
+                        <!-- Tarjeta de Jugador Mockup 1 -->
+                        <div class="bg-sawerDark border border-gray-700 hover:border-sawerRed/50 transition-colors rounded-xl p-3 md:p-4 flex flex-col gap-3 shadow-md">
+                            <!-- Info del jugador -->
+                            <div class="flex items-center gap-3 border-b border-gray-800 pb-2">
+                                <img src="../Inquisitor.png" class="w-10 h-10 md:w-12 md:h-12 rounded-lg border border-gray-600 object-cover bg-sawerGrey">
+                                <div>
+                                    <span class="font-bold text-sm md:text-base text-gray-200 block leading-none">SawFuntime</span>
+                                    <span class="text-[9px] md:text-[10px] text-gray-500 font-mono">ID: 123456789</span>
+                                </div>
+                            </div>
+                            <!-- Botones (Se apilan en celular, se expanden en PC) -->
+                            <div class="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-7 gap-2">
+                                <button class="sound-btn bg-red-900/80 hover:bg-red-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kick</button>
+                                <button class="sound-btn bg-orange-900/80 hover:bg-orange-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Restringir</button>
+                                <button class="sound-btn bg-black hover:bg-gray-800 border border-gray-700 hover:border-red-600 text-red-500 hover:text-red-400 text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kill</button>
+                                <button class="sound-btn bg-blue-900/80 hover:bg-blue-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Frz / Unfrz</button>
+                                <button class="sound-btn bg-green-900/80 hover:bg-green-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Nerd</button>
+                                <button class="sound-btn bg-purple-900/80 hover:bg-purple-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Screamer</button>
+                                <button class="sound-btn bg-yellow-900/80 hover:bg-yellow-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm col-span-3 sm:col-span-1 xl:col-span-1">Rgd / Unrgd</button>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta de Jugador Mockup 2 -->
+                        <div class="bg-sawerDark border border-gray-700 hover:border-sawerRed/50 transition-colors rounded-xl p-3 md:p-4 flex flex-col gap-3 shadow-md">
+                            <div class="flex items-center gap-3 border-b border-gray-800 pb-2">
+                                <img src="../Inquisitor.png" class="w-10 h-10 md:w-12 md:h-12 rounded-lg border border-gray-600 object-cover bg-sawerGrey">
+                                <div>
+                                    <span class="font-bold text-sm md:text-base text-gray-200 block leading-none">JugadorInvitado</span>
+                                    <span class="text-[9px] md:text-[10px] text-gray-500 font-mono">ID: 987654321</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-7 gap-2">
+                                <button class="sound-btn bg-red-900/80 hover:bg-red-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kick</button>
+                                <button class="sound-btn bg-orange-900/80 hover:bg-orange-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Restringir</button>
+                                <button class="sound-btn bg-black hover:bg-gray-800 border border-gray-700 hover:border-red-600 text-red-500 hover:text-red-400 text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kill</button>
+                                <button class="sound-btn bg-blue-900/80 hover:bg-blue-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Frz / Unfrz</button>
+                                <button class="sound-btn bg-green-900/80 hover:bg-green-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Nerd</button>
+                                <button class="sound-btn bg-purple-900/80 hover:bg-purple-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Screamer</button>
+                                <button class="sound-btn bg-yellow-900/80 hover:bg-yellow-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm col-span-3 sm:col-span-1 xl:col-span-1">Rgd / Unrgd</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- FRAME 2: CONTROL GLOBAL (Acciones masivas)     -->
+                <!-- ============================================== -->
+                <div class="w-full lg:w-1/3 flex flex-col gap-4 md:gap-6 flex-shrink-0">
+                    
+                    <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl overflow-hidden shadow-lg">
+                        <div class="p-4 border-b border-sawerRed/20 bg-sawerDark">
+                            <h2 class="text-lg md:text-xl font-black text-sawerRed uppercase tracking-wide">Control Global</h2>
+                            <p class="text-[10px] md:text-xs text-gray-400 mt-1">Afecta a todo el servidor</p>
+                        </div>
+                        
+                        <div class="p-4 space-y-5 md:space-y-6">
+                            
+                            <!-- Botones Rápidos Masivos -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <button class="sound-btn bg-red-900 hover:bg-red-600 border border-red-500 text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
+                                    Kick All
+                                </button>
+                                <button class="sound-btn bg-black hover:bg-gray-800 border border-gray-600 hover:border-red-600 text-red-500 hover:text-red-400 font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
+                                    Kill All
+                                </button>
+                                <button class="sound-btn col-span-2 bg-blue-900/50 hover:bg-blue-600 border border-blue-500/50 hover:border-blue-400 text-blue-200 hover:text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
+                                    Freeze All / Unfreeze All
+                                </button>
+                            </div>
+
+                            <hr class="border-gray-700">
+
+                            <!-- Inputs con Acciones -->
+                            <div class="space-y-4">
+                                <!-- Hora del Mapa -->
+                                <div>
+                                    <label class="block text-xs text-gray-400 uppercase font-bold mb-2 tracking-widest">Hora del Mapa</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" placeholder="Ej: 14:00" class="flex-1 bg-sawerDark border border-gray-600 rounded-lg p-2 md:p-3 text-white focus:border-sawerRed focus:outline-none transition-colors text-sm font-mono">
+                                        <button class="sound-btn bg-sawerRed hover:bg-red-700 text-white font-bold uppercase text-xs px-4 md:px-5 rounded-lg transition-colors shadow-md">
+                                            Aplicar
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Mensaje Global -->
+                                <div>
+                                    <label class="block text-xs text-gray-400 uppercase font-bold mb-2 tracking-widest">Mensaje Global</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" placeholder="Escribe tu anuncio aquí..." class="flex-1 bg-sawerDark border border-gray-600 rounded-lg p-2 md:p-3 text-white focus:border-sawerRed focus:outline-none transition-colors text-sm">
+                                        <button class="sound-btn bg-sawerRed hover:bg-red-700 text-white font-bold uppercase text-xs px-4 md:px-5 rounded-lg transition-colors shadow-md">
+                                            Enviar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
+
             </div>
         </main>
     </div>
@@ -129,13 +225,11 @@
         // 🚨 EL GUARDIA DE SEGURIDAD 🚨
         auth.onAuthStateChanged(user => {
             if (user && user.email === CORREO_ADMIN) {
-                // Usuario validado: Ocultamos pantalla de carga y mostramos panel
                 document.getElementById('pantalla-carga').classList.add('hidden');
                 const app = document.getElementById('app-container');
                 app.classList.remove('hidden');
                 app.classList.add('flex');
             } else {
-                // Intruso detectado: Patear a fun.html
                 window.location.href = '../fun.html';
             }
         });
@@ -158,7 +252,9 @@
                 el.addEventListener('mousedown', playClickSound);
             });
         }
-        reasignarSonidos();
+        
+        // Asignar los sonidos a los botones estáticos generados
+        setTimeout(() => { reasignarSonidos(); }, 500);
     </script>
 </body>
 </html>
