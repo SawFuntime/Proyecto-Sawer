@@ -18,9 +18,11 @@
             }
         }
     </script>
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
     <style>
         .custom-scroll::-webkit-scrollbar { width: 4px; }
@@ -31,13 +33,16 @@
 </head>
 <body class="bg-sawerDark text-white font-sans h-screen overflow-hidden flex flex-col md:flex-row select-none items-center justify-center">
 
+    <!-- PANTALLA DE VERIFICACIÓN -->
     <div id="pantalla-carga" class="flex flex-col items-center justify-center w-full h-full absolute z-50 bg-sawerDark">
         <svg class="animate-spin h-12 w-12 text-sawerRed mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
         <h2 class="text-xl font-black tracking-widest uppercase text-gray-500">Verificando Seguridad...</h2>
     </div>
 
+    <!-- APP PRINCIPAL ANÁLISIS -->
     <div id="app-container" class="hidden w-full h-full flex-col md:flex-row relative">
         
+        <!-- HEADER MÓVIL -->
         <div class="md:hidden flex items-center justify-between bg-sawerGrey border-b border-sawerRed/40 p-4 z-40 relative shadow-lg flex-shrink-0">
             <div class="flex items-center gap-3">
                 <img src="../Inquisitor.png" class="w-10 h-10 rounded-full border border-sawerRed object-cover" onerror="this.src='https://via.placeholder.com/50/c20000/ffffff?text=S'">
@@ -48,23 +53,29 @@
             </button>
         </div>
 
+        <!-- SIDEBAR -->
         <aside id="sidebar" class="hidden md:flex flex-col w-72 bg-sawerGrey border-r border-sawerRed/40 justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-50 flex-shrink-0">
             <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
                 <img src="../Inquisitor.png" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/c20000/ffffff?text=Sawer'">
                 <h2 class="text-xl font-bold tracking-widest text-center uppercase leading-tight">Análisis<br><span class="text-sawerRed">Estadístico</span></h2>
             </div>
+            
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-2 custom-scroll">
                 <button onclick="window.location.href='../fun.html'" class="sound-btn w-full flex items-center gap-4 bg-sawerDark border border-gray-700 hover:border-sawerRed hover:bg-sawerRed/20 text-white px-5 py-4 rounded-xl font-bold transition-all shadow-lg">
-                    <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Volver al Comando Central
+                    <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Volver al Comando Central
                 </button>
             </nav>
+
             <div class="p-6 border-t border-sawerRed/20">
                 <button onclick="logout()" class="sound-btn w-full flex items-center justify-center gap-2 border border-sawerRed text-sawerRed hover:bg-sawerRed hover:text-white font-bold py-3 rounded-lg transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg> Cerrar Sesión
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Cerrar Sesión
                 </button>
             </div>
         </aside>
 
+        <!-- ZONA DE ANÁLISIS -->
         <main class="flex-1 p-4 md:p-10 overflow-hidden relative z-10 flex flex-col min-h-0 w-full bg-sawerDark">
             <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none hidden md:block"></div>
 
@@ -87,17 +98,17 @@
                             <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Comunidad Discord</h3>
                         </div>
                         <div class="mt-1 z-10 flex flex-col">
-                            <span class="text-4xl font-black text-white" id="val-miembros">342</span>
+                            <span class="text-4xl font-black text-white" id="val-miembros">0</span>
                             <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Miembros Totales</span>
                         </div>
                         <div class="mt-auto pt-4 grid grid-cols-2 gap-2 z-10 border-t border-gray-800">
                             <div>
-                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Joins (Hoy)</p>
-                                <p class="text-green-400 font-bold text-sm flex items-center gap-1"><span id="val-joins">+12</span></p>
+                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Joins (Este Mes)</p>
+                                <p class="text-green-400 font-bold text-sm flex items-center gap-1"><span id="val-joins">+0</span></p>
                             </div>
                             <div>
-                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Leaves (Hoy)</p>
-                                <p class="text-red-500 font-bold text-sm flex items-center gap-1"><span id="val-leaves">-3</span></p>
+                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Leaves (Este Mes)</p>
+                                <p class="text-red-500 font-bold text-sm flex items-center gap-1"><span id="val-leaves">-0</span></p>
                             </div>
                         </div>
                     </div>
@@ -112,14 +123,14 @@
                             <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Actividad de Chat</h3>
                         </div>
                         <div class="mt-1 z-10 flex flex-col">
-                            <span class="text-4xl font-black text-white" id="val-mensajes">1,204</span>
-                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Mensajes Hoy</span>
+                            <span class="text-4xl font-black text-white" id="val-mensajes">0</span>
+                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Mensajes (Este Mes)</span>
                         </div>
                         <div class="mt-auto pt-4 z-10 border-t border-gray-800">
                             <div class="w-full bg-sawerDark rounded-full h-1.5 mb-1.5 border border-gray-700">
-                                <div class="bg-purple-500 h-1.5 rounded-full" style="width: 75%"></div>
+                                <div class="bg-purple-500 h-1.5 rounded-full" style="width: 100%"></div>
                             </div>
-                            <p class="text-gray-500 text-[9px] uppercase font-bold text-right">Récord Diario: 1,600</p>
+                            <p class="text-gray-500 text-[9px] uppercase font-bold text-right">Métrica Mensual</p>
                         </div>
                     </div>
 
@@ -133,14 +144,14 @@
                             <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Tráfico Roblox</h3>
                         </div>
                         <div class="mt-1 z-10 flex flex-col">
-                            <span class="text-4xl font-black text-white" id="val-visitas">48</span>
-                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Visitas Hoy</span>
+                            <span class="text-4xl font-black text-white" id="val-visitas">--</span>
+                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Visitas (Este Mes)</span>
                         </div>
                         <div class="mt-auto pt-4 z-10 border-t border-gray-800">
                             <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Último Ingreso:</p>
                             <div class="flex items-center gap-2 mt-1">
                                 <img src="../Inquisitor.png" class="w-5 h-5 rounded-full border border-sawerRed bg-sawerDark">
-                                <span class="text-gray-300 text-xs font-bold truncate">SawFuntime</span>
+                                <span class="text-gray-300 text-xs font-bold truncate">Esperando datos...</span>
                             </div>
                         </div>
                     </div>
@@ -152,7 +163,7 @@
                             <div class="p-2 bg-orange-900/30 rounded-lg border border-orange-500/30 text-orange-400">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                             </div>
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Tráfico Web (Público)</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Tráfico Web</h3>
                         </div>
                         <div class="mt-1 z-10 flex flex-col">
                             <span class="text-4xl font-black text-white" id="val-web">0</span>
@@ -187,6 +198,12 @@
         const auth = firebase.auth();
         const rtdb = firebase.database();
 
+        function getMesActual() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        // GUARDIA DE SEGURIDAD Y CONEXIÓN DE MÉTRICAS
         auth.onAuthStateChanged(user => {
             if (user && user.email === CORREO_ADMIN) {
                 document.getElementById('pantalla-carga').classList.add('hidden');
@@ -194,10 +211,35 @@
                 app.classList.remove('hidden');
                 app.classList.add('flex');
                 
-                // --- AHORA VAMOS A LEER LA MÉTRICA WEB ---
+                const mes = getMesActual();
+                
+                // 1. MÉTRICA WEB (Visitas Históricas)
                 rtdb.ref('EstadisticasWeb/VisitasTotales').on('value', (snapshot) => {
                     const visitas = snapshot.val() || 0;
                     document.getElementById('val-web').innerText = visitas.toLocaleString();
+                });
+
+                // 2. MÉTRICAS DISCORD (En tiempo real)
+                const discordRef = rtdb.ref('Analisis/Discord');
+
+                // Total de población actual
+                discordRef.child('TotalMiembros').on('value', snap => {
+                    document.getElementById('val-miembros').innerText = snap.val() || 0;
+                });
+
+                // Entradas del mes
+                discordRef.child(`${mes}/Joins`).on('value', snap => {
+                    document.getElementById('val-joins').innerText = `+${snap.val() || 0}`;
+                });
+
+                // Salidas del mes
+                discordRef.child(`${mes}/Leaves`).on('value', snap => {
+                    document.getElementById('val-leaves').innerText = `-${snap.val() || 0}`;
+                });
+
+                // Mensajes del mes
+                discordRef.child(`${mes}/Mensajes`).on('value', snap => {
+                    document.getElementById('val-mensajes').innerText = (snap.val() || 0).toLocaleString();
                 });
 
             } else {
@@ -206,6 +248,20 @@
         });
 
         function logout() { auth.signOut().then(() => { window.location.href = '../fun.html'; }); }
+
+        /* SONIDOS */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playHoverSound() { if (audioCtx.state === 'suspended') return; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(900, audioCtx.currentTime); gain.gain.setValueAtTime(0.015, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05); }
+        function playClickSound() { if (audioCtx.state === 'suspended') audioCtx.resume(); const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'square'; osc.frequency.setValueAtTime(450, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
+        document.body.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
+        
+        function reasignarSonidos() {
+            document.querySelectorAll('.sound-btn, .sound-card').forEach(el => {
+                el.addEventListener('mouseenter', playHoverSound);
+                el.addEventListener('mousedown', playClickSound);
+            });
+        }
+        setTimeout(() => { reasignarSonidos(); }, 500);
     </script>
 </body>
 </html>
