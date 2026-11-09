@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Controles - Proyecto Sawer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sawerRed: 'rgb(194, 0, 0)',
+                        sawerGrey: 'rgb(25, 25, 25)',
+                        sawerDark: 'rgb(15, 15, 15)'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        @media (min-width: 768px) { .custom-scroll::-webkit-scrollbar { width: 6px; } }
+        .custom-scroll::-webkit-scrollbar-track { background: #0f0f0f; border-radius: 8px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgb(194, 0, 0); border-radius: 8px; }
+    </style>
+</head>
+<body class="bg-sawerDark text-white font-sans h-screen overflow-hidden flex flex-col md:flex-row select-none items-center justify-center">
+
+    <!-- PANTALLA DE VERIFICACIÓN (Bouncer) -->
+    <div id="pantalla-carga" class="flex flex-col items-center justify-center w-full h-full absolute z-50 bg-sawerDark">
+        <svg class="animate-spin h-12 w-12 text-sawerRed mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        <h2 class="text-xl font-black tracking-widest uppercase text-gray-500">Verificando Seguridad...</h2>
+    </div>
+
+    <!-- APP PRINCIPAL CONTROLES -->
+    <div id="app-container" class="hidden w-full h-full flex-col md:flex-row relative">
+        
+        <!-- HEADER MÓVIL -->
+        <div class="md:hidden flex items-center justify-between bg-sawerGrey border-b border-sawerRed/40 p-4 z-40 relative shadow-lg flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <img src="Inquisitor.png" class="w-10 h-10 rounded-full border border-sawerRed object-cover">
+                <h2 class="text-lg font-black tracking-widest uppercase">Controles <span class="text-sawerRed">Globales</span></h2>
+            </div>
+            <button onclick="window.location.href='fun.html'" class="sound-btn text-sawerRed hover:text-white transition-colors p-2 bg-sawerDark rounded border border-sawerRed/30">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            </button>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="hidden md:flex flex-col w-72 bg-sawerGrey border-r border-sawerRed/40 justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-50">
+            <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
+                <img src="Inquisitor.png" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover">
+                <h2 class="text-xl font-bold tracking-widest text-center uppercase leading-tight">Controles<br><span class="text-sawerRed">Globales</span></h2>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-2 custom-scroll">
+                <button onclick="window.location.href='fun.html'" class="sound-btn w-full flex items-center gap-4 bg-sawerDark border border-gray-700 hover:border-sawerRed hover:bg-sawerRed/20 text-white px-5 py-4 rounded-xl font-bold transition-all shadow-lg">
+                    <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Volver al Comando Central
+                </button>
+            </nav>
+
+            <div class="p-6 border-t border-sawerRed/20">
+                <button onclick="logout()" class="sound-btn w-full flex items-center justify-center gap-2 border border-sawerRed text-sawerRed hover:bg-sawerRed hover:text-white font-bold py-3 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+
+        <!-- ZONA DE CONTROLES -->
+        <main class="flex-1 p-4 md:p-10 overflow-hidden relative z-10 flex flex-col min-h-0 w-full">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none hidden md:block"></div>
+
+            <div class="flex-col w-full h-full max-w-5xl mx-auto overflow-y-auto custom-scroll pb-10 md:pb-0">
+                <header class="mb-6 md:mb-10">
+                    <h1 class="text-2xl md:text-4xl font-black tracking-wide">PANEL DE CONTROLES</h1>
+                    <p class="text-gray-400 mt-1 md:mt-2 text-sm md:text-base">Ejecuta acciones que afectan a todo el servidor de Roblox.</p>
+                </header>
+
+                <!-- AQUÍ IRAREMOS PONIENDO TUS CONTROLES -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full content-start">
+                    
+                    <!-- Tarjeta de Ejemplo -->
+                    <div class="sound-card bg-sawerGrey rounded-2xl md:rounded-3xl p-5 md:p-6 border border-sawerRed/20 flex flex-col justify-between shadow-lg h-48 md:h-56">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <svg class="w-6 h-6 md:w-8 md:h-8 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                                <h3 class="text-xl md:text-2xl font-bold">Anuncio Global</h3>
+                            </div>
+                            <p class="text-gray-400 text-xs md:text-sm">Envía un mensaje en pantalla gigante a todos los jugadores conectados.</p>
+                        </div>
+                        <button class="sound-btn bg-sawerRed hover:bg-red-800 text-white font-black tracking-widest uppercase py-3 rounded-lg w-full transition-colors text-xs md:text-sm mt-4">
+                            Ejecutar Comando
+                        </button>
+                    </div>
+
+                    <!-- Puedes agregar más tarjetas como esta... -->
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        const CORREO_ADMIN = "willem0711@gmail.com";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDr_IscODIrscMWwoyEogJ56kNUo2VK3Ac",
+            authDomain: "proyecto-sawer.firebaseapp.com",
+            databaseURL: "https://proyecto-sawer-default-rtdb.firebaseio.com",
+            projectId: "proyecto-sawer",
+            storageBucket: "proyecto-sawer.firebasestorage.app",
+            messagingSenderId: "770496172923",
+            appId: "1:770496172923:web:79782a0ddbdca6561e23de"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const rtdb = firebase.database();
+
+        // 🚨 EL GUARDIA DE SEGURIDAD 🚨
+        auth.onAuthStateChanged(user => {
+            if (user && user.email === CORREO_ADMIN) {
+                // Usuario validado: Ocultamos pantalla de carga y mostramos panel
+                document.getElementById('pantalla-carga').classList.add('hidden');
+                const app = document.getElementById('app-container');
+                app.classList.remove('hidden');
+                app.classList.add('flex');
+            } else {
+                // Intruso detectado: Patear a fun.html
+                window.location.href = 'fun.html';
+            }
+        });
+
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.href = 'fun.html';
+            });
+        }
+
+        /* SONIDOS */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playHoverSound() { if (audioCtx.state === 'suspended') return; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(900, audioCtx.currentTime); gain.gain.setValueAtTime(0.015, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05); }
+        function playClickSound() { if (audioCtx.state === 'suspended') audioCtx.resume(); const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'square'; osc.frequency.setValueAtTime(450, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
+        document.body.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
+        
+        function reasignarSonidos() {
+            document.querySelectorAll('.sound-btn, .sound-card').forEach(el => {
+                el.addEventListener('mouseenter', playHoverSound);
+                el.addEventListener('mousedown', playClickSound);
+            });
+        }
+        reasignarSonidos();
+    </script>
+</body>
+</html>
