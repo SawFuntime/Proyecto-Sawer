@@ -79,114 +79,123 @@
             </div>
         </aside>
 
-        <!-- ZONA DE ANÁLISIS (ESTILO VERCEL) -->
-        <main class="flex-1 p-4 md:p-8 overflow-hidden relative z-10 flex flex-col min-h-0 w-full bg-[#0a0a0a]">
+        <!-- ZONA DE ANÁLISIS -->
+        <main class="flex-1 p-4 md:p-8 overflow-hidden relative z-10 flex flex-col min-h-0 w-full bg-[#0d0d0d]">
             
             <div class="flex-col w-full h-full max-w-7xl mx-auto overflow-y-auto custom-scroll pb-10 md:pb-0 pr-2">
-                <header class="mb-6">
+                <header class="mb-6 md:mb-10">
                     <h1 class="text-2xl md:text-3xl font-black tracking-wide">MÉTRICAS Y ANÁLISIS</h1>
-                    <p class="text-gray-400 mt-1 text-sm">Visualización de datos y tendencias en tiempo real.</p>
+                    <p class="text-gray-400 mt-1 text-sm">Visualización de datos de Discord, Roblox y Web en tiempo real.</p>
                 </header>
 
-                <!-- 4 PANELES GRANDES (2x2) -->
+                <!-- 4 PANELES GRANDES (Estilo Vercel) -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full pb-10">
                     
                     <!-- PANEL 1: DISCORD -->
-                    <div class="bg-[#111111] border border-gray-800 rounded-xl p-5 md:p-6 shadow-xl flex flex-col h-[320px] relative overflow-hidden group hover:border-blue-500/50 transition-colors">
-                        <div class="flex justify-between items-start z-10">
-                            <div>
-                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                    Comunidad Discord
-                                </h3>
-                                <div class="mt-2 flex items-baseline gap-2">
-                                    <span class="text-4xl md:text-5xl font-black text-white" id="val-miembros">0</span>
-                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Miembros Totales</span>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Joins / Leaves (Mes)</p>
-                                <div class="flex gap-3 justify-end text-sm md:text-base font-bold">
-                                    <span class="text-green-400" id="val-joins">+0</span>
-                                    <span class="text-red-500" id="val-leaves">-0</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Canvas Chart -->
-                        <div class="flex-1 w-full mt-6 relative z-0 min-h-0">
+                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl shadow-xl relative overflow-hidden group h-[220px] md:h-[260px] hover:border-blue-500/50 transition-all">
+                        
+                        <!-- Canvas anclado al fondo absoluto -->
+                        <div class="absolute bottom-0 left-0 w-full h-[65%] z-0 pointer-events-none">
                             <canvas id="chartDiscord"></canvas>
+                        </div>
+                        
+                        <!-- Contenido Texto -->
+                        <div class="relative z-10 p-5 md:p-6 flex flex-col h-full pointer-events-none">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                        Comunidad Discord
+                                    </h3>
+                                    <div class="mt-2 flex items-baseline gap-2">
+                                        <span class="text-4xl md:text-5xl font-black text-white drop-shadow-md" id="val-miembros">0</span>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase mt-1 block">Miembros Totales</span>
+                                </div>
+                                <div class="text-right bg-sawerDark/70 p-2 rounded-lg border border-gray-800 backdrop-blur-sm">
+                                    <p class="text-gray-400 text-[9px] uppercase font-bold mb-1">Joins / Leaves (Mes)</p>
+                                    <div class="flex gap-3 justify-end text-sm md:text-base font-bold">
+                                        <span class="text-green-400" id="val-joins">+0</span>
+                                        <span class="text-red-500" id="val-leaves">-0</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- PANEL 2: CHAT -->
-                    <div class="bg-[#111111] border border-gray-800 rounded-xl p-5 md:p-6 shadow-xl flex flex-col h-[320px] relative overflow-hidden group hover:border-purple-500/50 transition-colors">
-                        <div class="flex justify-between items-start z-10">
-                            <div>
-                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                                    Actividad de Chat
-                                </h3>
-                                <div class="mt-2 flex items-baseline gap-2">
-                                    <span class="text-4xl md:text-5xl font-black text-white" id="val-mensajes">0</span>
-                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Mensajes (Mes)</span>
+                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl shadow-xl relative overflow-hidden group h-[220px] md:h-[260px] hover:border-purple-500/50 transition-all">
+                        
+                        <div class="absolute bottom-0 left-0 w-full h-[65%] z-0 pointer-events-none">
+                            <canvas id="chartChat"></canvas>
+                        </div>
+                        
+                        <div class="relative z-10 p-5 md:p-6 flex flex-col h-full pointer-events-none">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                                        Actividad de Chat
+                                    </h3>
+                                    <div class="mt-2 flex items-baseline gap-2">
+                                        <span class="text-4xl md:text-5xl font-black text-white drop-shadow-md" id="val-mensajes">0</span>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase mt-1 block">Mensajes (Este Mes)</span>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Métrica</p>
-                                <span class="text-gray-300 text-xs md:text-sm font-bold">Volumen Diario</span>
-                            </div>
-                        </div>
-                        <div class="flex-1 w-full mt-6 relative z-0 min-h-0">
-                            <canvas id="chartChat"></canvas>
                         </div>
                     </div>
 
                     <!-- PANEL 3: ROBLOX -->
-                    <div class="bg-[#111111] border border-gray-800 rounded-xl p-5 md:p-6 shadow-xl flex flex-col h-[320px] relative overflow-hidden group hover:border-red-500/50 transition-colors">
-                        <div class="flex justify-between items-start z-10">
-                            <div>
-                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    Tráfico Roblox
-                                </h3>
-                                <div class="mt-2 flex items-baseline gap-2">
-                                    <span class="text-4xl md:text-5xl font-black text-white" id="val-visitas">0</span>
-                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Visitas (Mes)</span>
-                                </div>
-                            </div>
-                            <div class="text-right flex flex-col items-end">
-                                <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Último Ingreso</p>
-                                <div class="flex items-center gap-2 bg-black/40 px-2 py-1 rounded border border-gray-800">
-                                    <img src="../Inquisitor.png" id="avatar-ultimo-jugador" class="w-5 h-5 md:w-6 md:h-6 rounded-full border border-sawerRed object-cover bg-sawerDark">
-                                    <span class="text-gray-300 text-xs font-bold truncate max-w-[80px] md:max-w-[120px]" id="nombre-ultimo-jugador">Nadie aún</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex-1 w-full mt-6 relative z-0 min-h-0">
+                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl shadow-xl relative overflow-hidden group h-[220px] md:h-[260px] hover:border-red-500/50 transition-all">
+                        
+                        <div class="absolute bottom-0 left-0 w-full h-[65%] z-0 pointer-events-none">
                             <canvas id="chartRoblox"></canvas>
+                        </div>
+                        
+                        <div class="relative z-10 p-5 md:p-6 flex flex-col h-full pointer-events-none">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        Tráfico Roblox
+                                    </h3>
+                                    <div class="mt-2 flex items-baseline gap-2">
+                                        <span class="text-4xl md:text-5xl font-black text-white drop-shadow-md" id="val-visitas">0</span>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase mt-1 block">Visitas (Este Mes)</span>
+                                </div>
+                                <div class="text-right flex flex-col items-end bg-sawerDark/70 p-2 rounded-lg border border-gray-800 backdrop-blur-sm">
+                                    <p class="text-gray-400 text-[9px] uppercase font-bold mb-1">Último Ingreso</p>
+                                    <div class="flex items-center gap-2">
+                                        <img src="../Inquisitor.png" id="avatar-ultimo-jugador" class="w-4 h-4 md:w-5 md:h-5 rounded-full border border-sawerRed object-cover bg-sawerDark">
+                                        <span class="text-gray-200 text-xs font-bold truncate max-w-[80px] md:max-w-[120px]" id="nombre-ultimo-jugador">Nadie aún</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- PANEL 4: WEB -->
-                    <div class="bg-[#111111] border border-gray-800 rounded-xl p-5 md:p-6 shadow-xl flex flex-col h-[320px] relative overflow-hidden group hover:border-orange-500/50 transition-colors">
-                        <div class="flex justify-between items-start z-10">
-                            <div>
-                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                                    Tráfico Web
-                                </h3>
-                                <div class="mt-2 flex items-baseline gap-2">
-                                    <span class="text-4xl md:text-5xl font-black text-white" id="val-web">0</span>
-                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Visitas Totales</span>
+                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl shadow-xl relative overflow-hidden group h-[220px] md:h-[260px] hover:border-orange-500/50 transition-all">
+                        
+                        <div class="absolute bottom-0 left-0 w-full h-[65%] z-0 pointer-events-none">
+                            <canvas id="chartWeb"></canvas>
+                        </div>
+                        
+                        <div class="relative z-10 p-5 md:p-6 flex flex-col h-full pointer-events-none">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                        Tráfico Web
+                                    </h3>
+                                    <div class="mt-2 flex items-baseline gap-2">
+                                        <span class="text-4xl md:text-5xl font-black text-white drop-shadow-md" id="val-web">0</span>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase mt-1 block">Visitas Históricas Totales</span>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Dominio</p>
-                                <span class="text-gray-300 text-xs font-bold">proyectosawer.com</span>
-                            </div>
-                        </div>
-                        <div class="flex-1 w-full mt-6 relative z-0 min-h-0">
-                            <canvas id="chartWeb"></canvas>
                         </div>
                     </div>
 
@@ -255,10 +264,11 @@
                     }
                 });
 
-                // Iniciar las gráficas Chart.js dándole 50ms para que el DOM se haya pintado completamente
+                // Iniciar las gráficas Chart.js 
+                // Un pequeño retardo asegura que las tarjetas ya tienen su tamaño definitivo
                 setTimeout(() => {
                     inicializarGraficas();
-                }, 50);
+                }, 100);
 
             } else {
                 window.location.href = '../fun.html';
@@ -269,77 +279,59 @@
 
         /* ==========================================
            MOTOR DE GRÁFICAS (CHART.JS)
-           Estilo Minimalista Tipo Servidor
+           Estilo Minimalista (Vercel Style)
            ========================================== */
         function inicializarGraficas() {
-            Chart.defaults.color = 'rgba(255, 255, 255, 0.4)';
-            Chart.defaults.font.family = 'ui-sans-serif, system-ui, -apple-system, sans-serif';
-            Chart.defaults.font.size = 10;
             
-            const commonOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: 'rgba(255,255,255,0.1)',
-                        borderWidth: 1
-                    }
-                },
-                scales: {
-                    x: { 
-                        grid: { display: false }, // Sin líneas verticales
-                        border: { display: false }
-                    },
-                    y: { 
-                        beginAtZero: true, 
-                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false }, // Líneas horizontales muy sutiles
-                        border: { dash: [4, 4], display: false }, // Estilo punteado
-                        ticks: { maxTicksLimit: 4 }
-                    }
-                },
-                elements: {
-                    line: { tension: 0.2, borderWidth: 2 }, // Línea un poco curva
-                    point: { radius: 0, hitRadius: 20, hoverRadius: 4 } // Puntos invisibles hasta pasar el mouse
-                },
-                interaction: { mode: 'index', intersect: false }
-            };
-
-            const labelsDias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']; // Mockup de los últimos 7 días
-
-            // Función para pintar la gráfica y el degradado interior
             function crearGrafico(idCanvas, colorLinea, colorFondo, datos) {
                 const canvas = document.getElementById(idCanvas);
-                if (!canvas) return; // Evita errores si no se encuentra
+                if (!canvas) return; 
                 const ctx = canvas.getContext('2d');
                 
-                let gradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.clientHeight);
+                // Asegurar que leemos la altura del contenedor para el degradado
+                const alturaContenedor = canvas.parentElement.clientHeight || 150;
+                
+                let gradient = ctx.createLinearGradient(0, 0, 0, alturaContenedor);
                 gradient.addColorStop(0, colorFondo); 
-                gradient.addColorStop(1, 'rgba(10, 10, 10, 0)'); // Se desvanece al fondo oscuro
+                gradient.addColorStop(1, 'rgba(25, 25, 25, 0)'); // Se funde con el sawerGrey del fondo
 
                 new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: labelsDias,
+                        labels: ['1', '2', '3', '4', '5', '6', '7'], // Etiquetas invisibles
                         datasets: [{
                             data: datos,
                             borderColor: colorLinea,
                             backgroundColor: gradient,
-                            fill: true // Activa el degradado debajo de la línea
+                            fill: true,
+                            borderWidth: 3,
+                            pointRadius: 0,       // Sin puntos visibles
+                            pointHoverRadius: 0,  // Sin puntos al pasar el mouse
+                            tension: 0.4          // Curva muy suave
                         }]
                     },
-                    options: commonOptions
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { enabled: false } // Desactivamos el popup para que sea puramente estético
+                        },
+                        scales: {
+                            x: { display: false }, // Ocultamos líneas y textos del eje X
+                            y: { display: false, min: 0 } // Ocultamos líneas y textos del eje Y
+                        },
+                        layout: { padding: 0 },
+                        animation: { duration: 1500, easing: 'easeOutQuart' } // Animación de entrada fluida
+                    }
                 });
             }
 
-            // Datos de relleno (Mockups temporales para el efecto visual)
-            crearGrafico('chartDiscord', '#3b82f6', 'rgba(59, 130, 246, 0.2)', [1, 3, 2, 6, 4, 9, 5]); // Azul Discord
-            crearGrafico('chartChat', '#a855f7', 'rgba(168, 85, 247, 0.2)', [50, 120, 80, 200, 160, 300, 250]); // Morado Chat
-            crearGrafico('chartRoblox', '#c20000', 'rgba(194, 0, 0, 0.2)', [2, 5, 3, 10, 7, 15, 12]); // Rojo Sawer
-            crearGrafico('chartWeb', '#f97316', 'rgba(249, 115, 22, 0.2)', [10, 25, 15, 40, 35, 60, 50]); // Naranja Web
+            // Datos temporales para dibujar la forma de las gráficas
+            crearGrafico('chartDiscord', '#3b82f6', 'rgba(59, 130, 246, 0.4)', [10, 15, 12, 25, 22, 30, 28]); 
+            crearGrafico('chartChat', '#a855f7', 'rgba(168, 85, 247, 0.4)', [50, 120, 80, 200, 160, 300, 250]); 
+            crearGrafico('chartRoblox', '#c20000', 'rgba(194, 0, 0, 0.4)', [2, 5, 3, 10, 7, 15, 12]); 
+            crearGrafico('chartWeb', '#f97316', 'rgba(249, 115, 22, 0.4)', [10, 25, 15, 40, 35, 60, 50]); 
         }
 
         /* SONIDOS DE BOTONES */
