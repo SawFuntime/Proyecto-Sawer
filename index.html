@@ -897,5 +897,22 @@
             });
         }
     </script>
+    <!-- Contador Silencioso de Proyecto Sawer -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+    // Solo inicializamos lo mínimo necesario si aún no está inicializado
+    if (!firebase.apps.length) {
+        firebase.initializeApp({
+            databaseURL: "https://proyecto-sawer-default-rtdb.firebaseio.com"
+        });
+    }
+    
+    // Sumamos +1 a las visitas
+    const visitasRef = firebase.database().ref('EstadisticasWeb/VisitasTotales');
+    visitasRef.transaction(function(visitasActuales) {
+        return (visitasActuales || 0) + 1;
+    });
+</script>
 </body>
 </html>
