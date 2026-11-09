@@ -45,10 +45,11 @@
         <!-- HEADER MÓVIL -->
         <div class="md:hidden flex items-center justify-between bg-sawerGrey border-b border-sawerRed/40 p-4 z-40 relative shadow-lg flex-shrink-0">
             <div class="flex items-center gap-3">
-                <img src="Inquisitor.png" class="w-10 h-10 rounded-full border border-sawerRed object-cover">
+                <img src="../Inquisitor.png" class="w-10 h-10 rounded-full border border-sawerRed object-cover" onerror="this.src='https://via.placeholder.com/50/c20000/ffffff?text=S'">
                 <h2 class="text-lg font-black tracking-widest uppercase">Controles <span class="text-sawerRed">Globales</span></h2>
             </div>
-            <button onclick="window.location.href='fun.html'" class="sound-btn text-sawerRed hover:text-white transition-colors p-2 bg-sawerDark rounded border border-sawerRed/30">
+            <!-- Volver a fun.html con ../ -->
+            <button onclick="window.location.href='../fun.html'" class="sound-btn text-sawerRed hover:text-white transition-colors p-2 bg-sawerDark rounded border border-sawerRed/30">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             </button>
         </div>
@@ -56,12 +57,13 @@
         <!-- SIDEBAR -->
         <aside id="sidebar" class="hidden md:flex flex-col w-72 bg-sawerGrey border-r border-sawerRed/40 justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-50">
             <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
-                <img src="Inquisitor.png" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover">
+                <img src="../Inquisitor.png" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/c20000/ffffff?text=Sawer'">
                 <h2 class="text-xl font-bold tracking-widest text-center uppercase leading-tight">Controles<br><span class="text-sawerRed">Globales</span></h2>
             </div>
             
             <nav class="flex-1 p-4 space-y-2 overflow-y-auto mt-2 custom-scroll">
-                <button onclick="window.location.href='fun.html'" class="sound-btn w-full flex items-center gap-4 bg-sawerDark border border-gray-700 hover:border-sawerRed hover:bg-sawerRed/20 text-white px-5 py-4 rounded-xl font-bold transition-all shadow-lg">
+                <!-- Volver a fun.html con ../ -->
+                <button onclick="window.location.href='../fun.html'" class="sound-btn w-full flex items-center gap-4 bg-sawerDark border border-gray-700 hover:border-sawerRed hover:bg-sawerRed/20 text-white px-5 py-4 rounded-xl font-bold transition-all shadow-lg">
                     <svg class="w-5 h-5 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Volver al Comando Central
                 </button>
@@ -102,8 +104,6 @@
                         </button>
                     </div>
 
-                    <!-- Puedes agregar más tarjetas como esta... -->
-
                 </div>
             </div>
         </main>
@@ -136,13 +136,13 @@
                 app.classList.add('flex');
             } else {
                 // Intruso detectado: Patear a fun.html
-                window.location.href = 'fun.html';
+                window.location.href = '../fun.html';
             }
         });
 
         function logout() {
             auth.signOut().then(() => {
-                window.location.href = 'fun.html';
+                window.location.href = '../fun.html';
             });
         }
 
