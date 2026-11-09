@@ -18,6 +18,10 @@
             }
         }
     </script>
+    
+    <!-- Librería para las gráficas (Chart.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -79,23 +83,25 @@
         <main class="flex-1 p-4 md:p-10 overflow-hidden relative z-10 flex flex-col min-h-0 w-full bg-sawerDark">
             <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none hidden md:block"></div>
 
-            <div class="flex-col w-full h-full max-w-7xl mx-auto overflow-y-auto custom-scroll pb-10 md:pb-0">
+            <div class="flex-col w-full h-full max-w-7xl mx-auto overflow-y-auto custom-scroll pb-10 md:pb-0 pr-1">
                 <header class="mb-6 md:mb-10">
                     <h1 class="text-2xl md:text-4xl font-black tracking-wide">MÉTRICAS Y ANÁLISIS</h1>
                     <p class="text-gray-400 mt-1 md:mt-2 text-sm md:text-base">Visualización de datos de Discord, Roblox y Web en tiempo real.</p>
                 </header>
 
-                <!-- 4 MÉTRICAS -->
+                <!-- ========================================== -->
+                <!-- 4 TARJETAS NUMÉRICAS (Resumen en vivo) -->
+                <!-- ========================================== -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 w-full content-start" id="contenedor-metricas">
                     
-                    <!-- MÉTRICA 1: DISCORD MIEMBROS -->
+                    <!-- Tarjeta 1 -->
                     <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col">
                         <div class="absolute right-0 top-0 w-16 h-full bg-blue-500/5 skew-x-12 transform origin-top"></div>
                         <div class="flex items-center gap-3 mb-4 z-10">
                             <div class="p-2 bg-blue-900/30 rounded-lg border border-blue-500/30 text-blue-400">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                             </div>
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Comunidad Discord</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Discord</h3>
                         </div>
                         <div class="mt-1 z-10 flex flex-col">
                             <span class="text-4xl font-black text-white" id="val-miembros">0</span>
@@ -103,28 +109,28 @@
                         </div>
                         <div class="mt-auto pt-4 grid grid-cols-2 gap-2 z-10 border-t border-gray-800">
                             <div>
-                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Joins (Este Mes)</p>
+                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Joins (Mes)</p>
                                 <p class="text-green-400 font-bold text-sm flex items-center gap-1"><span id="val-joins">+0</span></p>
                             </div>
                             <div>
-                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Leaves (Este Mes)</p>
+                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Leaves (Mes)</p>
                                 <p class="text-red-500 font-bold text-sm flex items-center gap-1"><span id="val-leaves">-0</span></p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- MÉTRICA 2: ACTIVIDAD CHAT -->
+                    <!-- Tarjeta 2 -->
                     <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col">
                         <div class="absolute right-0 top-0 w-16 h-full bg-purple-500/5 skew-x-12 transform origin-top"></div>
                         <div class="flex items-center gap-3 mb-4 z-10">
                             <div class="p-2 bg-purple-900/30 rounded-lg border border-purple-500/30 text-purple-400">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
                             </div>
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Actividad de Chat</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Chat</h3>
                         </div>
                         <div class="mt-1 z-10 flex flex-col">
                             <span class="text-4xl font-black text-white" id="val-mensajes">0</span>
-                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Mensajes (Este Mes)</span>
+                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Mensajes (Mes)</span>
                         </div>
                         <div class="mt-auto pt-4 z-10 border-t border-gray-800">
                             <div class="w-full bg-sawerDark rounded-full h-1.5 mb-1.5 border border-gray-700">
@@ -134,18 +140,18 @@
                         </div>
                     </div>
 
-                    <!-- MÉTRICA 3: TRÁFICO ROBLOX -->
+                    <!-- Tarjeta 3 -->
                     <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col">
                         <div class="absolute right-0 top-0 w-16 h-full bg-sawerRed/5 skew-x-12 transform origin-top"></div>
                         <div class="flex items-center gap-3 mb-4 z-10">
                             <div class="p-2 bg-red-900/30 rounded-lg border border-red-500/30 text-sawerRed">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             </div>
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Tráfico Roblox</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Roblox</h3>
                         </div>
                         <div class="mt-1 z-10 flex flex-col">
                             <span class="text-4xl font-black text-white" id="val-visitas">--</span>
-                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Visitas (Este Mes)</span>
+                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Visitas (Mes)</span>
                         </div>
                         <div class="mt-auto pt-4 z-10 border-t border-gray-800">
                             <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Último Ingreso:</p>
@@ -156,14 +162,14 @@
                         </div>
                     </div>
 
-                    <!-- MÉTRICA 4: TRÁFICO WEB -->
+                    <!-- Tarjeta 4 -->
                     <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col">
                         <div class="absolute right-0 top-0 w-16 h-full bg-orange-500/5 skew-x-12 transform origin-top"></div>
                         <div class="flex items-center gap-3 mb-4 z-10">
                             <div class="p-2 bg-orange-900/30 rounded-lg border border-orange-500/30 text-orange-400">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                             </div>
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Tráfico Web</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Web</h3>
                         </div>
                         <div class="mt-1 z-10 flex flex-col">
                             <span class="text-4xl font-black text-white" id="val-web">0</span>
@@ -176,8 +182,59 @@
                             <p class="text-gray-500 text-[9px] uppercase font-bold text-right">proyectosawer.com</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- SECCIÓN DE GRÁFICAS VISUALES (ESTILO PRO)  -->
+                <!-- ========================================== -->
+                <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 w-full mb-10">
+                    
+                    <!-- Gráfico 1: Evolución Discord -->
+                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl p-5 shadow-lg w-full">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-300">Nuevos Miembros Discord</h3>
+                            <span class="text-[10px] text-gray-500 bg-sawerDark px-2 py-1 rounded">Últimos 7 días</span>
+                        </div>
+                        <div class="relative h-48 md:h-64 w-full">
+                            <canvas id="chartDiscord"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico 2: Actividad Chat -->
+                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl p-5 shadow-lg w-full">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-300">Volumen de Chat</h3>
+                            <span class="text-[10px] text-gray-500 bg-sawerDark px-2 py-1 rounded">Últimos 7 días</span>
+                        </div>
+                        <div class="relative h-48 md:h-64 w-full">
+                            <canvas id="chartChat"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico 3: Tráfico Roblox -->
+                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl p-5 shadow-lg w-full">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-300">Ingresos al Juego (Roblox)</h3>
+                            <span class="text-[10px] text-gray-500 bg-sawerDark px-2 py-1 rounded">Últimos 7 días</span>
+                        </div>
+                        <div class="relative h-48 md:h-64 w-full">
+                            <canvas id="chartRoblox"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico 4: Tráfico Web -->
+                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl p-5 shadow-lg w-full">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-300">Visitas Públicas (Web)</h3>
+                            <span class="text-[10px] text-gray-500 bg-sawerDark px-2 py-1 rounded">Últimos 7 días</span>
+                        </div>
+                        <div class="relative h-48 md:h-64 w-full">
+                            <canvas id="chartWeb"></canvas>
+                        </div>
+                    </div>
 
                 </div>
+
             </div>
         </main>
     </div>
@@ -203,7 +260,6 @@
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
         }
 
-        // GUARDIA DE SEGURIDAD Y CONEXIÓN DE MÉTRICAS
         auth.onAuthStateChanged(user => {
             if (user && user.email === CORREO_ADMIN) {
                 document.getElementById('pantalla-carga').classList.add('hidden');
@@ -213,57 +269,28 @@
                 
                 const mes = getMesActual();
                 
-                // 1. MÉTRICA WEB (Visitas Históricas)
-                rtdb.ref('EstadisticasWeb/VisitasTotales').on('value', (snapshot) => {
-                    const visitas = snapshot.val() || 0;
-                    document.getElementById('val-web').innerText = visitas.toLocaleString();
+                // Conexiones a Firebase (Tarjetas Superiores)
+                rtdb.ref('EstadisticasWeb/VisitasTotales').on('value', snap => {
+                    document.getElementById('val-web').innerText = (snap.val() || 0).toLocaleString();
                 });
-
-                // 2. MÉTRICAS DISCORD (En tiempo real)
+                
                 const discordRef = rtdb.ref('Analisis/Discord');
+                discordRef.child('TotalMiembros').on('value', snap => document.getElementById('val-miembros').innerText = snap.val() || 0);
+                discordRef.child(`${mes}/Joins`).on('value', snap => document.getElementById('val-joins').innerText = `+${snap.val() || 0}`);
+                discordRef.child(`${mes}/Leaves`).on('value', snap => document.getElementById('val-leaves').innerText = `-${snap.val() || 0}`);
+                discordRef.child(`${mes}/Mensajes`).on('value', snap => document.getElementById('val-mensajes').innerText = (snap.val() || 0).toLocaleString());
 
-                // Total de población actual
-                discordRef.child('TotalMiembros').on('value', snap => {
-                    document.getElementById('val-miembros').innerText = snap.val() || 0;
-                });
-
-                // Entradas del mes
-                discordRef.child(`${mes}/Joins`).on('value', snap => {
-                    document.getElementById('val-joins').innerText = `+${snap.val() || 0}`;
-                });
-
-                // Salidas del mes
-                discordRef.child(`${mes}/Leaves`).on('value', snap => {
-                    document.getElementById('val-leaves').innerText = `-${snap.val() || 0}`;
-                });
-
-                // Mensajes del mes
-                discordRef.child(`${mes}/Mensajes`).on('value', snap => {
-                    document.getElementById('val-mensajes').innerText = (snap.val() || 0).toLocaleString();
-                });
-                // 3. MÉTRICAS DE ROBLOX (Webhook)
                 const robloxRef = rtdb.ref('Analisis/Roblox');
-
-                // Visitas del mes
-                robloxRef.child(`${mes}/Visitas`).on('value', snap => {
-                    document.getElementById('val-visitas').innerText = snap.val() || 0;
-                });
-
-                // Último jugador en entrar
+                robloxRef.child(`${mes}/Visitas`).on('value', snap => document.getElementById('val-visitas').innerText = snap.val() || 0);
                 robloxRef.child('UltimoIngreso').on('value', snap => {
                     const data = snap.val();
                     if (data) {
-                        // Actualizar texto
-                        const spanNombre = document.querySelector('#contenedor-metricas .truncate');
+                        const spanNombre = document.querySelector('#contenedor-metricas > div:nth-child(3) .truncate');
                         if(spanNombre) spanNombre.innerText = data.nombre;
-                        
-                        // Cargar foto real desde Roblox
                         if (data.id) {
                             fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${data.id}&size=150x150&format=Png&isCircular=false`)
-                            .then(r => r.json())
-                            .then(j => {
+                            .then(r => r.json()).then(j => {
                                 if (j.data && j.data.length > 0) {
-                                    // Buscar la imagen del último jugador (es la tercera tarjeta, única img pequeña)
                                     const imgTarget = document.querySelector('#contenedor-metricas > div:nth-child(3) img');
                                     if(imgTarget) imgTarget.src = j.data[0].imageUrl;
                                 }
@@ -271,12 +298,76 @@
                         }
                     }
                 });
+
+                // Iniciar las gráficas una vez que la pantalla cargó
+                inicializarGraficas();
+
             } else {
                 window.location.href = '../fun.html';
             }
         });
 
         function logout() { auth.signOut().then(() => { window.location.href = '../fun.html'; }); }
+
+        /* ==========================================
+           MOTOR DE GRÁFICAS (CHART.JS)
+           ========================================== */
+        function inicializarGraficas() {
+            // Configuración global para estilo oscuro (Grid sutil)
+            Chart.defaults.color = '#6b7280';
+            Chart.defaults.font.family = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+            
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }, // Ocultamos la leyenda
+                scales: {
+                    x: { grid: { display: false, drawBorder: false } },
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false }, // Líneas grises casi invisibles
+                        ticks: { maxTicksLimit: 5 }
+                    }
+                },
+                elements: {
+                    line: { tension: 0.3, borderWidth: 2 }, // Línea ligeramente curva y definida
+                    point: { radius: 0, hitRadius: 10, hoverRadius: 5 } // Puntos invisibles hasta que pasas el mouse
+                },
+                interaction: { mode: 'index', intersect: false }
+            };
+
+            const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+
+            // Función genérica para crear las gráficas con degradado
+            function crearGrafico(idCanvas, colorLinea, colorFondoOpaco, datos) {
+                const ctx = document.getElementById(idCanvas).getContext('2d');
+                
+                // Crear el degradado (área rellenada debajo de la línea)
+                let gradient = ctx.createLinearGradient(0, 0, 0, 300);
+                gradient.addColorStop(0, colorFondoOpaco); // Color intenso arriba
+                gradient.addColorStop(1, 'rgba(15, 15, 15, 0)'); // Se desvanece al oscuro del fondo abajo
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: diasSemana,
+                        datasets: [{
+                            data: datos,
+                            borderColor: colorLinea,
+                            backgroundColor: gradient,
+                            fill: true // Activa el relleno de área
+                        }]
+                    },
+                    options: commonOptions
+                });
+            }
+
+            // Datos de prueba (mockups) para demostrar la estética visual
+            crearGrafico('chartDiscord', '#3b82f6', 'rgba(59, 130, 246, 0.3)', [2, 5, 3, 8, 4, 12, 7]); // Azul
+            crearGrafico('chartChat', '#a855f7', 'rgba(168, 85, 247, 0.3)', [120, 300, 150, 450, 200, 600, 410]); // Morado
+            crearGrafico('chartRoblox', '#c20000', 'rgba(194, 0, 0, 0.3)', [0, 5, 2, 18, 9, 25, 14]); // Rojo
+            crearGrafico('chartWeb', '#f97316', 'rgba(249, 115, 22, 0.3)', [5, 12, 8, 30, 15, 45, 22]); // Naranja
+        }
 
         /* SONIDOS */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
