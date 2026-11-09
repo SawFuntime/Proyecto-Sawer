@@ -82,15 +82,84 @@
             <div class="flex-col w-full h-full max-w-6xl mx-auto overflow-y-auto custom-scroll pb-10 md:pb-0">
                 <header class="mb-6 md:mb-10">
                     <h1 class="text-2xl md:text-4xl font-black tracking-wide">MÉTRICAS Y ANÁLISIS</h1>
-                    <p class="text-gray-400 mt-1 md:mt-2 text-sm md:text-base">Visualización de datos globales del servidor y la base de datos.</p>
+                    <p class="text-gray-400 mt-1 md:mt-2 text-sm md:text-base">Visualización de datos de Discord y Roblox en tiempo real.</p>
                 </header>
 
-                <!-- LIENZO EN BLANCO PARA LAS MÉTRICAS -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full content-start" id="contenedor-metricas">
                     
-                    <!-- Tarjeta base de ejemplo para empezar a construir -->
-                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl p-6 shadow-lg flex flex-col justify-center items-center h-40">
-                        <p class="text-gray-500 font-bold uppercase tracking-widest text-sm">Espacio para métrica</p>
+                    <!-- MÉTRICA 1: COMUNIDAD DISCORD -->
+                    <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 md:p-6 shadow-lg relative overflow-hidden flex flex-col">
+                        <div class="absolute right-0 top-0 w-24 h-full bg-blue-500/5 skew-x-12 transform origin-top"></div>
+                        <div class="flex items-center gap-3 mb-4 z-10">
+                            <div class="p-3 bg-blue-900/30 rounded-lg border border-blue-500/30 text-blue-400">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152... (icono acortado para legibilidad, usaremos uno genérico de usuarios)"></path><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            </div>
+                            <h3 class="text-lg md:text-xl font-bold uppercase tracking-widest text-gray-300">Población Discord</h3>
+                        </div>
+                        
+                        <div class="mt-2 z-10">
+                            <span class="text-4xl md:text-5xl font-black text-white" id="val-miembros">342</span>
+                            <span class="text-gray-400 text-xs md:text-sm uppercase font-bold ml-2">Miembros Totales</span>
+                        </div>
+
+                        <div class="mt-auto pt-6 grid grid-cols-2 gap-4 z-10 border-t border-gray-800">
+                            <div>
+                                <p class="text-gray-500 text-[10px] md:text-xs uppercase font-bold mb-1">Entradas (Hoy)</p>
+                                <p class="text-green-400 font-bold text-lg flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg> <span id="val-joins">12</span></p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-[10px] md:text-xs uppercase font-bold mb-1">Salidas (Hoy)</p>
+                                <p class="text-red-500 font-bold text-lg flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg> <span id="val-leaves">3</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MÉTRICA 2: ACTIVIDAD DE MENSAJES -->
+                    <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 md:p-6 shadow-lg relative overflow-hidden flex flex-col">
+                        <div class="absolute right-0 top-0 w-24 h-full bg-purple-500/5 skew-x-12 transform origin-top"></div>
+                        <div class="flex items-center gap-3 mb-4 z-10">
+                            <div class="p-3 bg-purple-900/30 rounded-lg border border-purple-500/30 text-purple-400">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                            </div>
+                            <h3 class="text-lg md:text-xl font-bold uppercase tracking-widest text-gray-300">Actividad de Chat</h3>
+                        </div>
+                        
+                        <div class="mt-2 z-10">
+                            <span class="text-4xl md:text-5xl font-black text-white" id="val-mensajes">1,204</span>
+                            <span class="text-gray-400 text-xs md:text-sm uppercase font-bold ml-2">Mensajes Hoy</span>
+                        </div>
+
+                        <div class="mt-auto pt-6 z-10 border-t border-gray-800">
+                            <div class="w-full bg-sawerDark rounded-full h-2 mb-2 border border-gray-700">
+                                <div class="bg-purple-500 h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                            <p class="text-gray-500 text-[10px] md:text-xs uppercase font-bold text-right">Récord Diario: 1,600</p>
+                        </div>
+                    </div>
+
+                    <!-- MÉTRICA 3: TRÁFICO DE ROBLOX -->
+                    <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 md:p-6 shadow-lg relative overflow-hidden flex flex-col md:col-span-2 lg:col-span-1">
+                        <div class="absolute right-0 top-0 w-24 h-full bg-sawerRed/5 skew-x-12 transform origin-top"></div>
+                        <div class="flex items-center gap-3 mb-4 z-10">
+                            <div class="p-3 bg-red-900/30 rounded-lg border border-red-500/30 text-sawerRed">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            </div>
+                            <h3 class="text-lg md:text-xl font-bold uppercase tracking-widest text-gray-300">Tráfico Roblox</h3>
+                        </div>
+                        
+                        <div class="mt-2 z-10">
+                            <span class="text-4xl md:text-5xl font-black text-white" id="val-visitas">48</span>
+                            <span class="text-gray-400 text-xs md:text-sm uppercase font-bold ml-2">Visitas Hoy</span>
+                        </div>
+
+                        <div class="mt-auto pt-6 z-10 border-t border-gray-800">
+                            <p class="text-gray-500 text-[10px] md:text-xs uppercase font-bold mb-1">Último Ingreso Detectado:</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <img src="../Inquisitor.png" class="w-6 h-6 rounded-full border border-sawerRed bg-sawerDark" id="img-ultimo-jugador">
+                                <span class="text-gray-300 text-sm font-bold" id="nombre-ultimo-jugador">SawFuntime</span>
+                                <span class="text-gray-500 text-xs ml-auto" id="hora-ultimo-jugador">Hace 2 min</span>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -122,9 +191,6 @@
                 const app = document.getElementById('app-container');
                 app.classList.remove('hidden');
                 app.classList.add('flex');
-                
-                // Aquí iniciaremos la carga de datos cuando me digas qué quieres medir
-                // cargarMetricas();
             } else {
                 window.location.href = '../fun.html';
             }
