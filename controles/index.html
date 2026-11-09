@@ -33,7 +33,7 @@
 </head>
 <body class="bg-sawerDark text-white font-sans h-screen overflow-hidden flex flex-col md:flex-row select-none items-center justify-center">
 
-    <!-- PANTALLA DE VERIFICACIÓN (Bouncer) -->
+    <!-- PANTALLA DE VERIFICACIÓN -->
     <div id="pantalla-carga" class="flex flex-col items-center justify-center w-full h-full absolute z-50 bg-sawerDark">
         <svg class="animate-spin h-12 w-12 text-sawerRed mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
         <h2 class="text-xl font-black tracking-widest uppercase text-gray-500">Verificando Seguridad...</h2>
@@ -95,12 +95,10 @@
                         </div>
                     </div>
 
-                    <!-- Contenedor del Leaderboard Mockup -->
                     <div class="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 custom-scroll" id="contenedor-jugadores-activos">
                         
                         <!-- Tarjeta de Jugador Mockup 1 -->
                         <div class="bg-sawerDark border border-gray-700 hover:border-sawerRed/50 transition-colors rounded-xl p-3 md:p-4 flex flex-col gap-3 shadow-md">
-                            <!-- Info del jugador -->
                             <div class="flex items-center gap-3 border-b border-gray-800 pb-2">
                                 <img src="../Inquisitor.png" class="w-10 h-10 md:w-12 md:h-12 rounded-lg border border-gray-600 object-cover bg-sawerGrey">
                                 <div>
@@ -108,15 +106,15 @@
                                     <span class="text-[9px] md:text-[10px] text-gray-500 font-mono">ID: 123456789</span>
                                 </div>
                             </div>
-                            <!-- Botones (Se apilan en celular, se expanden en PC) -->
+                            <!-- Botones Grises Estilo Sawer -->
                             <div class="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-7 gap-2">
-                                <button class="sound-btn bg-red-900/80 hover:bg-red-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kick</button>
-                                <button class="sound-btn bg-orange-900/80 hover:bg-orange-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Restringir</button>
-                                <button class="sound-btn bg-black hover:bg-gray-800 border border-gray-700 hover:border-red-600 text-red-500 hover:text-red-400 text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kill</button>
-                                <button class="sound-btn bg-blue-900/80 hover:bg-blue-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Frz / Unfrz</button>
-                                <button class="sound-btn bg-green-900/80 hover:bg-green-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Nerd</button>
-                                <button class="sound-btn bg-purple-900/80 hover:bg-purple-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Screamer</button>
-                                <button class="sound-btn bg-yellow-900/80 hover:bg-yellow-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm col-span-3 sm:col-span-1 xl:col-span-1">Rgd / Unrgd</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kick</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Restringir</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kill</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Frz / Unfrz</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Nerd</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Screamer</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm col-span-3 sm:col-span-1 xl:col-span-1">Rgd / Unrgd</button>
                             </div>
                         </div>
 
@@ -129,14 +127,15 @@
                                     <span class="text-[9px] md:text-[10px] text-gray-500 font-mono">ID: 987654321</span>
                                 </div>
                             </div>
+                            <!-- Botones Grises Estilo Sawer -->
                             <div class="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-7 gap-2">
-                                <button class="sound-btn bg-red-900/80 hover:bg-red-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kick</button>
-                                <button class="sound-btn bg-orange-900/80 hover:bg-orange-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Restringir</button>
-                                <button class="sound-btn bg-black hover:bg-gray-800 border border-gray-700 hover:border-red-600 text-red-500 hover:text-red-400 text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kill</button>
-                                <button class="sound-btn bg-blue-900/80 hover:bg-blue-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Frz / Unfrz</button>
-                                <button class="sound-btn bg-green-900/80 hover:bg-green-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Nerd</button>
-                                <button class="sound-btn bg-purple-900/80 hover:bg-purple-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Screamer</button>
-                                <button class="sound-btn bg-yellow-900/80 hover:bg-yellow-600 text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm col-span-3 sm:col-span-1 xl:col-span-1">Rgd / Unrgd</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kick</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Restringir</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kill</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Frz / Unfrz</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Nerd</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Screamer</button>
+                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm col-span-3 sm:col-span-1 xl:col-span-1">Rgd / Unrgd</button>
                             </div>
                         </div>
 
@@ -158,13 +157,13 @@
                             
                             <!-- Botones Rápidos Masivos -->
                             <div class="grid grid-cols-2 gap-3">
-                                <button class="sound-btn bg-red-900 hover:bg-red-600 border border-red-500 text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
+                                <button class="sound-btn bg-sawerGrey hover:bg-gray-800 border border-gray-600 text-gray-300 hover:text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
                                     Kick All
                                 </button>
-                                <button class="sound-btn bg-black hover:bg-gray-800 border border-gray-600 hover:border-red-600 text-red-500 hover:text-red-400 font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
+                                <button class="sound-btn bg-black hover:bg-gray-900 border border-gray-700 hover:border-red-600 text-red-500 hover:text-red-400 font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
                                     Kill All
                                 </button>
-                                <button class="sound-btn col-span-2 bg-blue-900/50 hover:bg-blue-600 border border-blue-500/50 hover:border-blue-400 text-blue-200 hover:text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
+                                <button class="sound-btn col-span-2 bg-sawerGrey hover:bg-gray-800 border border-gray-600 text-gray-300 hover:text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
                                     Freeze All / Unfreeze All
                                 </button>
                             </div>
