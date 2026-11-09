@@ -19,7 +19,7 @@
         }
     </script>
     
-    <!-- Librería para las gráficas (Chart.js) -->
+    <!-- Librería Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Firebase -->
@@ -79,162 +79,118 @@
             </div>
         </aside>
 
-        <!-- ZONA DE ANÁLISIS -->
-        <main class="flex-1 p-4 md:p-10 overflow-hidden relative z-10 flex flex-col min-h-0 w-full bg-sawerDark">
-            <div class="absolute top-0 left-1/4 w-96 h-96 bg-sawerRed/5 rounded-full blur-[100px] pointer-events-none hidden md:block"></div>
-
-            <div class="flex-col w-full h-full max-w-7xl mx-auto overflow-y-auto custom-scroll pb-10 md:pb-0 pr-1">
-                <header class="mb-6 md:mb-10">
-                    <h1 class="text-2xl md:text-4xl font-black tracking-wide">MÉTRICAS Y ANÁLISIS</h1>
-                    <p class="text-gray-400 mt-1 md:mt-2 text-sm md:text-base">Visualización de datos de Discord, Roblox y Web en tiempo real.</p>
+        <!-- ZONA DE ANÁLISIS (ESTILO VERCEL) -->
+        <main class="flex-1 p-4 md:p-8 overflow-hidden relative z-10 flex flex-col min-h-0 w-full bg-[#0a0a0a]">
+            
+            <div class="flex-col w-full h-full max-w-7xl mx-auto overflow-y-auto custom-scroll pb-10 md:pb-0 pr-2">
+                <header class="mb-6">
+                    <h1 class="text-2xl md:text-3xl font-black tracking-wide">MÉTRICAS Y ANÁLISIS</h1>
+                    <p class="text-gray-400 mt-1 text-sm">Visualización de datos y tendencias en tiempo real.</p>
                 </header>
 
-                <!-- ========================================== -->
-                <!-- 4 TARJETAS NUMÉRICAS (Resumen en vivo) -->
-                <!-- ========================================== -->
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 w-full content-start" id="contenedor-metricas">
+                <!-- 4 PANELES GRANDES (2x2) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full pb-10">
                     
-                    <!-- Tarjeta 1 -->
-                    <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col">
-                        <div class="absolute right-0 top-0 w-16 h-full bg-blue-500/5 skew-x-12 transform origin-top"></div>
-                        <div class="flex items-center gap-3 mb-4 z-10">
-                            <div class="p-2 bg-blue-900/30 rounded-lg border border-blue-500/30 text-blue-400">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            </div>
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Discord</h3>
-                        </div>
-                        <div class="mt-1 z-10 flex flex-col">
-                            <span class="text-4xl font-black text-white" id="val-miembros">0</span>
-                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Miembros Totales</span>
-                        </div>
-                        <div class="mt-auto pt-4 grid grid-cols-2 gap-2 z-10 border-t border-gray-800">
+                    <!-- PANEL 1: DISCORD -->
+                    <div class="bg-[#111111] border border-gray-800 rounded-xl p-5 md:p-6 shadow-xl flex flex-col h-[320px] relative overflow-hidden group hover:border-blue-500/50 transition-colors">
+                        <div class="flex justify-between items-start z-10">
                             <div>
-                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Joins (Mes)</p>
-                                <p class="text-green-400 font-bold text-sm flex items-center gap-1"><span id="val-joins">+0</span></p>
+                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    Comunidad Discord
+                                </h3>
+                                <div class="mt-2 flex items-baseline gap-2">
+                                    <span class="text-4xl md:text-5xl font-black text-white" id="val-miembros">0</span>
+                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Miembros Totales</span>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Leaves (Mes)</p>
-                                <p class="text-red-500 font-bold text-sm flex items-center gap-1"><span id="val-leaves">-0</span></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tarjeta 2 -->
-                    <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col">
-                        <div class="absolute right-0 top-0 w-16 h-full bg-purple-500/5 skew-x-12 transform origin-top"></div>
-                        <div class="flex items-center gap-3 mb-4 z-10">
-                            <div class="p-2 bg-purple-900/30 rounded-lg border border-purple-500/30 text-purple-400">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                            </div>
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Chat</h3>
-                        </div>
-                        <div class="mt-1 z-10 flex flex-col">
-                            <span class="text-4xl font-black text-white" id="val-mensajes">0</span>
-                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Mensajes (Mes)</span>
-                        </div>
-                        <div class="mt-auto pt-4 z-10 border-t border-gray-800">
-                            <div class="w-full bg-sawerDark rounded-full h-1.5 mb-1.5 border border-gray-700">
-                                <div class="bg-purple-500 h-1.5 rounded-full" style="width: 100%"></div>
-                            </div>
-                            <p class="text-gray-500 text-[9px] uppercase font-bold text-right">Métrica Mensual</p>
-                        </div>
-                    </div>
-
-                    <!-- Tarjeta 3 -->
-                    <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col">
-                        <div class="absolute right-0 top-0 w-16 h-full bg-sawerRed/5 skew-x-12 transform origin-top"></div>
-                        <div class="flex items-center gap-3 mb-4 z-10">
-                            <div class="p-2 bg-red-900/30 rounded-lg border border-red-500/30 text-sawerRed">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Roblox</h3>
-                        </div>
-                        <div class="mt-1 z-10 flex flex-col">
-                            <span class="text-4xl font-black text-white" id="val-visitas">--</span>
-                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Visitas (Mes)</span>
-                        </div>
-                        <div class="mt-auto pt-4 z-10 border-t border-gray-800">
-                            <p class="text-gray-500 text-[9px] uppercase font-bold mb-1">Último Ingreso:</p>
-                            <div class="flex items-center gap-2 mt-1">
-                                <img src="../Inquisitor.png" class="w-5 h-5 rounded-full border border-sawerRed bg-sawerDark">
-                                <span class="text-gray-300 text-xs font-bold truncate">Esperando datos...</span>
+                            <div class="text-right">
+                                <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Joins / Leaves (Mes)</p>
+                                <div class="flex gap-3 justify-end text-sm md:text-base font-bold">
+                                    <span class="text-green-400" id="val-joins">+0</span>
+                                    <span class="text-red-500" id="val-leaves">-0</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Tarjeta 4 -->
-                    <div class="bg-sawerGrey border border-sawerRed/30 rounded-2xl p-5 shadow-lg relative overflow-hidden flex flex-col">
-                        <div class="absolute right-0 top-0 w-16 h-full bg-orange-500/5 skew-x-12 transform origin-top"></div>
-                        <div class="flex items-center gap-3 mb-4 z-10">
-                            <div class="p-2 bg-orange-900/30 rounded-lg border border-orange-500/30 text-orange-400">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                            </div>
-                            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-300">Web</h3>
-                        </div>
-                        <div class="mt-1 z-10 flex flex-col">
-                            <span class="text-4xl font-black text-white" id="val-web">0</span>
-                            <span class="text-gray-400 text-[10px] uppercase font-bold mt-1">Visitas Históricas Totales</span>
-                        </div>
-                        <div class="mt-auto pt-4 z-10 border-t border-gray-800">
-                            <div class="w-full bg-sawerDark rounded-full h-1.5 mb-1.5 border border-gray-700">
-                                <div class="bg-orange-500 h-1.5 rounded-full animate-pulse" style="width: 100%"></div>
-                            </div>
-                            <p class="text-gray-500 text-[9px] uppercase font-bold text-right">proyectosawer.com</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========================================== -->
-                <!-- SECCIÓN DE GRÁFICAS VISUALES (ESTILO PRO)  -->
-                <!-- ========================================== -->
-                <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 w-full mb-10">
-                    
-                    <!-- Gráfico 1: Evolución Discord -->
-                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl p-5 shadow-lg w-full">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-300">Nuevos Miembros Discord</h3>
-                            <span class="text-[10px] text-gray-500 bg-sawerDark px-2 py-1 rounded">Últimos 7 días</span>
-                        </div>
-                        <div class="relative h-48 md:h-64 w-full">
+                        <!-- Canvas Chart -->
+                        <div class="flex-1 w-full mt-6 relative z-0 min-h-0">
                             <canvas id="chartDiscord"></canvas>
                         </div>
                     </div>
 
-                    <!-- Gráfico 2: Actividad Chat -->
-                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl p-5 shadow-lg w-full">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-300">Volumen de Chat</h3>
-                            <span class="text-[10px] text-gray-500 bg-sawerDark px-2 py-1 rounded">Últimos 7 días</span>
+                    <!-- PANEL 2: CHAT -->
+                    <div class="bg-[#111111] border border-gray-800 rounded-xl p-5 md:p-6 shadow-xl flex flex-col h-[320px] relative overflow-hidden group hover:border-purple-500/50 transition-colors">
+                        <div class="flex justify-between items-start z-10">
+                            <div>
+                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                                    Actividad de Chat
+                                </h3>
+                                <div class="mt-2 flex items-baseline gap-2">
+                                    <span class="text-4xl md:text-5xl font-black text-white" id="val-mensajes">0</span>
+                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Mensajes (Mes)</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Métrica</p>
+                                <span class="text-gray-300 text-xs md:text-sm font-bold">Volumen Diario</span>
+                            </div>
                         </div>
-                        <div class="relative h-48 md:h-64 w-full">
+                        <div class="flex-1 w-full mt-6 relative z-0 min-h-0">
                             <canvas id="chartChat"></canvas>
                         </div>
                     </div>
 
-                    <!-- Gráfico 3: Tráfico Roblox -->
-                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl p-5 shadow-lg w-full">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-300">Ingresos al Juego (Roblox)</h3>
-                            <span class="text-[10px] text-gray-500 bg-sawerDark px-2 py-1 rounded">Últimos 7 días</span>
+                    <!-- PANEL 3: ROBLOX -->
+                    <div class="bg-[#111111] border border-gray-800 rounded-xl p-5 md:p-6 shadow-xl flex flex-col h-[320px] relative overflow-hidden group hover:border-red-500/50 transition-colors">
+                        <div class="flex justify-between items-start z-10">
+                            <div>
+                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-sawerRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Tráfico Roblox
+                                </h3>
+                                <div class="mt-2 flex items-baseline gap-2">
+                                    <span class="text-4xl md:text-5xl font-black text-white" id="val-visitas">0</span>
+                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Visitas (Mes)</span>
+                                </div>
+                            </div>
+                            <div class="text-right flex flex-col items-end">
+                                <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Último Ingreso</p>
+                                <div class="flex items-center gap-2 bg-black/40 px-2 py-1 rounded border border-gray-800">
+                                    <img src="../Inquisitor.png" id="avatar-ultimo-jugador" class="w-5 h-5 md:w-6 md:h-6 rounded-full border border-sawerRed object-cover bg-sawerDark">
+                                    <span class="text-gray-300 text-xs font-bold truncate max-w-[80px] md:max-w-[120px]" id="nombre-ultimo-jugador">Nadie aún</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="relative h-48 md:h-64 w-full">
+                        <div class="flex-1 w-full mt-6 relative z-0 min-h-0">
                             <canvas id="chartRoblox"></canvas>
                         </div>
                     </div>
 
-                    <!-- Gráfico 4: Tráfico Web -->
-                    <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl p-5 shadow-lg w-full">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-300">Visitas Públicas (Web)</h3>
-                            <span class="text-[10px] text-gray-500 bg-sawerDark px-2 py-1 rounded">Últimos 7 días</span>
+                    <!-- PANEL 4: WEB -->
+                    <div class="bg-[#111111] border border-gray-800 rounded-xl p-5 md:p-6 shadow-xl flex flex-col h-[320px] relative overflow-hidden group hover:border-orange-500/50 transition-colors">
+                        <div class="flex justify-between items-start z-10">
+                            <div>
+                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                    Tráfico Web
+                                </h3>
+                                <div class="mt-2 flex items-baseline gap-2">
+                                    <span class="text-4xl md:text-5xl font-black text-white" id="val-web">0</span>
+                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Visitas Totales</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Dominio</p>
+                                <span class="text-gray-300 text-xs font-bold">proyectosawer.com</span>
+                            </div>
                         </div>
-                        <div class="relative h-48 md:h-64 w-full">
+                        <div class="flex-1 w-full mt-6 relative z-0 min-h-0">
                             <canvas id="chartWeb"></canvas>
                         </div>
                     </div>
 
                 </div>
-
             </div>
         </main>
     </div>
@@ -269,7 +225,7 @@
                 
                 const mes = getMesActual();
                 
-                // Conexiones a Firebase (Tarjetas Superiores)
+                // Conexiones a Firebase para actualizar los números
                 rtdb.ref('EstadisticasWeb/VisitasTotales').on('value', snap => {
                     document.getElementById('val-web').innerText = (snap.val() || 0).toLocaleString();
                 });
@@ -285,13 +241,13 @@
                 robloxRef.child('UltimoIngreso').on('value', snap => {
                     const data = snap.val();
                     if (data) {
-                        const spanNombre = document.querySelector('#contenedor-metricas > div:nth-child(3) .truncate');
+                        const spanNombre = document.getElementById('nombre-ultimo-jugador');
                         if(spanNombre) spanNombre.innerText = data.nombre;
                         if (data.id) {
                             fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${data.id}&size=150x150&format=Png&isCircular=false`)
                             .then(r => r.json()).then(j => {
                                 if (j.data && j.data.length > 0) {
-                                    const imgTarget = document.querySelector('#contenedor-metricas > div:nth-child(3) img');
+                                    const imgTarget = document.getElementById('avatar-ultimo-jugador');
                                     if(imgTarget) imgTarget.src = j.data[0].imageUrl;
                                 }
                             }).catch(()=>{});
@@ -299,8 +255,10 @@
                     }
                 });
 
-                // Iniciar las gráficas una vez que la pantalla cargó
-                inicializarGraficas();
+                // Iniciar las gráficas Chart.js dándole 50ms para que el DOM se haya pintado completamente
+                setTimeout(() => {
+                    inicializarGraficas();
+                }, 50);
 
             } else {
                 window.location.href = '../fun.html';
@@ -311,77 +269,91 @@
 
         /* ==========================================
            MOTOR DE GRÁFICAS (CHART.JS)
+           Estilo Minimalista Tipo Servidor
            ========================================== */
         function inicializarGraficas() {
-            // Configuración global para estilo oscuro (Grid sutil)
-            Chart.defaults.color = '#6b7280';
-            Chart.defaults.font.family = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+            Chart.defaults.color = 'rgba(255, 255, 255, 0.4)';
+            Chart.defaults.font.family = 'ui-sans-serif, system-ui, -apple-system, sans-serif';
+            Chart.defaults.font.size = 10;
             
             const commonOptions = {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } }, // Ocultamos la leyenda
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1
+                    }
+                },
                 scales: {
-                    x: { grid: { display: false, drawBorder: false } },
+                    x: { 
+                        grid: { display: false }, // Sin líneas verticales
+                        border: { display: false }
+                    },
                     y: { 
                         beginAtZero: true, 
-                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false }, // Líneas grises casi invisibles
-                        ticks: { maxTicksLimit: 5 }
+                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false }, // Líneas horizontales muy sutiles
+                        border: { dash: [4, 4], display: false }, // Estilo punteado
+                        ticks: { maxTicksLimit: 4 }
                     }
                 },
                 elements: {
-                    line: { tension: 0.3, borderWidth: 2 }, // Línea ligeramente curva y definida
-                    point: { radius: 0, hitRadius: 10, hoverRadius: 5 } // Puntos invisibles hasta que pasas el mouse
+                    line: { tension: 0.2, borderWidth: 2 }, // Línea un poco curva
+                    point: { radius: 0, hitRadius: 20, hoverRadius: 4 } // Puntos invisibles hasta pasar el mouse
                 },
                 interaction: { mode: 'index', intersect: false }
             };
 
-            const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+            const labelsDias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']; // Mockup de los últimos 7 días
 
-            // Función genérica para crear las gráficas con degradado
-            function crearGrafico(idCanvas, colorLinea, colorFondoOpaco, datos) {
-                const ctx = document.getElementById(idCanvas).getContext('2d');
+            // Función para pintar la gráfica y el degradado interior
+            function crearGrafico(idCanvas, colorLinea, colorFondo, datos) {
+                const canvas = document.getElementById(idCanvas);
+                if (!canvas) return; // Evita errores si no se encuentra
+                const ctx = canvas.getContext('2d');
                 
-                // Crear el degradado (área rellenada debajo de la línea)
-                let gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                gradient.addColorStop(0, colorFondoOpaco); // Color intenso arriba
-                gradient.addColorStop(1, 'rgba(15, 15, 15, 0)'); // Se desvanece al oscuro del fondo abajo
+                let gradient = ctx.createLinearGradient(0, 0, 0, canvas.parentElement.clientHeight);
+                gradient.addColorStop(0, colorFondo); 
+                gradient.addColorStop(1, 'rgba(10, 10, 10, 0)'); // Se desvanece al fondo oscuro
 
                 new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: diasSemana,
+                        labels: labelsDias,
                         datasets: [{
                             data: datos,
                             borderColor: colorLinea,
                             backgroundColor: gradient,
-                            fill: true // Activa el relleno de área
+                            fill: true // Activa el degradado debajo de la línea
                         }]
                     },
                     options: commonOptions
                 });
             }
 
-            // Datos de prueba (mockups) para demostrar la estética visual
-            crearGrafico('chartDiscord', '#3b82f6', 'rgba(59, 130, 246, 0.3)', [2, 5, 3, 8, 4, 12, 7]); // Azul
-            crearGrafico('chartChat', '#a855f7', 'rgba(168, 85, 247, 0.3)', [120, 300, 150, 450, 200, 600, 410]); // Morado
-            crearGrafico('chartRoblox', '#c20000', 'rgba(194, 0, 0, 0.3)', [0, 5, 2, 18, 9, 25, 14]); // Rojo
-            crearGrafico('chartWeb', '#f97316', 'rgba(249, 115, 22, 0.3)', [5, 12, 8, 30, 15, 45, 22]); // Naranja
+            // Datos de relleno (Mockups temporales para el efecto visual)
+            crearGrafico('chartDiscord', '#3b82f6', 'rgba(59, 130, 246, 0.2)', [1, 3, 2, 6, 4, 9, 5]); // Azul Discord
+            crearGrafico('chartChat', '#a855f7', 'rgba(168, 85, 247, 0.2)', [50, 120, 80, 200, 160, 300, 250]); // Morado Chat
+            crearGrafico('chartRoblox', '#c20000', 'rgba(194, 0, 0, 0.2)', [2, 5, 3, 10, 7, 15, 12]); // Rojo Sawer
+            crearGrafico('chartWeb', '#f97316', 'rgba(249, 115, 22, 0.2)', [10, 25, 15, 40, 35, 60, 50]); // Naranja Web
         }
 
-        /* SONIDOS */
+        /* SONIDOS DE BOTONES */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playHoverSound() { if (audioCtx.state === 'suspended') return; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(900, audioCtx.currentTime); gain.gain.setValueAtTime(0.015, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05); }
         function playClickSound() { if (audioCtx.state === 'suspended') audioCtx.resume(); const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'square'; osc.frequency.setValueAtTime(450, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
         document.body.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
         
-        function reasignarSonidos() {
-            document.querySelectorAll('.sound-btn, .sound-card').forEach(el => {
+        setTimeout(() => { 
+            document.querySelectorAll('.sound-btn').forEach(el => {
                 el.addEventListener('mouseenter', playHoverSound);
                 el.addEventListener('mousedown', playClickSound);
             });
-        }
-        setTimeout(() => { reasignarSonidos(); }, 500);
+        }, 500);
     </script>
 </body>
 </html>
