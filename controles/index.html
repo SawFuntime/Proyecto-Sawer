@@ -45,7 +45,7 @@
         <!-- HEADER MÓVIL -->
         <div class="md:hidden flex items-center justify-between bg-sawerGrey border-b border-sawerRed/40 p-4 z-40 relative shadow-lg flex-shrink-0">
             <div class="flex items-center gap-3">
-                <img src="../Inquisitor.png" class="w-10 h-10 rounded-full border border-sawerRed object-cover" onerror="this.src='https://via.placeholder.com/50/c20000/ffffff?text=S'">
+                <img src="../Inquisitor.png" class="w-10 h-10 rounded-full border border-sawerRed object-cover">
                 <h2 class="text-lg font-black tracking-widest uppercase">Controles <span class="text-sawerRed">Globales</span></h2>
             </div>
             <button onclick="window.location.href='../fun.html'" class="sound-btn text-sawerRed hover:text-white transition-colors p-2 bg-sawerDark rounded border border-sawerRed/30">
@@ -56,7 +56,7 @@
         <!-- SIDEBAR -->
         <aside id="sidebar" class="hidden md:flex flex-col w-72 bg-sawerGrey border-r border-sawerRed/40 justify-between shadow-[5px_0_15px_rgba(0,0,0,0.5)] z-50 flex-shrink-0">
             <div class="p-8 flex flex-col items-center justify-center border-b border-sawerRed/20">
-                <img src="../Inquisitor.png" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover" onerror="this.src='https://via.placeholder.com/150/c20000/ffffff?text=Sawer'">
+                <img src="../Inquisitor.png" class="w-28 h-28 rounded-full border-2 border-sawerRed shadow-[0_0_15px_rgba(194,0,0,0.4)] mb-4 object-cover">
                 <h2 class="text-xl font-bold tracking-widest text-center uppercase leading-tight">Controles<br><span class="text-sawerRed">Globales</span></h2>
             </div>
             
@@ -95,50 +95,9 @@
                         </div>
                     </div>
 
+                    <!-- Lista de Jugadores Reales -->
                     <div class="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 custom-scroll" id="contenedor-jugadores-activos">
-                        
-                        <!-- Tarjeta de Jugador Mockup 1 -->
-                        <div class="bg-sawerDark border border-gray-700 hover:border-sawerRed/50 transition-colors rounded-xl p-3 md:p-4 flex flex-col gap-3 shadow-md">
-                            <div class="flex items-center gap-3 border-b border-gray-800 pb-2">
-                                <img src="../Inquisitor.png" class="w-10 h-10 md:w-12 md:h-12 rounded-lg border border-gray-600 object-cover bg-sawerGrey">
-                                <div>
-                                    <span class="font-bold text-sm md:text-base text-gray-200 block leading-none">SawFuntime</span>
-                                    <span class="text-[9px] md:text-[10px] text-gray-500 font-mono">ID: 123456789</span>
-                                </div>
-                            </div>
-                            <!-- Botones Grises Estilo Sawer -->
-                            <div class="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-7 gap-2">
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kick</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Restringir</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kill</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Frz / Unfrz</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Nerd</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Screamer</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm col-span-3 sm:col-span-1 xl:col-span-1">Rgd / Unrgd</button>
-                            </div>
-                        </div>
-
-                        <!-- Tarjeta de Jugador Mockup 2 -->
-                        <div class="bg-sawerDark border border-gray-700 hover:border-sawerRed/50 transition-colors rounded-xl p-3 md:p-4 flex flex-col gap-3 shadow-md">
-                            <div class="flex items-center gap-3 border-b border-gray-800 pb-2">
-                                <img src="../Inquisitor.png" class="w-10 h-10 md:w-12 md:h-12 rounded-lg border border-gray-600 object-cover bg-sawerGrey">
-                                <div>
-                                    <span class="font-bold text-sm md:text-base text-gray-200 block leading-none">JugadorInvitado</span>
-                                    <span class="text-[9px] md:text-[10px] text-gray-500 font-mono">ID: 987654321</span>
-                                </div>
-                            </div>
-                            <!-- Botones Grises Estilo Sawer -->
-                            <div class="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-7 gap-2">
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kick</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Restringir</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kill</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Frz / Unfrz</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Nerd</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Screamer</button>
-                                <button class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm col-span-3 sm:col-span-1 xl:col-span-1">Rgd / Unrgd</button>
-                            </div>
-                        </div>
-
+                        <!-- Generado por JS -->
                     </div>
                 </div>
 
@@ -157,13 +116,13 @@
                             
                             <!-- Botones Rápidos Masivos -->
                             <div class="grid grid-cols-2 gap-3">
-                                <button class="sound-btn bg-sawerGrey hover:bg-gray-800 border border-gray-600 text-gray-300 hover:text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
+                                <button onclick="enviarComando('KickAll', 'All')" class="sound-btn bg-sawerGrey hover:bg-gray-800 border border-gray-600 text-gray-300 hover:text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
                                     Kick All
                                 </button>
-                                <button class="sound-btn bg-black hover:bg-gray-900 border border-gray-700 hover:border-red-600 text-red-500 hover:text-red-400 font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
+                                <button onclick="enviarComando('KillAll', 'All')" class="sound-btn bg-black hover:bg-gray-900 border border-gray-700 hover:border-red-600 text-red-500 hover:text-red-400 font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
                                     Kill All
                                 </button>
-                                <button class="sound-btn col-span-2 bg-sawerGrey hover:bg-gray-800 border border-gray-600 text-gray-300 hover:text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
+                                <button onclick="enviarComando('FreezeAllToggle', 'All')" class="sound-btn col-span-2 bg-sawerGrey hover:bg-gray-800 border border-gray-600 text-gray-300 hover:text-white font-bold uppercase tracking-wider py-3 rounded-lg text-xs transition-colors shadow-md">
                                     Freeze All / Unfreeze All
                                 </button>
                             </div>
@@ -176,8 +135,8 @@
                                 <div>
                                     <label class="block text-xs text-gray-400 uppercase font-bold mb-2 tracking-widest">Hora del Mapa</label>
                                     <div class="flex gap-2">
-                                        <input type="text" placeholder="Ej: 14:00" class="flex-1 bg-sawerDark border border-gray-600 rounded-lg p-2 md:p-3 text-white focus:border-sawerRed focus:outline-none transition-colors text-sm font-mono">
-                                        <button class="sound-btn bg-sawerRed hover:bg-red-700 text-white font-bold uppercase text-xs px-4 md:px-5 rounded-lg transition-colors shadow-md">
+                                        <input type="text" id="input-hora" placeholder="Ej: 14:00" class="flex-1 bg-sawerDark border border-gray-600 rounded-lg p-2 md:p-3 text-white focus:border-sawerRed focus:outline-none transition-colors text-sm font-mono">
+                                        <button onclick="enviarInput('HoraMapa', 'input-hora')" class="sound-btn bg-sawerRed hover:bg-red-700 text-white font-bold uppercase text-xs px-4 md:px-5 rounded-lg transition-colors shadow-md">
                                             Aplicar
                                         </button>
                                     </div>
@@ -187,8 +146,8 @@
                                 <div>
                                     <label class="block text-xs text-gray-400 uppercase font-bold mb-2 tracking-widest">Mensaje Global</label>
                                     <div class="flex gap-2">
-                                        <input type="text" placeholder="Escribe tu anuncio aquí..." class="flex-1 bg-sawerDark border border-gray-600 rounded-lg p-2 md:p-3 text-white focus:border-sawerRed focus:outline-none transition-colors text-sm">
-                                        <button class="sound-btn bg-sawerRed hover:bg-red-700 text-white font-bold uppercase text-xs px-4 md:px-5 rounded-lg transition-colors shadow-md">
+                                        <input type="text" id="input-mensaje" placeholder="Escribe tu anuncio aquí..." class="flex-1 bg-sawerDark border border-gray-600 rounded-lg p-2 md:p-3 text-white focus:border-sawerRed focus:outline-none transition-colors text-sm">
+                                        <button onclick="enviarInput('MensajeGlobal', 'input-mensaje')" class="sound-btn bg-sawerRed hover:bg-red-700 text-white font-bold uppercase text-xs px-4 md:px-5 rounded-lg transition-colors shadow-md">
                                             Enviar
                                         </button>
                                     </div>
@@ -199,12 +158,11 @@
                     </div>
 
                 </div>
-
             </div>
         </main>
     </div>
 
-    <!-- SCRIPTS -->
+    <!-- SCRIPTS CORE -->
     <script>
         const CORREO_ADMIN = "willem0711@gmail.com";
         const firebaseConfig = {
@@ -228,15 +186,14 @@
                 const app = document.getElementById('app-container');
                 app.classList.remove('hidden');
                 app.classList.add('flex');
+                iniciarEscuchaJugadores();
             } else {
                 window.location.href = '../fun.html';
             }
         });
 
         function logout() {
-            auth.signOut().then(() => {
-                window.location.href = '../fun.html';
-            });
+            auth.signOut().then(() => { window.location.href = '../fun.html'; });
         }
 
         /* SONIDOS */
@@ -247,13 +204,174 @@
         
         function reasignarSonidos() {
             document.querySelectorAll('.sound-btn, .sound-card').forEach(el => {
+                el.removeEventListener('mouseenter', playHoverSound);
+                el.removeEventListener('mousedown', playClickSound);
                 el.addEventListener('mouseenter', playHoverSound);
                 el.addEventListener('mousedown', playClickSound);
             });
         }
+
+        /* ========================================================
+           SISTEMA DE COMANDOS EN VIVO A ROBLOX
+           ======================================================== */
         
-        // Asignar los sonidos a los botones estáticos generados
-        setTimeout(() => { reasignarSonidos(); }, 500);
+        // Enviar un comando a Firebase para que Roblox lo lea
+        async function enviarComando(accion, targetId, valor = "", btnObj = null) {
+            try {
+                // Feedback visual rápido
+                if (btnObj) {
+                    const textoOriginal = btnObj.innerText;
+                    btnObj.innerText = "...";
+                    btnObj.classList.add('opacity-50');
+                    setTimeout(() => {
+                        btnObj.innerText = textoOriginal;
+                        btnObj.classList.remove('opacity-50');
+                    }, 500);
+                }
+
+                const cmdRef = rtdb.ref('LiveCommands').push();
+                await cmdRef.set({
+                    accion: accion,
+                    target: targetId,
+                    valor: valor,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+            } catch (error) {
+                console.error("Error al enviar el comando:", error);
+            }
+        }
+
+        // Leer los inputs de texto (Hora y Anuncios)
+        function enviarInput(accion, inputId) {
+            const inputElement = document.getElementById(inputId);
+            const valor = inputElement.value.trim();
+            if (!valor) return;
+
+            enviarComando(accion, 'All', valor);
+            inputElement.value = ''; // Limpiar la caja después de enviar
+        }
+
+
+        /* ========================================================
+           SISTEMA DE JUGADORES EN TIEMPO REAL
+           ======================================================== */
+        let userNamesMap = {};
+        let pendingNameRequests = new Set(); 
+
+        async function preCargarNombres() {
+            if (Object.keys(userNamesMap).length > 0) return;
+            try {
+                const snap = await db.collection("users").get();
+                snap.forEach(doc => {
+                    const u = doc.data();
+                    if(u.robloxUserId) { userNamesMap[u.robloxUserId] = u.robloxUsername; }
+                });
+            } catch(e) { console.error("Error precargando nombres:", e); }
+        }
+
+        async function obtenerNombreRobloxInesperado(rblxId) {
+            if (userNamesMap[rblxId] || pendingNameRequests.has(rblxId)) return;
+            pendingNameRequests.add(rblxId);
+            try {
+                const response = await fetch(`https://users.roproxy.com/v1/users/${rblxId}`);
+                const data = await response.json();
+                if (data && data.name) {
+                    userNamesMap[rblxId] = data.name;
+                    const spanElement = document.getElementById(`name-ctrl-${rblxId}`);
+                    if (spanElement) spanElement.innerText = data.name;
+                }
+            } catch (error) { console.error(`No se pudo obtener el nombre para ${rblxId}:`, error); }
+        }
+
+        function fetchAvatar(rblxId, imgId) {
+            if(!rblxId) return;
+            fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${rblxId}&size=420x420&format=Png&isCircular=false`)
+                .then(r => r.json())
+                .then(j => {
+                    if (j.data && j.data.length > 0) {
+                        const el = document.getElementById(imgId);
+                        if(el) el.src = j.data[0].imageUrl;
+                    }
+                }).catch(()=>{});
+        }
+
+        function iniciarEscuchaJugadores() {
+            const cont = document.getElementById('contenedor-jugadores-activos');
+            
+            cont.innerHTML = `
+                <div class="flex flex-col items-center justify-center text-gray-500 opacity-50 mt-20" id="ctrl-cargando">
+                    <svg class="animate-spin h-10 w-10 text-sawerRed mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="font-bold tracking-widest text-xs md:text-sm">BUSCANDO JUGADORES...</p>
+                </div>
+            `;
+
+            preCargarNombres().then(() => {
+                rtdb.ref('jugadores').on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    
+                    if (!data) {
+                        cont.innerHTML = '<div class="flex items-center justify-center text-gray-500 font-bold tracking-widest mt-20 text-xs md:text-sm text-center px-4 uppercase">No hay nadie en el servidor</div>';
+                        return;
+                    }
+
+                    let activosArr = [];
+
+                    for (const key in data) {
+                        const rblxId = key.split('_')[1];
+                        const globalData = data[key].DatosGlobales || {};
+                        const estaOnline = globalData.IsOnline === true; 
+                        
+                        // Solo incluimos a los que están activamente en el servidor
+                        if (estaOnline) { 
+                            if (!userNamesMap[rblxId]) obtenerNombreRobloxInesperado(rblxId);
+                            activosArr.push({
+                                id: rblxId,
+                                nombre: userNamesMap[rblxId] || `Cargando...`
+                            });
+                        }
+                    }
+
+                    if (activosArr.length === 0) {
+                        cont.innerHTML = '<div class="flex items-center justify-center text-gray-500 font-bold tracking-widest mt-20 text-xs md:text-sm text-center px-4 uppercase">No hay nadie en el servidor</div>';
+                        return;
+                    }
+
+                    let htmlList = '';
+                    
+                    activosArr.forEach((jugador) => {
+                        htmlList += `
+                        <div class="bg-sawerDark border border-gray-700 hover:border-sawerRed/50 transition-colors rounded-xl p-3 md:p-4 flex flex-col gap-3 shadow-md">
+                            <div class="flex items-center gap-3 border-b border-gray-800 pb-2">
+                                <img id="av-ctrl-${jugador.id}" src="../Inquisitor.png" class="w-10 h-10 md:w-12 md:h-12 rounded-lg border border-gray-600 object-cover bg-sawerGrey flex-shrink-0">
+                                <div class="overflow-hidden">
+                                    <span id="name-ctrl-${jugador.id}" class="font-bold text-sm md:text-base text-gray-200 block leading-none truncate">${jugador.nombre}</span>
+                                    <span class="text-[9px] md:text-[10px] text-gray-500 font-mono">ID: ${jugador.id}</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-7 gap-2">
+                                <button onclick="enviarComando('Kick', '${jugador.id}', '', this)" class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kick</button>
+                                <button onclick="enviarComando('Restringir', '${jugador.id}', '', this)" class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Restringir</button>
+                                <button onclick="enviarComando('Kill', '${jugador.id}', '', this)" class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Kill</button>
+                                <button onclick="enviarComando('FreezeToggle', '${jugador.id}', '', this)" class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Frz/Unfrz</button>
+                                <button onclick="enviarComando('Nerd', '${jugador.id}', '', this)" class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Nerd</button>
+                                <button onclick="enviarComando('Screamer', '${jugador.id}', '', this)" class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm">Screamer</button>
+                                <button onclick="enviarComando('RagdollToggle', '${jugador.id}', '', this)" class="sound-btn bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 hover:text-white text-[9px] md:text-[10px] uppercase font-bold py-1.5 md:py-2 rounded transition-colors shadow-sm col-span-3 sm:col-span-1 xl:col-span-1">Rgd/Unrgd</button>
+                            </div>
+                        </div>
+                        `;
+                    });
+
+                    cont.innerHTML = htmlList;
+                    
+                    // Cargar fotos y sonidos a los nuevos botones
+                    activosArr.forEach(j => fetchAvatar(j.id, `av-ctrl-${j.id}`));
+                    setTimeout(() => { reasignarSonidos(); }, 300);
+                });
+            });
+        }
     </script>
 </body>
 </html>
