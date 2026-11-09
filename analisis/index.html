@@ -241,7 +241,36 @@
                 discordRef.child(`${mes}/Mensajes`).on('value', snap => {
                     document.getElementById('val-mensajes').innerText = (snap.val() || 0).toLocaleString();
                 });
+                // 3. MÉTRICAS DE ROBLOX (Webhook)
+                const robloxRef = rtdb.ref('Analisis/Roblox');
 
+                // Visitas del mes
+                robloxRef.child(`${mes}/Visitas`).on('value', snap => {
+                    document.getElementById('val-visitas').innerText = snap.val() || 0;
+                });
+
+                // Último jugador en entrar
+                robloxRef.child('UltimoIngreso').on('value', snap => {
+                    const data = snap.val();
+                    if (data) {
+                        // Actualizar texto
+                        const spanNombre = document.querySelector('#contenedor-metricas .truncate');
+                        if(spanNombre) spanNombre.innerText = data.nombre;
+                        
+                        // Cargar foto real desde Roblox
+                        if (data.id) {
+                            fetch(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${data.id}&size=150x150&format=Png&isCircular=false`)
+                            .then(r => r.json())
+                            .then(j => {
+                                if (j.data && j.data.length > 0) {
+                                    // Buscar la imagen del último jugador (es la tercera tarjeta, única img pequeña)
+                                    const imgTarget = document.querySelector('#contenedor-metricas > div:nth-child(3) img');
+                                    if(imgTarget) imgTarget.src = j.data[0].imageUrl;
+                                }
+                            }).catch(()=>{});
+                        }
+                    }
+                });
             } else {
                 window.location.href = '../fun.html';
             }
