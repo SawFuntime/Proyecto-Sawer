@@ -1,0 +1,128 @@
+<script type="module">
+    // Importar Firebase directamente desde el CDN oficial
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // Tu configuración exacta
+    const firebaseConfig = {
+      apiKey: "AIzaSyBdIrFO3dNXvWdeYMA7Ow6VmgzdRpS4FN8",
+      authDomain: "sawerillo-9cd39.firebaseapp.com",
+      databaseURL: "https://sawerillo-9cd39-default-rtdb.firebaseio.com",
+      projectId: "sawerillo-9cd39",
+      storageBucket: "sawerillo-9cd39.firebasestorage.app",
+      messagingSenderId: "1069109311615",
+      appId: "1:1069109311615:web:a5cce8a50eb8f63829e74a"
+    };
+
+    // Inicializar Firebase y la Base de Datos
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Función auxiliar para convertir la imagen subida a texto Base64
+    function archivoABase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    // Funciones de navegación visual
+    window.mostrarSeccion = (id) => {
+        document.getElementById('menu-principal').classList.add('oculto');
+        document.getElementById('crear-sala').classList.add('oculto');
+        document.getElementById('unirse-sala').classList.add('oculto');
+        document.getElementById(id).classList.remove('oculto');
+    };
+
+    // Lógica para CREAR LA SALA en Firebase
+    window.iniciarCreacionSala = async () => {
+        const nombreSala = document.getElementById('host-sala-nombre').value;
+        const nombreHost = document.getElementById('host-nombre').value;
+        const rondas = document.getElementById('host-rondas').value;
+        const tiempo = document.getElementById('host-tiempo').value;
+        const inputFoto = document.getElementById('host-foto');
+
+        if (!nombreSala || !nombreHost) {
+            alert("Por favor, llena el nombre de la sala y tu nombre.");
+            return;
+        }
+
+        let fotoBase64 = "";
+        if (inputFoto.files.length > 0) {
+            fotoBase64 = await archivoABase64(inputFoto.files[0]);
+        }
+
+        // Generar un ID único para la sala
+        const salasRef = ref(db, 'salas');
+        const nuevaSalaRef = push(salasRef);
+        const salaId = nuevaSalaRef.key;
+
+        // Estructura de datos a guardar
+        const datosSala = {
+            estado: "esperando",
+            configuracion: {
+                nombreSala: nombreSala,
+                hostId: "jugador_1", // El host siempre será el jugador 1
+                rondasTotales: parseInt(rondas),
+                tiempoPorTurno: parseInt(tiempo)
+            },
+            estadoJuego: {
+                rondaActual: 1,
+                jugadorDibujando: "",
+                palabraActual: "",
+                tiempoTerminaEn: 0
+            },
+            jugadores: {
+                "jugador_1": {
+                    nombre: nombreHost,
+                    foto: fotoBase64,
+                    puntos: 0,
+                    isHost: true
+                }
+            }
+        };
+
+        try {
+            await set(nuevaSalaRef, datosSala);
+            alert(`¡Sala creada con éxito! ID: ${salaId}`);
+            // Aquí luego haremos la transición a la pantalla de dibujo/lobby
+        } catch (error) {
+            console.error("Error al crear la sala:", error);
+            alert("Hubo un error al conectar con Firebase.");
+        }
+    };
+
+    // Lógica para listar las salas disponibles al abrir la pestaña "Unirse"
+    window.cargarSalasDisponibles = () => {
+        const salasRef = ref(db, 'salas');
+        onValue(salasRef, (snapshot) => {
+            const salas = snapshot.val();
+            const listaHtml = document.getElementById('lista-salas');
+            listaHtml.innerHTML = ""; // Limpiar lista actual
+
+            if (salas) {
+                Object.keys(salas).forEach(salaId => {
+                    const sala = salas[salaId];
+                    if (sala.estado === "esperando") {
+                        listaHtml.innerHTML += `
+                            <div class="p-3 border border-gray-600 rounded bg-black/20 flex justify-between items-center cursor-pointer hover:border-sawer-red transition-colors" onclick="seleccionarSala('${salaId}')">
+                                <span>${sala.configuracion.nombreSala}</span>
+                                <span class="text-sawer-red text-sm font-bold">SELECCIONAR</span>
+                            </div>
+                        `;
+                    }
+                });
+            } else {
+                listaHtml.innerHTML = "<p class='text-sm text-gray-400'>No hay salas disponibles.</p>";
+            }
+        });
+    };
+
+    // Modificar el botón de unirse del menú principal para que cargue la lista
+    document.querySelector("button[onclick=\"mostrarSeccion('unirse-sala')\"]").onclick = () => {
+        window.mostrarSeccion('unirse-sala');
+        window.cargarSalasDisponibles();
+    };
+</script>
