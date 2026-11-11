@@ -24,9 +24,16 @@
         .foto-perfil { width: 45px; height: 45px; object-fit: cover; border-radius: 50%; border: 2px solid rgb(155, 0, 0); flex-shrink: 0; }
         #pizarra { cursor: crosshair; touch-action: none; }
         
-        .btn-color { width: 28px; height: 28px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.15s ease; flex-shrink: 0;}
-        .btn-color:hover { transform: scale(1.15); border-color: white; z-index: 10; box-shadow: 0 0 8px rgba(0,0,0,0.5); }
-        .color-activo { border-color: white; transform: scale(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .btn-color { 
+            width: 28px; height: 28px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.1); 
+            cursor: pointer; transition: all 0.15s ease; flex-shrink: 0;
+        }
+        .btn-color:hover { 
+            transform: scale(1.15); border-color: white; z-index: 10; box-shadow: 0 0 8px rgba(0,0,0,0.5); 
+        }
+        .color-activo { 
+            border-color: white; transform: scale(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.3); 
+        }
 
         .btn-herramienta {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -38,8 +45,13 @@
         .herramienta-activa { background-color: rgba(155, 0, 0, 0.2); border-color: rgb(155, 0, 0); color: rgb(255, 100, 100); }
         
         input[type=range] { -webkit-appearance: none; background: transparent; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: rgb(155, 0, 0); cursor: pointer; margin-top: -6px; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgb(60, 60, 60); border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { 
+            -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; 
+            background: rgb(155, 0, 0); cursor: pointer; margin-top: -6px; box-shadow: 0 0 5px rgba(0,0,0,0.5); 
+        }
+        input[type=range]::-webkit-slider-runnable-track { 
+            width: 100%; height: 4px; cursor: pointer; background: rgb(60, 60, 60); border-radius: 2px; 
+        }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: rgb(20,20,20); border-radius: 4px; }
@@ -49,17 +61,14 @@
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .anim-fade { animation: fadeIn 0.3s ease forwards; }
 
-        .bg-sawer-custom {
-            background-color: rgb(15, 15, 15);
-            background-image: url('f7a111bb-1b7e-4031-aa04-760f03a5b095.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+        .bg-sawer-custom { 
+            background-color: rgb(15, 15, 15); 
+            background-image: url('f7a111bb-1b7e-4031-aa04-760f03a5b095.png'); 
+            background-size: cover; background-position: center; 
+            background-repeat: no-repeat; background-attachment: fixed; 
         }
     </style>
 </head>
-<!-- NOTA: Usamos h-[100dvh] para que el teclado del celular no tape el chat -->
 <body class="bg-sawer-custom text-white h-[100dvh] flex flex-col items-center justify-center font-sans overflow-hidden selection:bg-sawer-red selection:text-white relative z-0" onclick="iniciarAudio()">
 
     <!-- MENÚ PRINCIPAL -->
@@ -131,7 +140,9 @@
             </div>
             <p class="text-gray-300 font-medium">Jugadores: <span id="espera-conteo" class="text-sawer-red font-bold text-2xl ml-1">1</span></p>
         </div>
+        
         <div id="grid-jugadores" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8 min-h-[100px]"></div>
+        
         <div class="flex gap-2">
             <button onclick="abandonarSala()" class="w-1/3 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-bold py-4 rounded-xl transition-all">Salir</button>
             <button id="btn-iniciar-ronda" onclick="iniciarPartidaGlobal()" class="oculto w-2/3 bg-sawer-red hover:bg-sawer-red-hover text-white font-bold py-4 px-6 rounded-xl md:text-xl transition-all shadow-[0_0_20px_rgba(155,0,0,0.6)]">¡COMENZAR PARTIDA!</button>
@@ -173,12 +184,11 @@
                 <p class="text-gray-500 mt-4 animate-pulse text-sm">Preparando siguiente turno...</p>
             </div>
 
-            <!-- PANEL JUGADORES -->
-            <div class="w-full lg:w-64 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl p-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto shadow-lg flex-shrink-0 lg:flex-shrink max-h-[80px] lg:max-h-none" id="lista-jugadores-juego"></div>
+            <!-- PANEL JUGADORES (CORREGIDO PARA PC) -->
+            <div class="w-full lg:w-56 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl p-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto shadow-lg flex-shrink-0 lg:flex-shrink-0 max-h-[80px] lg:max-h-none" id="lista-jugadores-juego"></div>
 
-            <!-- ÁREA CENTRAL (CANVAS) -->
-            <!-- REDUCIDO EN MÓVIL (min-h-[250px]) para que el chat no se esconda -->
-            <div class="flex-grow flex flex-col gap-2 md:gap-4 min-h-[250px] lg:min-h-[400px]">
+            <!-- ÁREA CENTRAL (CANVAS - CORREGIDO PARA DARLE PRIORIDAD EN PC) -->
+            <div class="flex-grow flex flex-col gap-2 md:gap-4 min-h-[250px] lg:min-h-0 w-full lg:w-auto">
                 <div class="bg-white rounded-xl flex-grow relative overflow-hidden shadow-2xl border border-gray-800 touch-none">
                     <canvas id="pizarra" width="900" height="600" class="absolute top-0 left-0 w-full h-full"></canvas>
                 </div>
@@ -205,34 +215,33 @@
                 </div>
             </div>
 
-            <!-- CHAT (Móvil usa flex-grow para rellenar lo que sobra de pantalla sin esconderse) -->
-            <div class="w-full lg:w-72 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-lg flex-grow lg:flex-shrink-0 max-h-[30vh] lg:max-h-none">
+            <!-- CHAT (CORREGIDO PARA NO INVADIR EN PC) -->
+            <div class="w-full lg:w-72 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-lg flex-grow lg:flex-grow-0 lg:flex-shrink-0 max-h-[30vh] lg:max-h-none">
                 <div class="bg-sawer-red/10 text-sawer-red text-[10px] md:text-xs font-bold uppercase tracking-wider text-center py-2 md:py-3 border-b border-gray-800">Adivinanzas</div>
                 <div class="flex-grow p-2 md:p-3 overflow-y-auto flex flex-col gap-2 text-xs md:text-sm font-sans" id="caja-chat"></div>
                 
-                <!-- FORMULARIO DE CHAT (NUEVO: Etiqueta <form> para forzar al teclado de celular a mostrar el botón Enviar) -->
+                <!-- FORMULARIO DE CHAT -->
                 <form id="form-chat" class="p-2 md:p-3 border-t border-gray-800 bg-black/50 m-0 flex gap-2" onsubmit="return false;">
                     <input type="text" id="input-chat" class="flex-grow w-full bg-black border border-gray-700 rounded-lg p-2 text-white placeholder-gray-500 focus:border-sawer-red focus:outline-none focus:ring-1 focus:ring-sawer-red transition-all text-xs md:text-sm" placeholder="Escribe aquí..." autocomplete="off">
-                    <!-- Botón forzado para móviles en caso de que el teclado falle -->
                     <button type="submit" class="md:hidden bg-sawer-red hover:bg-sawer-red-hover text-white px-3 py-2 rounded-lg font-bold text-xs shadow-md flex-shrink-0">Enviar</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT FIREBASE Y MOTOR DE JUEGO -->
+    <!-- SCRIPT FIREBASE Y MOTOR DE JUEGO EXPANDIDO -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, push, onValue, get, onChildAdded, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyBdIrFO3dNXvWdeYMA7Ow6VmgzdRpS4FN8",
-          authDomain: "sawerillo-9cd39.firebaseapp.com",
-          databaseURL: "https://sawerillo-9cd39-default-rtdb.firebaseio.com",
-          projectId: "sawerillo-9cd39",
-          storageBucket: "sawerillo-9cd39.firebasestorage.app",
-          messagingSenderId: "1069109311615",
-          appId: "1:1069109311615:web:a5cce8a50eb8f63829e74a"
+            apiKey: "AIzaSyBdIrFO3dNXvWdeYMA7Ow6VmgzdRpS4FN8",
+            authDomain: "sawerillo-9cd39.firebaseapp.com",
+            databaseURL: "https://sawerillo-9cd39-default-rtdb.firebaseio.com",
+            projectId: "sawerillo-9cd39",
+            storageBucket: "sawerillo-9cd39.firebasestorage.app",
+            messagingSenderId: "1069109311615",
+            appId: "1:1069109311615:web:a5cce8a50eb8f63829e74a"
         };
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
@@ -241,9 +250,7 @@
             "MALVAVISCO", "SIERRA", "ROBLOX", "SANGRE", "DISCORD", "ADMINISTRADOR", "MISTERIO", 
             "PIZARRA", "TIEMPO", "JUEGO", "COMPUTADORA", "AURICULARES", "TECLADO", "MURCIELAGO", 
             "FANTASMA", "ESPADA", "PIZZA", "HAMBURGUESA", "ESQUELETO", "PROGRAMADOR",
-            "SILLA GAMER", "MONITOR", "SUICIDIO", "PROYECTO SAWER", "HITLER", "JEFFREY EPSTEIN" , "PERÚ",
-            "SAWFUNTIME", "LENOIDE", "HIKARU", "MONTE EVEREST", "SANS", "GEOMETRY DASH", "MICHAEL JACKSON", "PALOMA",
-            "RADIO", "ACAMPAR", "RIÑÓN", "ISRAEL", "EMO", "MEWING", "SOPA", "TUN TUNG SAHUR", "GOKU", "PAYASO", "MANZANA"
+            "SILLA GAMER", "MONITOR", "PSICOLOGO", "UNIVERSIDAD", "COQUIMBO", "CALAMA"
         ];
 
         window.salaActualId = null; 
@@ -261,9 +268,14 @@
         
         // --- SINTETIZADOR 8-BIT AUDIO ---
         let audioCtx;
+        
         window.iniciarAudio = () => { 
-            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
-            if(audioCtx.state === 'suspended') audioCtx.resume(); 
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
+            }
+            if(audioCtx.state === 'suspended') {
+                audioCtx.resume(); 
+            }
         };
         
         function playSound(type) {
@@ -274,44 +286,69 @@
             gain.connect(audioCtx.destination);
             
             if(type === 'acierto') {
-                osc.type = 'square'; osc.frequency.setValueAtTime(440, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+                osc.type = 'square'; 
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.3);
             } else if(type === 'tick') {
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                osc.type = 'triangle'; 
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.1);
             } else if(type === 'turno') {
-                osc.type = 'square'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.2);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+                osc.type = 'square'; 
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.4);
             } else if(type === 'fin') {
-                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.5);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+                osc.type = 'sawtooth'; 
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.5);
             }
         }
 
+        // --- FUNCIONES DE NAVEGACIÓN Y CONFIGURACIÓN ---
         function archivoABase64(file) { 
             return new Promise((resolve, reject) => { 
-                const reader = new FileReader(); reader.readAsDataURL(file); 
-                reader.onload = () => resolve(reader.result); reader.onerror = error => reject(error); 
+                const reader = new FileReader(); 
+                reader.readAsDataURL(file); 
+                reader.onload = () => resolve(reader.result); 
+                reader.onerror = error => reject(error); 
             }); 
         }
 
         window.mostrarSeccion = (id) => { 
             ['menu-principal', 'crear-sala', 'unirse-sala', 'sala-espera', 'pantalla-juego'].forEach(sec => document.getElementById(sec).classList.add('oculto')); 
             document.getElementById(id).classList.remove('oculto'); 
-            if(id === 'unirse-sala' && !window.salaSeleccionadaParaUnirse) window.cargarSalasDisponibles(); 
+            if(id === 'unirse-sala' && !window.salaSeleccionadaParaUnirse) {
+                window.cargarSalasDisponibles(); 
+            }
         };
 
         window.iniciarCreacionSala = async () => {
             const nombreSala = document.getElementById('host-sala-nombre').value; 
             window.miNombreGlobal = document.getElementById('host-nombre').value;
-            if (!nombreSala || !window.miNombreGlobal) return alert("Por favor, llena los campos correspondientes.");
+            
+            if (!nombreSala || !window.miNombreGlobal) {
+                return alert("Por favor, llena los campos correspondientes.");
+            }
             
             let fotoBase64 = "https://ui-avatars.com/api/?name=" + window.miNombreGlobal + "&background=9b0000&color=fff";
-            if (document.getElementById('host-foto').files.length > 0) fotoBase64 = await archivoABase64(document.getElementById('host-foto').files[0]);
+            if (document.getElementById('host-foto').files.length > 0) {
+                fotoBase64 = await archivoABase64(document.getElementById('host-foto').files[0]);
+            }
             
             const nuevaSalaRef = push(ref(db, 'salas')); 
             window.salaActualId = nuevaSalaRef.key; 
@@ -320,10 +357,33 @@
             
             await set(nuevaSalaRef, {
                 estado: "esperando", 
-                configuracion: { nombreSala: nombreSala, hostId: window.miJugadorId, rondasTotales: parseInt(document.getElementById('host-rondas').value), tiempoPorTurno: parseInt(document.getElementById('host-tiempo').value) },
-                estadoJuego: { estadoLocal: 'esperando', rondaActual: 1, turnoIndex: 0, palabraActual: "", dibujanteActual: "", tiempo: 0, opcionesPalabras: [], pistas: [], acertaron: {} }, 
-                jugadores: { [window.miJugadorId]: { nombre: window.miNombreGlobal, foto: fotoBase64, puntos: 0, isHost: true } }
+                configuracion: { 
+                    nombreSala: nombreSala, 
+                    hostId: window.miJugadorId, 
+                    rondasTotales: parseInt(document.getElementById('host-rondas').value), 
+                    tiempoPorTurno: parseInt(document.getElementById('host-tiempo').value) 
+                },
+                estadoJuego: { 
+                    estadoLocal: 'esperando', 
+                    rondaActual: 1, 
+                    turnoIndex: 0, 
+                    palabraActual: "", 
+                    dibujanteActual: "", 
+                    tiempo: 0, 
+                    opcionesPalabras: [], 
+                    pistas: [], 
+                    acertaron: {} 
+                }, 
+                jugadores: { 
+                    [window.miJugadorId]: { 
+                        nombre: window.miNombreGlobal, 
+                        foto: fotoBase64, 
+                        puntos: 0, 
+                        isHost: true 
+                    } 
+                }
             });
+            
             entrarLobby(nombreSala);
         };
 
@@ -332,10 +392,16 @@
                 const salas = snapshot.val(); 
                 const listaHtml = document.getElementById('lista-salas'); 
                 listaHtml.innerHTML = ""; 
+                
                 if (salas) { 
                     Object.keys(salas).forEach(id => { 
                         if (salas[id].estado === "esperando") { 
-                            listaHtml.innerHTML += `<div class="p-3 mb-2 border border-sawer-red rounded bg-black/40 flex justify-between items-center cursor-pointer hover:bg-sawer-red/20 transition-colors" onclick="seleccionarSalaId('${id}')"><span>${salas[id].configuracion.nombreSala}</span><span class="text-sawer-red font-bold text-sm">UNIRSE</span></div>`; 
+                            listaHtml.innerHTML += `
+                                <div class="p-3 mb-2 border border-sawer-red rounded bg-black/40 flex justify-between items-center cursor-pointer hover:bg-sawer-red/20 transition-colors" onclick="seleccionarSalaId('${id}')">
+                                    <span>${salas[id].configuracion.nombreSala}</span>
+                                    <span class="text-sawer-red font-bold text-sm">UNIRSE</span>
+                                </div>
+                            `; 
                         } 
                     }); 
                 } else { 
@@ -351,21 +417,34 @@
 
         window.unirseASalaSeleccionada = async () => {
             window.miNombreGlobal = document.getElementById('jugador-nombre').value;
-            if (!window.salaSeleccionadaParaUnirse || !window.miNombreGlobal) return alert("Faltan datos.");
+            
+            if (!window.salaSeleccionadaParaUnirse || !window.miNombreGlobal) {
+                return alert("Faltan datos.");
+            }
             
             let fotoBase64 = "https://ui-avatars.com/api/?name=" + window.miNombreGlobal + "&background=9b0000&color=fff";
-            if (document.getElementById('jugador-foto').files.length > 0) fotoBase64 = await archivoABase64(document.getElementById('jugador-foto').files[0]);
+            if (document.getElementById('jugador-foto').files.length > 0) {
+                fotoBase64 = await archivoABase64(document.getElementById('jugador-foto').files[0]);
+            }
             
             const nuevoJugadorRef = push(ref(db, `salas/${window.salaSeleccionadaParaUnirse}/jugadores`));
             window.miJugadorId = nuevoJugadorRef.key; 
             window.salaActualId = window.salaSeleccionadaParaUnirse; 
             window.soyHost = false;
             
-            await set(nuevoJugadorRef, { nombre: window.miNombreGlobal, foto: fotoBase64, puntos: 0, isHost: false });
-            get(ref(db, `salas/${window.salaActualId}/configuracion/nombreSala`)).then((s) => entrarLobby(s.val() || "Sala Invitada"));
+            await set(nuevoJugadorRef, { 
+                nombre: window.miNombreGlobal, 
+                foto: fotoBase64, 
+                puntos: 0, 
+                isHost: false 
+            });
+            
+            get(ref(db, `salas/${window.salaActualId}/configuracion/nombreSala`)).then((s) => {
+                entrarLobby(s.val() || "Sala Invitada");
+            });
         };
 
-        // --- FUNCIONALIDAD PARA EL HOST: EXPULSAR JUGADORES ---
+        // --- SISTEMA DE EXPULSIÓN DE JUGADORES ---
         window.expulsarJugador = (idJugadorAEchar) => {
             if (confirm("¿Estás seguro de que quieres expulsar a este jugador?")) {
                 remove(ref(db, `salas/${window.salaActualId}/jugadores/${idJugadorAEchar}`));
@@ -385,16 +464,17 @@
                 document.getElementById('msg-esperando-host').classList.remove('oculto'); 
             }
 
-            // LISTENER PARA DETECTAR SI FUISTE EXPULSADO (Aplicado a tu propio nodo)
+            // LISTENER DE EXPULSIÓN (Para el cliente que fue expulsado)
             const refMiJugador = ref(db, `salas/${window.salaActualId}/jugadores/${window.miJugadorId}`);
             onValue(refMiJugador, (snap) => {
                 if (!snap.exists() && window.salaActualId) {
-                    window.salaActualId = null; // Evitar spam de alertas
+                    window.salaActualId = null;
                     alert("Has sido expulsado de la sala.");
                     window.location.href = window.location.pathname;
                 }
             });
 
+            // ACTUALIZAR PANELES DE JUGADORES (LOBBY Y JUEGO)
             onValue(ref(db, `salas/${window.salaActualId}/jugadores`), (snapshot) => {
                 const jugadoresData = snapshot.val(); 
                 const gridHtml = document.getElementById('grid-jugadores'); 
@@ -408,15 +488,40 @@
                     document.getElementById('espera-conteo').innerText = Object.keys(jugadoresData).length;
                     
                     jugadoresOrdenados.forEach(([id, jug], i) => {
-                        // LOBBY: Añadir botón de expulsar si eres el host y no eres tú mismo
-                        let btnExpulsarHtml = (window.soyHost && id !== window.miJugadorId) 
-                            ? `<button onclick="expulsarJugador('${id}')" class="absolute top-2 right-2 bg-red-600 hover:bg-red-800 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-md" title="Expulsar">X</button>` 
+                        
+                        // Botón Expulsar en Lobby
+                        let btnExpHtml = (window.soyHost && id !== window.miJugadorId) 
+                            ? `<button onclick="expulsarJugador('${id}')" class="absolute top-2 right-2 bg-red-600 hover:bg-red-800 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-md z-10" title="Expulsar">X</button>` 
+                            : '';
+                        
+                        // Botón Expulsar In-Game
+                        let btnExpInGameHtml = (window.soyHost && id !== window.miJugadorId) 
+                            ? `<button onclick="expulsarJugador('${id}')" class="absolute -top-1 -right-1 bg-red-600 hover:bg-red-800 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow-md z-10" title="Expulsar">X</button>` 
                             : '';
 
-                        gridHtml.innerHTML += `<div class="relative bg-black/50 p-3 rounded-xl border border-gray-700 flex flex-col items-center justify-center text-center shadow-lg backdrop-blur-sm">${btnExpulsarHtml}<img src="${jug.foto}" class="foto-perfil mb-2"><span class="font-bold text-sm text-white truncate w-full">${jug.nombre}</span>${jug.isHost ? '<span class="text-xs text-sawer-red mt-1">HOST</span>' : ''}</div>`;
+                        gridHtml.innerHTML += `
+                            <div class="relative bg-black/50 p-3 rounded-xl border border-gray-700 flex flex-col items-center justify-center text-center shadow-lg backdrop-blur-sm">
+                                ${btnExpHtml}
+                                <img src="${jug.foto}" class="foto-perfil mb-2">
+                                <span class="font-bold text-sm text-white truncate w-full">${jug.nombre}</span>
+                                ${jug.isHost ? '<span class="text-xs text-sawer-red mt-1">HOST</span>' : ''}
+                            </div>
+                        `;
                         
                         const colorPos = i === 0 && jug.puntos > 0 ? "border-yellow-500 text-yellow-500" : (i === 1 && jug.puntos > 0 ? "border-gray-300 text-gray-300" : (i === 2 && jug.puntos > 0 ? "border-orange-600 text-orange-600" : "border-gray-500 text-gray-500"));
-                        panelHtml.innerHTML += `<div id="card-${id}" class="bg-black/60 p-1.5 md:p-2 rounded-lg flex items-center gap-2 border-l-2 lg:border-l-2 lg:border-b-0 border-b-2 lg:border-b-transparent ${colorPos} min-w-[120px] lg:min-w-0 flex-shrink-0 lg:flex-shrink relative"><div class="font-bold ${colorPos} text-xs md:text-lg w-auto lg:w-4 hidden lg:block">#${i+1}</div><img src="${jug.foto}" class="foto-perfil w-6 h-6 md:w-10 md:h-10 border"><div class="flex-grow min-w-0"><div class="font-bold text-xs md:text-sm text-white leading-tight truncate">${jug.nombre}</div><div class="text-[10px] md:text-xs text-gray-400">${jug.puntos} pts</div></div><div class="icono-lapiz oculto absolute top-1 right-1 text-[10px] bg-sawer-red rounded-full w-4 h-4 flex items-center justify-center" title="Dibujando">✏️</div></div>`;
+                        
+                        panelHtml.innerHTML += `
+                            <div id="card-${id}" class="bg-black/60 p-1.5 md:p-2 rounded-lg flex items-center gap-2 border-l-2 lg:border-l-2 lg:border-b-0 border-b-2 lg:border-b-transparent ${colorPos} min-w-[120px] lg:min-w-0 flex-shrink-0 lg:flex-shrink relative">
+                                ${btnExpInGameHtml}
+                                <div class="font-bold ${colorPos} text-xs md:text-lg w-auto lg:w-4 hidden lg:block">#${i+1}</div>
+                                <img src="${jug.foto}" class="foto-perfil w-6 h-6 md:w-10 md:h-10 border">
+                                <div class="flex-grow min-w-0">
+                                    <div class="font-bold text-xs md:text-sm text-white leading-tight truncate">${jug.nombre}</div>
+                                    <div class="text-[10px] md:text-xs text-gray-400">${jug.puntos} pts</div>
+                                </div>
+                                <div class="icono-lapiz oculto absolute top-1 right-1 text-[10px] bg-sawer-red rounded-full w-4 h-4 flex items-center justify-center" title="Dibujando">✏️</div>
+                            </div>
+                        `;
                     });
                 }
             });
@@ -500,13 +605,17 @@
                 
                 if(tRestante === Math.floor(window.tTotal * 0.5) && pistaIndex < pistasPosibles.length) { 
                     get(ref(db, `salas/${window.salaActualId}/estadoJuego/pistas`)).then(s => { 
-                        let arrPistas = s.val() || []; arrPistas.push(pistasPosibles[pistaIndex++]); update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
+                        let arrPistas = s.val() || []; 
+                        arrPistas.push(pistasPosibles[pistaIndex++]); 
+                        update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
                     }); 
                 }
                 
                 if(tRestante === Math.floor(window.tTotal * 0.25) && pistaIndex < pistasPosibles.length) { 
                     get(ref(db, `salas/${window.salaActualId}/estadoJuego/pistas`)).then(s => { 
-                        let arrPistas = s.val() || []; arrPistas.push(pistasPosibles[pistaIndex++]); update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
+                        let arrPistas = s.val() || []; 
+                        arrPistas.push(pistasPosibles[pistaIndex++]); 
+                        update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
                     }); 
                 }
 
@@ -553,20 +662,30 @@
         function inicializarCanvas() {
             const containerPaleta = document.getElementById('paleta-colores'); 
             containerPaleta.innerHTML = '';
+            
             paleta.forEach((colorP, index) => { 
                 containerPaleta.innerHTML += `<div class="btn-color ${index === 0 ? 'color-activo' : ''}" style="background-color: ${colorP};" onclick="cambiarColor('${colorP}', this)"></div>`; 
             });
             
             canvas = document.getElementById('pizarra'); 
             ctx = canvas.getContext('2d', { alpha: false }); 
-            ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.lineCap = 'round'; 
+            ctx.lineJoin = 'round'; 
+            ctx.fillStyle = "#ffffff"; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            canvas.addEventListener('mousedown', iniciarTrazo); canvas.addEventListener('mouseup', terminarTrazo); canvas.addEventListener('mousemove', dibujar); canvas.addEventListener('mouseout', terminarTrazo);
-            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); iniciarTrazo(e.touches[0]); }, { passive: false }); canvas.addEventListener('touchmove', (e) => { e.preventDefault(); dibujar(e.touches[0]); }, { passive: false }); canvas.addEventListener('touchend', terminarTrazo);
+            canvas.addEventListener('mousedown', iniciarTrazo); 
+            canvas.addEventListener('mouseup', terminarTrazo); 
+            canvas.addEventListener('mousemove', dibujar); 
+            canvas.addEventListener('mouseout', terminarTrazo);
+            
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); iniciarTrazo(e.touches[0]); }, { passive: false }); 
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); dibujar(e.touches[0]); }, { passive: false }); 
+            canvas.addEventListener('touchend', terminarTrazo);
 
-            // EVENTO SUBMIT DEL FORMULARIO DE CHAT (REPARADO PARA CELULARES)
+            // EVENTO SUBMIT DEL FORMULARIO DE CHAT
             document.getElementById('form-chat').addEventListener('submit', async function(e) {
-                e.preventDefault(); // Prevenir recarga de página al darle a enter/enviar en el móvil
+                e.preventDefault(); 
                 const inputObj = document.getElementById('input-chat');
 
                 if (inputObj.value.trim() !== '') {
@@ -578,6 +697,7 @@
                         const tiempoActual = parseInt(document.getElementById('reloj').innerText);
                         const puntosPorTiempo = Math.floor((tiempoActual / (window.tTotal||80)) * 300);
                         const numAcertados = window.cantidadAcertadosGlobal;
+                        
                         let bonusPorOrden = numAcertados === 0 ? 200 : (numAcertados === 1 ? 100 : (numAcertados === 2 ? 50 : 0));
                         const puntosTotalesGanados = puntosPorTiempo + bonusPorOrden + 50; 
                         
@@ -601,6 +721,7 @@
                                 const dbSala = s.val(); 
                                 const totalJugadores = Object.keys(dbSala.jugadores).length; 
                                 const totalAcertaron = dbSala.estadoJuego.acertaron ? Object.keys(dbSala.estadoJuego.acertaron).length : 0;
+                                
                                 if(totalAcertaron >= totalJugadores - 1) {
                                     window.hostForzarFinTurno();
                                 }
@@ -614,34 +735,104 @@
             });
         }
 
-        window.cambiarColor = (colorSeleccionado, elementoBtn) => { colorActual = colorSeleccionado; seleccionarHerramienta('lapiz'); document.querySelectorAll('.btn-color').forEach(b => b.classList.remove('color-activo')); if(elementoBtn) elementoBtn.classList.add('color-activo'); };
-        window.seleccionarHerramienta = (herramientaStr) => { herramientaActual = herramientaStr; document.getElementById('btn-lapiz').classList.remove('herramienta-activa'); document.getElementById('btn-goma').classList.remove('herramienta-activa'); document.getElementById('btn-' + herramientaStr).classList.add('herramienta-activa'); };
-        function obtenerC(eventoMouse) { const rect = canvas.getBoundingClientRect(); return { x: (eventoMouse.clientX - rect.left) * (canvas.width / rect.width), y: (eventoMouse.clientY - rect.top) * (canvas.height / rect.height) }; }
+        window.cambiarColor = (colorSeleccionado, elementoBtn) => { 
+            colorActual = colorSeleccionado; 
+            seleccionarHerramienta('lapiz'); 
+            document.querySelectorAll('.btn-color').forEach(b => b.classList.remove('color-activo')); 
+            if(elementoBtn) elementoBtn.classList.add('color-activo'); 
+        };
+        
+        window.seleccionarHerramienta = (herramientaStr) => { 
+            herramientaActual = herramientaStr; 
+            document.getElementById('btn-lapiz').classList.remove('herramienta-activa'); 
+            document.getElementById('btn-goma').classList.remove('herramienta-activa'); 
+            document.getElementById('btn-' + herramientaStr).classList.add('herramienta-activa'); 
+        };
+        
+        function obtenerC(eventoMouse) { 
+            const rect = canvas.getBoundingClientRect(); 
+            return { 
+                x: (eventoMouse.clientX - rect.left) * (canvas.width / rect.width), 
+                y: (eventoMouse.clientY - rect.top) * (canvas.height / rect.height) 
+            }; 
+        }
 
         function envTrazo(coordX, coordY, tipoM, opacidadGlobal) { 
             if(!window.salaActualId || !soyElDibujante || window.estadoGlobalJuego !== 'jugando') return; 
+            
             const valorOpacidad = opacidadGlobal || document.getElementById('opacidad-lapiz').value;
-            push(ref(db, `salas/${window.salaActualId}/trazos`), { uid: window.miJugadorId, x: Math.round(coordX), y: Math.round(coordY), c: herramientaActual === 'goma' ? "#ffffff" : colorActual, g: document.getElementById('grosor-lapiz').value, o: parseFloat(valorOpacidad), t: tipoM }); 
+            
+            push(ref(db, `salas/${window.salaActualId}/trazos`), { 
+                uid: window.miJugadorId, 
+                x: Math.round(coordX), 
+                y: Math.round(coordY), 
+                c: herramientaActual === 'goma' ? "#ffffff" : colorActual, 
+                g: document.getElementById('grosor-lapiz').value, 
+                o: parseFloat(valorOpacidad), 
+                t: tipoM 
+            }); 
         }
         
         function iniciarTrazo(e) { 
             if(!soyElDibujante || window.estadoGlobalJuego !== 'jugando') return; 
-            pintando = true; const coord = obtenerC(e); const grosorSize = document.getElementById('grosor-lapiz').value; const opacidadVal = document.getElementById('opacidad-lapiz').value;
-            ctx.globalAlpha = parseFloat(opacidadVal); ctx.fillStyle = herramientaActual === 'goma' ? "#ffffff" : colorActual; ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = grosorSize; 
-            ctx.beginPath(); ctx.arc(coord.x, coord.y, grosorSize/2, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(coord.x, coord.y); 
+            
+            pintando = true; 
+            const coord = obtenerC(e); 
+            const grosorSize = document.getElementById('grosor-lapiz').value; 
+            const opacidadVal = document.getElementById('opacidad-lapiz').value;
+            
+            ctx.globalAlpha = parseFloat(opacidadVal); 
+            ctx.fillStyle = herramientaActual === 'goma' ? "#ffffff" : colorActual; 
+            ctx.strokeStyle = ctx.fillStyle; 
+            ctx.lineWidth = grosorSize; 
+            
+            ctx.beginPath(); 
+            ctx.arc(coord.x, coord.y, grosorSize/2, 0, Math.PI*2); 
+            ctx.fill(); 
+            ctx.beginPath(); 
+            ctx.moveTo(coord.x, coord.y); 
+            
             envTrazo(coord.x, coord.y, 'ini', opacidadVal); 
         }
         
-        function dibujar(e) { if(pintando && soyElDibujante && window.estadoGlobalJuego === 'jugando') { const coord = obtenerC(e); ctx.lineTo(coord.x, coord.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(coord.x, coord.y); envTrazo(coord.x, coord.y, 'mov', null); } }
-        function terminarTrazo() { if(pintando){ pintando = false; ctx.beginPath(); envTrazo(0, 0, 'fin', null); } }
+        function dibujar(e) { 
+            if(pintando && soyElDibujante && window.estadoGlobalJuego === 'jugando') { 
+                const coord = obtenerC(e); 
+                ctx.lineTo(coord.x, coord.y); 
+                ctx.stroke(); 
+                ctx.beginPath(); 
+                ctx.moveTo(coord.x, coord.y); 
+                
+                envTrazo(coord.x, coord.y, 'mov', null); 
+            } 
+        }
         
-        window.limpiarPizarra = () => { if(window.salaActualId && soyElDibujante && window.estadoGlobalJuego === 'jugando') { ctx.globalAlpha = 1; ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height); set(ref(db, `salas/${window.salaActualId}/trazos`), null); } };
+        function terminarTrazo() { 
+            if(pintando){ 
+                pintando = false; 
+                ctx.beginPath(); 
+                envTrazo(0, 0, 'fin', null); 
+            } 
+        }
+        
+        window.limpiarPizarra = () => { 
+            if(window.salaActualId && soyElDibujante && window.estadoGlobalJuego === 'jugando') { 
+                ctx.globalAlpha = 1; 
+                ctx.fillStyle = "#ffffff"; 
+                ctx.fillRect(0, 0, canvas.width, canvas.height); 
+                
+                set(ref(db, `salas/${window.salaActualId}/trazos`), null); 
+            } 
+        };
 
-        window.elegirPalabra = (palabraSeleccionada) => { update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { estadoLocal: 'jugando', palabraActual: palabraSeleccionada }); };
+        window.elegirPalabra = (palabraSeleccionada) => {
+            update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { estadoLocal: 'jugando', palabraActual: palabraSeleccionada }); 
+        };
 
         function iniciarEscuchasFirebase() {
             onValue(ref(db, `salas/${window.salaActualId}/estadoJuego`), (snap) => {
-                const stateData = snap.val(); if (!stateData) return;
+                const stateData = snap.val(); 
+                if (!stateData) return;
                 
                 window.estadoGlobalJuego = stateData.estadoLocal;
                 window.palabraActualGlobal = stateData.palabraActual || "";
@@ -652,7 +843,12 @@
                 
                 if (stateData.tiempo !== undefined) { 
                     textReloj.innerText = stateData.tiempo; 
-                    if(stateData.tiempo <= 10 && stateData.tiempo > 0 && window.estadoGlobalJuego === 'jugando') { textReloj.classList.add('text-red-500'); playSound('tick'); } else { textReloj.classList.remove('text-red-500'); } 
+                    if(stateData.tiempo <= 10 && stateData.tiempo > 0 && window.estadoGlobalJuego === 'jugando') { 
+                        textReloj.classList.add('text-red-500'); 
+                        playSound('tick'); 
+                    } else { 
+                        textReloj.classList.remove('text-red-500'); 
+                    } 
                 }
 
                 const idDibujanteFirebase = stateData.dibujanteActual;
@@ -665,45 +861,95 @@
                 const inpCajaChat = document.getElementById('input-chat');
 
                 document.querySelectorAll('.icono-lapiz').forEach(icono => icono.classList.add('oculto'));
-                const iconUserDibujante = document.querySelector(`#card-${idDibujanteFirebase} .icono-lapiz`); if (iconUserDibujante) iconUserDibujante.classList.remove('oculto');
+                const iconUserDibujante = document.querySelector(`#card-${idDibujanteFirebase} .icono-lapiz`); 
+                if (iconUserDibujante) iconUserDibujante.classList.remove('oculto');
 
                 if (stateData.estadoLocal === 'seleccionando') {
-                    window.yaAdivineLocal = false; window.tTotal = stateData.tiempo || 80; divOverlayResult.classList.add('oculto'); divHerramientas.classList.add('oculto'); inpCajaChat.disabled = true; inpCajaChat.placeholder = "Esperando elección..."; pPalabraSec.innerText = "ESPERANDO";
+                    window.yaAdivineLocal = false; 
+                    window.tTotal = stateData.tiempo || 80; 
+                    
+                    divOverlayResult.classList.add('oculto'); 
+                    divHerramientas.classList.add('oculto'); 
+                    
+                    inpCajaChat.disabled = true; 
+                    inpCajaChat.placeholder = "Esperando elección..."; 
+                    pPalabraSec.innerText = "ESPERANDO";
                     
                     if (soyElDibujante) {
-                        playSound('turno'); divOverlaySelect.classList.remove('oculto'); document.getElementById('txt-seleccion-titulo').innerText = "¡Es tu turno!"; document.getElementById('txt-seleccion-sub').innerText = "Elige una palabra para dibujar:";
-                        const cBotones = document.getElementById('botones-palabras'); cBotones.innerHTML = "";
-                        (stateData.opcionesPalabras || []).forEach(opcionWord => { cBotones.innerHTML += `<button onclick="elegirPalabra('${opcionWord}')" class="bg-gray-800 hover:bg-sawer-red text-white font-bold py-3 px-6 rounded border border-gray-600 hover:border-sawer-red transition-all">${opcionWord}</button>`; });
+                        playSound('turno'); 
+                        divOverlaySelect.classList.remove('oculto');
+                        document.getElementById('txt-seleccion-titulo').innerText = "¡Es tu turno!"; 
+                        document.getElementById('txt-seleccion-sub').innerText = "Elige una palabra para dibujar:";
+                        
+                        const cBotones = document.getElementById('botones-palabras'); 
+                        cBotones.innerHTML = "";
+                        
+                        (stateData.opcionesPalabras || []).forEach(opcionWord => { 
+                            cBotones.innerHTML += `<button onclick="elegirPalabra('${opcionWord}')" class="bg-gray-800 hover:bg-sawer-red text-white font-bold py-3 px-6 rounded border border-gray-600 hover:border-sawer-red transition-all">${opcionWord}</button>`; 
+                        });
                     } else {
-                        divOverlaySelect.classList.remove('oculto'); document.getElementById('txt-seleccion-titulo').innerText = "Preparando Ronda"; document.getElementById('txt-seleccion-sub').innerText = "El dibujante está eligiendo una palabra..."; document.getElementById('botones-palabras').innerHTML = "";
+                        divOverlaySelect.classList.remove('oculto'); 
+                        document.getElementById('txt-seleccion-titulo').innerText = "Preparando Ronda"; 
+                        document.getElementById('txt-seleccion-sub').innerText = "El dibujante está eligiendo una palabra..."; 
+                        document.getElementById('botones-palabras').innerHTML = "";
                     }
                 } 
                 else if (stateData.estadoLocal === 'jugando') {
-                    divOverlaySelect.classList.add('oculto'); divOverlayResult.classList.add('oculto');
-                    if(window.soyHost && !window.relojCorriendoLocal && window.palabraActualGlobal !== "") { window.hostArrancarReloj(window.palabraActualGlobal); }
+                    divOverlaySelect.classList.add('oculto'); 
+                    divOverlayResult.classList.add('oculto');
+                    
+                    if(window.soyHost && !window.relojCorriendoLocal && window.palabraActualGlobal !== "") { 
+                        window.hostArrancarReloj(window.palabraActualGlobal); 
+                    }
 
                     if (soyElDibujante) {
-                        divHerramientas.classList.remove('oculto'); divHerramientas.classList.add('flex'); inpCajaChat.disabled = true; inpCajaChat.placeholder = "¡Es tu turno! Dibuja la palabra."; inpCajaChat.classList.add('opacity-50');
+                        divHerramientas.classList.remove('oculto'); 
+                        divHerramientas.classList.add('flex'); 
+                        
+                        inpCajaChat.disabled = true; 
+                        inpCajaChat.placeholder = "¡Es tu turno! Dibuja la palabra."; 
+                        inpCajaChat.classList.add('opacity-50');
                         pPalabraSec.innerText = window.palabraActualGlobal.split('').join(' ');
                     } else {
-                        divHerramientas.classList.add('oculto'); divHerramientas.classList.remove('flex'); inpCajaChat.disabled = window.yaAdivineLocal; inpCajaChat.placeholder = window.yaAdivineLocal ? "¡Adivinaste! Espera a los demás." : "Escribe aquí..."; inpCajaChat.classList.remove('opacity-50');
+                        divHerramientas.classList.add('oculto'); 
+                        divHerramientas.classList.remove('flex'); 
+                        
+                        inpCajaChat.disabled = window.yaAdivineLocal; 
+                        inpCajaChat.placeholder = window.yaAdivineLocal ? "¡Adivinaste! Espera a los demás." : "Escribe aquí..."; 
+                        inpCajaChat.classList.remove('opacity-50');
                         
                         let txtMascara = "";
                         for(let iter=0; iter<window.palabraActualGlobal.length; iter++) {
-                            if(window.palabraActualGlobal[iter] === " ") { txtMascara += "   "; } else if(stateData.pistas && stateData.pistas.includes(iter)) { txtMascara += window.palabraActualGlobal[iter] + " "; } else { txtMascara += "_ "; }
+                            if(window.palabraActualGlobal[iter] === " ") {
+                                txtMascara += "   ";
+                            } else if(stateData.pistas && stateData.pistas.includes(iter)) {
+                                txtMascara += window.palabraActualGlobal[iter] + " ";
+                            } else {
+                                txtMascara += "_ ";
+                            }
                         }
                         pPalabraSec.innerText = txtMascara;
                     }
                 }
                 else if (stateData.estadoLocal === 'resultados') {
-                    window.relojCorriendoLocal = false; playSound('fin'); divOverlaySelect.classList.add('oculto'); divOverlayResult.classList.remove('oculto'); document.getElementById('resultado-palabra').innerText = window.palabraActualGlobal;
-                    const copyPanelPts = document.getElementById('lista-jugadores-juego').innerHTML; document.getElementById('lista-resultados').innerHTML = copyPanelPts;
-                    divHerramientas.classList.add('oculto'); inpCajaChat.disabled = true;
+                    window.relojCorriendoLocal = false; 
+                    playSound('fin'); 
+                    divOverlaySelect.classList.add('oculto'); 
+                    divOverlayResult.classList.remove('oculto'); 
+                    document.getElementById('resultado-palabra').innerText = window.palabraActualGlobal;
+                    
+                    const copyPanelPts = document.getElementById('lista-jugadores-juego').innerHTML; 
+                    document.getElementById('lista-resultados').innerHTML = copyPanelPts;
+                    
+                    divHerramientas.classList.add('oculto'); 
+                    inpCajaChat.disabled = true;
                 }
             });
 
             onChildAdded(ref(db, `salas/${window.salaActualId}/chat`), (snap) => {
-                const infoMsg = snap.val(); const contChat = document.getElementById('caja-chat');
+                const infoMsg = snap.val(); 
+                const contChat = document.getElementById('caja-chat');
+                
                 if (infoMsg.msj === "MALVAVISCO_SECRETO_ACIERTO") {
                     contChat.innerHTML += `<div class="bg-green-900/40 p-2 rounded text-xs border-l-2 border-green-500 my-1"><span class="font-bold text-green-400">✅ ¡${infoMsg.nombre} adivinó! (+${infoMsg.pts} pts)</span></div>`;
                 } else {
@@ -714,15 +960,38 @@
 
             let cursorR = {x:0, y:0};
             onChildAdded(ref(db, `salas/${window.salaActualId}/trazos`), (snap) => {
-                const tr = snap.val(); if (tr.uid === window.miJugadorId) return; 
-                ctx.strokeStyle = tr.c; ctx.fillStyle = tr.c; ctx.lineWidth = tr.g; ctx.globalAlpha = tr.o !== undefined ? tr.o : 1;
+                const tr = snap.val(); 
+                if (tr.uid === window.miJugadorId) return; 
                 
-                if (tr.t === 'ini') { ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.g/2, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(tr.x, tr.y); cursorR = {x: tr.x, y: tr.y}; } 
-                else if (tr.t === 'mov') { ctx.beginPath(); ctx.moveTo(cursorR.x, cursorR.y); ctx.lineTo(tr.x, tr.y); ctx.stroke(); cursorR = {x: tr.x, y: tr.y}; } 
-                else if (tr.t === 'fin') { ctx.beginPath(); }
+                ctx.strokeStyle = tr.c; 
+                ctx.fillStyle = tr.c; 
+                ctx.lineWidth = tr.g; 
+                ctx.globalAlpha = tr.o !== undefined ? tr.o : 1;
+                
+                if (tr.t === 'ini') { 
+                    ctx.beginPath(); 
+                    ctx.arc(tr.x, tr.y, tr.g/2, 0, Math.PI*2); 
+                    ctx.fill(); 
+                    ctx.beginPath(); 
+                    ctx.moveTo(tr.x, tr.y); 
+                    cursorR = {x: tr.x, y: tr.y}; 
+                } else if (tr.t === 'mov') { 
+                    ctx.beginPath(); 
+                    ctx.moveTo(cursorR.x, cursorR.y); 
+                    ctx.lineTo(tr.x, tr.y); 
+                    ctx.stroke(); 
+                    cursorR = {x: tr.x, y: tr.y}; 
+                } else if (tr.t === 'fin') { 
+                    ctx.beginPath(); 
+                }
             });
 
-            onValue(ref(db, `salas/${window.salaActualId}/trazos`), (snap) => { if (!snap.exists()) { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height); } });
+            onValue(ref(db, `salas/${window.salaActualId}/trazos`), (snap) => { 
+                if (!snap.exists()) { 
+                    ctx.fillStyle = "#ffffff"; 
+                    ctx.fillRect(0, 0, canvas.width, canvas.height); 
+                } 
+            });
         }
     </script>
 </body>
