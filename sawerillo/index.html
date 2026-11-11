@@ -10,7 +10,6 @@
             theme: {
                 extend: {
                     colors: {
-                        'sawer-bg': 'rgb(15, 15, 15)',
                         'sawer-panel': 'rgb(30, 30, 30)',
                         'sawer-red': 'rgb(155, 0, 0)',
                         'sawer-red-hover': 'rgb(180, 20, 20)',
@@ -49,15 +48,19 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .anim-fade { animation: fadeIn 0.3s ease forwards; }
+
+        /* NUEVO FONDO PERSONALIZADO DE GITHUB */
+        .bg-sawer-custom {
+            background-color: rgb(15, 15, 15);
+            background-image: url('f7a111bb-1b7e-4031-aa04-760f03a5b095.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
     </style>
 </head>
-<body class="bg-sawer-bg text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden selection:bg-sawer-red selection:text-white relative z-0" onclick="iniciarAudio()">
-
-    <!-- 2 FRANJAS ROJAS GRUESAS UNIFICADAS RESTAURADAS -->
-    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden flex justify-center items-center">
-        <div class="absolute w-[200vw] h-[150px] bg-sawer-dark-red shadow-[0_0_20px_rgba(90,0,0,0.5)]" style="transform: rotate(30deg) translateY(-320px);"></div>
-        <div class="absolute w-[200vw] h-[150px] bg-sawer-dark-red shadow-[0_0_20px_rgba(90,0,0,0.5)]" style="transform: rotate(30deg) translateY(320px);"></div>
-    </div>
+<body class="bg-sawer-custom text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden selection:bg-sawer-red selection:text-white relative z-0" onclick="iniciarAudio()">
 
     <!-- MENÚ PRINCIPAL -->
     <div id="menu-principal" class="text-center space-y-6 w-full max-w-md bg-black/80 p-6 md:p-8 rounded-2xl shadow-[0_0_25px_rgba(155,0,0,0.2)] border-2 border-sawer-red backdrop-blur-md m-4">
@@ -72,11 +75,11 @@
         <div class="space-y-4">
             <div>
                 <label class="block text-sm font-bold mb-1 text-white">Nombre de la Sala</label>
-                <input type="text" id="host-sala-nombre" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-white" placeholder="Ej: Sala Principal">
+                <input type="text" id="host-sala-nombre" class="w-full bg-black/50 border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-white" placeholder="Ej: Sala Principal">
             </div>
             <div>
                 <label class="block text-sm font-bold mb-1 text-white">Tu Nombre (Host)</label>
-                <input type="text" id="host-nombre" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-white">
+                <input type="text" id="host-nombre" class="w-full bg-black/50 border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-white">
             </div>
             <div>
                 <label class="block text-sm font-bold mb-1 text-white">Foto de Perfil</label>
@@ -85,11 +88,11 @@
             <div class="flex gap-4">
                 <div class="w-1/2">
                     <label class="block text-sm font-bold mb-1 text-white">Rondas</label>
-                    <input type="number" id="host-rondas" min="1" max="10" value="4" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-center text-white">
+                    <input type="number" id="host-rondas" min="1" max="10" value="4" class="w-full bg-black/50 border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-center text-white">
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-bold mb-1 text-white">Tiempo (seg)</label>
-                    <input type="number" id="host-tiempo" min="30" max="120" value="80" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-center text-white">
+                    <input type="number" id="host-tiempo" min="30" max="120" value="80" class="w-full bg-black/50 border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-center text-white">
                 </div>
             </div>
             <div class="pt-4 flex gap-2">
@@ -106,7 +109,7 @@
         <div class="space-y-4 border-t border-sawer-red/50 pt-4">
             <div>
                 <label class="block text-sm font-bold mb-1 text-white">Tu Nombre</label>
-                <input type="text" id="jugador-nombre" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-white">
+                <input type="text" id="jugador-nombre" class="w-full bg-black/50 border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-white">
             </div>
             <div>
                 <label class="block text-sm font-bold mb-1 text-white">Foto de Perfil</label>
@@ -124,7 +127,7 @@
         <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b border-sawer-red pb-4 gap-4 text-center md:text-left">
             <div>
                 <h2 id="espera-titulo" class="text-2xl md:text-3xl font-bold text-white">Sala: ...</h2>
-                <button onclick="copiarEnlaceInvitacion()" id="btn-copiar" class="mt-2 text-xs md:text-sm bg-sawer-bg hover:bg-gray-800 border border-sawer-red px-3 py-1 rounded text-white transition-colors flex items-center justify-center gap-2">🔗 Copiar enlace de invitación</button>
+                <button onclick="copiarEnlaceInvitacion()" id="btn-copiar" class="mt-2 text-xs md:text-sm bg-black/50 hover:bg-gray-800 border border-sawer-red px-3 py-1 rounded text-white transition-colors flex items-center justify-center gap-2">🔗 Copiar enlace de invitación</button>
             </div>
             <p class="text-gray-300 font-medium">Jugadores: <span id="espera-conteo" class="text-sawer-red font-bold text-2xl ml-1">1</span></p>
         </div>
@@ -139,7 +142,7 @@
     <!-- PANTALLA DE JUEGO (MOTOR) -->
     <div id="pantalla-juego" class="oculto w-full h-full max-w-[1600px] mx-auto flex flex-col gap-2 md:gap-4 p-2 relative z-10 overflow-y-auto lg:overflow-hidden">
         
-        <div class="w-full bg-sawer-panel rounded-xl px-3 md:px-6 py-2 flex justify-between items-center shadow-lg border-b-2 border-sawer-red flex-shrink-0">
+        <div class="w-full bg-sawer-panel/90 backdrop-blur-md rounded-xl px-3 md:px-6 py-2 flex justify-between items-center shadow-lg border-b-2 border-sawer-red flex-shrink-0">
             <div class="flex items-center gap-2 md:gap-4">
                 <span class="text-xs md:text-base text-gray-400 font-medium tracking-wide hidden sm:inline">RONDA <span class="text-white font-bold" id="ronda-ui">1/4</span></span>
                 <button onclick="abandonarSala()" class="bg-gray-800 hover:bg-sawer-red border border-gray-600 hover:border-sawer-red text-white text-xs md:text-sm px-2 py-1 rounded transition-colors flex items-center gap-1" title="Abandonar partida">🚪 <span class="hidden sm:inline">Salir</span></button>
@@ -156,14 +159,14 @@
         <div class="flex flex-col lg:flex-row w-full flex-grow gap-2 md:gap-4 min-h-0 relative">
             
             <!-- OVERLAY: SELECCIONAR PALABRA -->
-            <div id="overlay-seleccion" class="oculto absolute inset-0 bg-black/90 z-20 rounded-xl flex flex-col items-center justify-center anim-fade p-4 border border-sawer-red">
+            <div id="overlay-seleccion" class="oculto absolute inset-0 bg-black/95 z-20 rounded-xl flex flex-col items-center justify-center anim-fade p-4 border border-sawer-red">
                 <h2 class="text-2xl md:text-4xl font-bold text-sawer-red mb-2 drop-shadow-md" id="txt-seleccion-titulo">Es tu turno de dibujar</h2>
                 <p class="text-gray-400 mb-8" id="txt-seleccion-sub">Elige una de estas opciones para la ronda:</p>
                 <div class="flex flex-col md:flex-row gap-4" id="botones-palabras"></div>
             </div>
 
             <!-- OVERLAY: RESULTADOS DE RONDA -->
-            <div id="overlay-resultados" class="oculto absolute inset-0 bg-black/90 z-20 rounded-xl flex flex-col items-center justify-center anim-fade p-4 border border-sawer-red">
+            <div id="overlay-resultados" class="oculto absolute inset-0 bg-black/95 z-20 rounded-xl flex flex-col items-center justify-center anim-fade p-4 border border-sawer-red">
                 <h2 class="text-xl md:text-3xl font-bold text-white mb-2">Fin del Turno</h2>
                 <p class="text-gray-400 mb-6">La palabra era: <span class="text-sawer-red font-bold text-2xl md:text-4xl uppercase" id="resultado-palabra">...</span></p>
                 <div class="w-full max-w-md bg-sawer-panel rounded-xl border border-gray-700 p-4 max-h-[50vh] overflow-y-auto" id="lista-resultados"></div>
@@ -171,14 +174,14 @@
             </div>
 
             <!-- PANEL JUGADORES -->
-            <div class="w-full lg:w-64 lg:h-full bg-sawer-panel border border-gray-800 rounded-xl p-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto shadow-lg flex-shrink-0 lg:flex-shrink max-h-[130px] lg:max-h-none" id="lista-jugadores-juego"></div>
+            <div class="w-full lg:w-64 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl p-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto shadow-lg flex-shrink-0 lg:flex-shrink max-h-[130px] lg:max-h-none" id="lista-jugadores-juego"></div>
 
             <div class="flex-grow flex flex-col gap-2 md:gap-4 min-h-[400px]">
                 <div class="bg-white rounded-xl flex-grow relative overflow-hidden shadow-2xl border border-gray-800 touch-none">
                     <canvas id="pizarra" width="900" height="600" class="absolute top-0 left-0 w-full h-full"></canvas>
                 </div>
                 
-                <div id="panel-herramientas" class="bg-sawer-panel border border-gray-800 rounded-xl p-2 md:p-4 flex flex-wrap lg:flex-nowrap justify-between items-center shadow-lg gap-2">
+                <div id="panel-herramientas" class="bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl p-2 md:p-4 flex flex-wrap lg:flex-nowrap justify-between items-center shadow-lg gap-2">
                     <div class="flex gap-2 border-r border-gray-700 pr-2 md:pr-4">
                         <button id="btn-lapiz" onclick="seleccionarHerramienta('lapiz')" class="btn-herramienta herramienta-activa" title="Lápiz"><svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                         <button id="btn-goma" onclick="seleccionarHerramienta('goma')" class="btn-herramienta" title="Goma de borrar"><svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
@@ -200,11 +203,11 @@
                 </div>
             </div>
 
-            <div class="w-full lg:w-72 lg:h-full bg-sawer-panel border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-lg h-64 lg:h-auto flex-shrink-0 lg:flex-shrink">
+            <div class="w-full lg:w-72 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-lg h-64 lg:h-auto flex-shrink-0 lg:flex-shrink">
                 <div class="bg-sawer-red/10 text-sawer-red text-[10px] md:text-xs font-bold uppercase tracking-wider text-center py-2 md:py-3 border-b border-gray-800">Adivinanzas</div>
                 <div class="flex-grow p-2 md:p-3 overflow-y-auto flex flex-col gap-2 text-xs md:text-sm font-sans" id="caja-chat"></div>
-                <div class="p-2 md:p-3 border-t border-gray-800 bg-black/30">
-                    <input type="text" id="input-chat" class="w-full bg-sawer-bg border border-gray-700 rounded-lg p-2 text-white placeholder-gray-500 focus:border-sawer-red focus:outline-none focus:ring-1 focus:ring-sawer-red transition-all text-xs md:text-sm" placeholder="Escribe aquí y presiona Enter...">
+                <div class="p-2 md:p-3 border-t border-gray-800 bg-black/50">
+                    <input type="text" id="input-chat" class="w-full bg-black border border-gray-700 rounded-lg p-2 text-white placeholder-gray-500 focus:border-sawer-red focus:outline-none focus:ring-1 focus:ring-sawer-red transition-all text-xs md:text-sm" placeholder="Escribe aquí y presiona Enter...">
                 </div>
             </div>
         </div>
@@ -227,7 +230,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // BANCO DE PALABRAS MÁS GRANDE (Para opciones aleatorias)
         const bancoPalabras = [
             "MALVAVISCO", "SIERRA", "ROBLOX", "SANGRE", "DISCORD", "ADMINISTRADOR", "MISTERIO", 
             "PIZARRA", "TIEMPO", "JUEGO", "COMPUTADORA", "AURICULARES", "TECLADO", "MURCIELAGO", 
@@ -248,7 +250,6 @@
         window.relojCorriendoLocal = false; 
         window.tTotal = 80;
         
-        // --- SINTETIZADOR 8-BIT AUDIO (Undertale Vibe) ---
         let audioCtx;
         window.iniciarAudio = () => { 
             if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
@@ -296,7 +297,6 @@
             }
         }
 
-        // --- UTILIDADES ---
         function archivoABase64(file) { 
             return new Promise((resolve, reject) => { 
                 const reader = new FileReader(); 
@@ -398,10 +398,10 @@
                     document.getElementById('espera-conteo').innerText = Object.keys(jugadoresData).length;
                     
                     jugadoresOrdenados.forEach(([id, jug], i) => {
-                        gridHtml.innerHTML += `<div class="bg-sawer-bg p-3 rounded-xl border border-gray-700 flex flex-col items-center justify-center text-center shadow-lg"><img src="${jug.foto}" class="foto-perfil mb-2"><span class="font-bold text-sm text-white truncate w-full">${jug.nombre}</span>${jug.isHost ? '<span class="text-xs text-sawer-red mt-1">HOST</span>' : ''}</div>`;
+                        gridHtml.innerHTML += `<div class="bg-black/50 p-3 rounded-xl border border-gray-700 flex flex-col items-center justify-center text-center shadow-lg backdrop-blur-sm"><img src="${jug.foto}" class="foto-perfil mb-2"><span class="font-bold text-sm text-white truncate w-full">${jug.nombre}</span>${jug.isHost ? '<span class="text-xs text-sawer-red mt-1">HOST</span>' : ''}</div>`;
                         
                         const colorPos = i === 0 && jug.puntos > 0 ? "border-yellow-500 text-yellow-500" : (i === 1 && jug.puntos > 0 ? "border-gray-300 text-gray-300" : (i === 2 && jug.puntos > 0 ? "border-orange-600 text-orange-600" : "border-gray-500 text-gray-500"));
-                        panelHtml.innerHTML += `<div id="card-${id}" class="bg-black/40 p-1.5 md:p-2 rounded-lg flex items-center gap-2 border-l-2 lg:border-l-2 lg:border-b-0 border-b-2 lg:border-b-transparent ${colorPos} min-w-[120px] lg:min-w-0 flex-shrink-0 lg:flex-shrink relative"><div class="font-bold ${colorPos} text-xs md:text-lg w-auto lg:w-4 hidden lg:block">#${i+1}</div><img src="${jug.foto}" class="foto-perfil w-6 h-6 md:w-10 md:h-10 border"><div class="flex-grow min-w-0"><div class="font-bold text-xs md:text-sm text-white leading-tight truncate">${jug.nombre}</div><div class="text-[10px] md:text-xs text-gray-400">${jug.puntos} pts</div></div><div class="icono-lapiz oculto absolute top-1 right-1 text-[10px] bg-sawer-red rounded-full w-4 h-4 flex items-center justify-center" title="Dibujando">✏️</div></div>`;
+                        panelHtml.innerHTML += `<div id="card-${id}" class="bg-black/60 p-1.5 md:p-2 rounded-lg flex items-center gap-2 border-l-2 lg:border-l-2 lg:border-b-0 border-b-2 lg:border-b-transparent ${colorPos} min-w-[120px] lg:min-w-0 flex-shrink-0 lg:flex-shrink relative"><div class="font-bold ${colorPos} text-xs md:text-lg w-auto lg:w-4 hidden lg:block">#${i+1}</div><img src="${jug.foto}" class="foto-perfil w-6 h-6 md:w-10 md:h-10 border"><div class="flex-grow min-w-0"><div class="font-bold text-xs md:text-sm text-white leading-tight truncate">${jug.nombre}</div><div class="text-[10px] md:text-xs text-gray-400">${jug.puntos} pts</div></div><div class="icono-lapiz oculto absolute top-1 right-1 text-[10px] bg-sawer-red rounded-full w-4 h-4 flex items-center justify-center" title="Dibujando">✏️</div></div>`;
                     });
                 }
             });
@@ -425,7 +425,6 @@
             navigator.clipboard.writeText(urlCompleta).then(() => alert("Copiado al portapapeles")); 
         };
 
-        // --- SISTEMA HOST (CEREBRO DEL JUEGO) ---
         let cronometroInterval; 
         let tRestante = 0;
         
@@ -524,7 +523,6 @@
             }, 6000);
         }
 
-        // --- SISTEMA DE PANTALLA DE JUEGO (CANVAS) ---
         let juegoIniciadoLocal = false; 
         let soyElDibujante = false;
         
@@ -562,7 +560,6 @@
             canvas.addEventListener('touchmove', (e) => { e.preventDefault(); dibujar(e.touches[0]); }, { passive: false }); 
             canvas.addEventListener('touchend', terminarTrazo);
 
-            // LOGICA DE CHAT CON VALIDACION DE PUNTOS
             document.getElementById('input-chat').addEventListener('keypress', async function(e) {
                 if (e.key === 'Enter' && this.value.trim() !== '') {
                     const mensajeLimpiado = this.value.trim().toUpperCase();
@@ -570,18 +567,15 @@
                     if (window.estadoGlobalJuego === 'jugando' && !soyElDibujante && !window.yaAdivineLocal && mensajeLimpiado === window.palabraActualGlobal.toUpperCase()) {
                         window.yaAdivineLocal = true;
                         
-                        // Cálculo de puntos escalonados (Velocidad + Orden)
                         const tiempoActual = parseInt(document.getElementById('reloj').innerText);
                         const puntosPorTiempo = Math.floor((tiempoActual / (window.tTotal||80)) * 300);
                         const numAcertados = window.cantidadAcertadosGlobal;
                         let bonusPorOrden = numAcertados === 0 ? 200 : (numAcertados === 1 ? 100 : (numAcertados === 2 ? 50 : 0));
                         const puntosTotalesGanados = puntosPorTiempo + bonusPorOrden + 50; 
                         
-                        // Suma de puntos locales
                         const refPuntosMios = ref(db, `salas/${window.salaActualId}/jugadores/${window.miJugadorId}/puntos`);
                         get(refPuntosMios).then(s => set(refPuntosMios, (s.val()||0) + puntosTotalesGanados));
                         
-                        // Premio para el dibujante
                         const elemDibujante = document.querySelector('.icono-lapiz:not(.oculto)');
                         if(elemDibujante) {
                             const idDibujante = elemDibujante.parentElement.id.replace('card-', '');
@@ -594,7 +588,6 @@
 
                         push(ref(db, `salas/${window.salaActualId}/chat`), { uid: window.miJugadorId, nombre: window.miNombreGlobal, msj: "MALVAVISCO_SECRETO_ACIERTO", pts: puntosTotalesGanados });
                         
-                        // Validar Fin de Turno automático si todos adivinan
                         if(window.soyHost) {
                             get(ref(db, `salas/${window.salaActualId}`)).then(s => {
                                 const dbSala = s.val(); 
@@ -650,7 +643,6 @@
             }); 
         }
         
-        // CORRECCIÓN LOCAL DE DIBUJO
         function iniciarTrazo(e) { 
             if(!soyElDibujante || window.estadoGlobalJuego !== 'jugando') return; 
             pintando = true; 
@@ -660,7 +652,7 @@
             
             ctx.globalAlpha = parseFloat(opacidadVal); 
             ctx.fillStyle = herramientaActual === 'goma' ? "#ffffff" : colorActual; 
-            ctx.strokeStyle = ctx.fillStyle; // <--- Arreglo crucial de color invisible
+            ctx.strokeStyle = ctx.fillStyle; 
             ctx.lineWidth = grosorSize; 
             
             ctx.beginPath(); 
@@ -770,7 +762,6 @@
                     divOverlaySelect.classList.add('oculto'); 
                     divOverlayResult.classList.add('oculto');
                     
-                    // --- DISPARADOR DEL HOST CORREGIDO ---
                     if(window.soyHost && !window.relojCorriendoLocal && window.palabraActualGlobal !== "") { 
                         window.hostArrancarReloj(window.palabraActualGlobal); 
                     }
@@ -837,7 +828,7 @@
                 ctx.strokeStyle = tr.c; 
                 ctx.fillStyle = tr.c; 
                 ctx.lineWidth = tr.g; 
-                ctx.globalAlpha = tr.o !== undefined ? tr.o : 1; // ARREGLO OPACIDAD REMOTA
+                ctx.globalAlpha = tr.o !== undefined ? tr.o : 1;
                 
                 if (tr.t === 'ini') { 
                     ctx.beginPath(); 
