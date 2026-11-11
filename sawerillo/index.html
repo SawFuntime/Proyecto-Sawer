@@ -49,7 +49,6 @@
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .anim-fade { animation: fadeIn 0.3s ease forwards; }
 
-        /* NUEVO FONDO PERSONALIZADO DE GITHUB */
         .bg-sawer-custom {
             background-color: rgb(15, 15, 15);
             background-image: url('f7a111bb-1b7e-4031-aa04-760f03a5b095.png');
@@ -206,9 +205,12 @@
             <div class="w-full lg:w-72 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-lg h-64 lg:h-auto flex-shrink-0 lg:flex-shrink">
                 <div class="bg-sawer-red/10 text-sawer-red text-[10px] md:text-xs font-bold uppercase tracking-wider text-center py-2 md:py-3 border-b border-gray-800">Adivinanzas</div>
                 <div class="flex-grow p-2 md:p-3 overflow-y-auto flex flex-col gap-2 text-xs md:text-sm font-sans" id="caja-chat"></div>
-                <div class="p-2 md:p-3 border-t border-gray-800 bg-black/50">
-                    <input type="text" id="input-chat" class="w-full bg-black border border-gray-700 rounded-lg p-2 text-white placeholder-gray-500 focus:border-sawer-red focus:outline-none focus:ring-1 focus:ring-sawer-red transition-all text-xs md:text-sm" placeholder="Escribe aquí y presiona Enter...">
-                </div>
+                
+                <!-- FORMULARIO DE CHAT ADAPTADO PARA MÓVIL (NUEVO) -->
+                <form id="form-chat" class="p-2 md:p-3 border-t border-gray-800 bg-black/50 m-0 flex gap-2" onsubmit="return false;">
+                    <input type="text" id="input-chat" class="flex-grow w-full bg-black border border-gray-700 rounded-lg p-2 text-white placeholder-gray-500 focus:border-sawer-red focus:outline-none focus:ring-1 focus:ring-sawer-red transition-all text-xs md:text-sm" placeholder="Escribe aquí...">
+                    <button type="submit" class="md:hidden bg-sawer-red hover:bg-sawer-red-hover text-white px-3 py-2 rounded-lg font-bold text-xs shadow-md">Enviar</button>
+                </form>
             </div>
         </div>
     </div>
@@ -252,6 +254,7 @@
         window.relojCorriendoLocal = false; 
         window.tTotal = 80;
         
+        // --- SINTETIZADOR 8-BIT AUDIO ---
         let audioCtx;
         window.iniciarAudio = () => { 
             if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
@@ -427,6 +430,7 @@
             navigator.clipboard.writeText(urlCompleta).then(() => alert("Copiado al portapapeles")); 
         };
 
+        // --- SISTEMA HOST (CEREBRO DEL JUEGO) ---
         let cronometroInterval; 
         let tRestante = 0;
         
@@ -525,6 +529,7 @@
             }, 6000);
         }
 
+        // --- SISTEMA DE PANTALLA DE JUEGO (CANVAS) ---
         let juegoIniciadoLocal = false; 
         let soyElDibujante = false;
         
@@ -562,9 +567,13 @@
             canvas.addEventListener('touchmove', (e) => { e.preventDefault(); dibujar(e.touches[0]); }, { passive: false }); 
             canvas.addEventListener('touchend', terminarTrazo);
 
-            document.getElementById('input-chat').addEventListener('keypress', async function(e) {
-                if (e.key === 'Enter' && this.value.trim() !== '') {
-                    const mensajeLimpiado = this.value.trim().toUpperCase();
+            // LOGICA DE CHAT CON VALIDACION DE PUNTOS (ARREGLADO PARA MÓVIL Y PC)
+            document.getElementById('form-chat').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const inputObj = document.getElementById('input-chat');
+
+                if (inputObj.value.trim() !== '') {
+                    const mensajeLimpiado = inputObj.value.trim().toUpperCase();
                     
                     if (window.estadoGlobalJuego === 'jugando' && !soyElDibujante && !window.yaAdivineLocal && mensajeLimpiado === window.palabraActualGlobal.toUpperCase()) {
                         window.yaAdivineLocal = true;
@@ -601,9 +610,9 @@
                             });
                         }
                     } else {
-                        push(ref(db, `salas/${window.salaActualId}/chat`), { uid: window.miJugadorId, nombre: window.miNombreGlobal, msj: this.value });
+                        push(ref(db, `salas/${window.salaActualId}/chat`), { uid: window.miJugadorId, nombre: window.miNombreGlobal, msj: inputObj.value });
                     }
-                    this.value = '';
+                    inputObj.value = '';
                 }
             });
         }
@@ -779,7 +788,7 @@
                         divHerramientas.classList.add('oculto'); 
                         divHerramientas.classList.remove('flex'); 
                         inpCajaChat.disabled = window.yaAdivineLocal; 
-                        inpCajaChat.placeholder = window.yaAdivineLocal ? "¡Adivinaste! Espera a los demás." : "Escribe aquí y presiona Enter..."; 
+                        inpCajaChat.placeholder = window.yaAdivineLocal ? "¡Adivinaste! Espera a los demás." : "Escribe aquí..."; 
                         inpCajaChat.classList.remove('opacity-50');
                         
                         let txtMascara = "";
