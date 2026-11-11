@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sawerillo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -59,7 +59,8 @@
         }
     </style>
 </head>
-<body class="bg-sawer-custom text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden selection:bg-sawer-red selection:text-white relative z-0" onclick="iniciarAudio()">
+<!-- NOTA: Usamos h-[100dvh] para que el teclado del celular no tape el chat -->
+<body class="bg-sawer-custom text-white h-[100dvh] flex flex-col items-center justify-center font-sans overflow-hidden selection:bg-sawer-red selection:text-white relative z-0" onclick="iniciarAudio()">
 
     <!-- MENÚ PRINCIPAL -->
     <div id="menu-principal" class="text-center space-y-6 w-full max-w-md bg-black/80 p-6 md:p-8 rounded-2xl shadow-[0_0_25px_rgba(155,0,0,0.2)] border-2 border-sawer-red backdrop-blur-md m-4">
@@ -139,7 +140,7 @@
     </div>
 
     <!-- PANTALLA DE JUEGO (MOTOR) -->
-    <div id="pantalla-juego" class="oculto w-full h-full max-w-[1600px] mx-auto flex flex-col gap-2 md:gap-4 p-2 relative z-10 overflow-y-auto lg:overflow-hidden">
+    <div id="pantalla-juego" class="oculto w-full h-[100dvh] max-w-[1600px] mx-auto flex flex-col gap-2 p-2 relative z-10">
         
         <div class="w-full bg-sawer-panel/90 backdrop-blur-md rounded-xl px-3 md:px-6 py-2 flex justify-between items-center shadow-lg border-b-2 border-sawer-red flex-shrink-0">
             <div class="flex items-center gap-2 md:gap-4">
@@ -173,9 +174,11 @@
             </div>
 
             <!-- PANEL JUGADORES -->
-            <div class="w-full lg:w-64 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl p-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto shadow-lg flex-shrink-0 lg:flex-shrink max-h-[130px] lg:max-h-none" id="lista-jugadores-juego"></div>
+            <div class="w-full lg:w-64 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl p-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto shadow-lg flex-shrink-0 lg:flex-shrink max-h-[80px] lg:max-h-none" id="lista-jugadores-juego"></div>
 
-            <div class="flex-grow flex flex-col gap-2 md:gap-4 min-h-[400px]">
+            <!-- ÁREA CENTRAL (CANVAS) -->
+            <!-- REDUCIDO EN MÓVIL (min-h-[250px]) para que el chat no se esconda -->
+            <div class="flex-grow flex flex-col gap-2 md:gap-4 min-h-[250px] lg:min-h-[400px]">
                 <div class="bg-white rounded-xl flex-grow relative overflow-hidden shadow-2xl border border-gray-800 touch-none">
                     <canvas id="pizarra" width="900" height="600" class="absolute top-0 left-0 w-full h-full"></canvas>
                 </div>
@@ -202,20 +205,22 @@
                 </div>
             </div>
 
-            <div class="w-full lg:w-72 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-lg h-64 lg:h-auto flex-shrink-0 lg:flex-shrink">
+            <!-- CHAT (Móvil usa flex-grow para rellenar lo que sobra de pantalla sin esconderse) -->
+            <div class="w-full lg:w-72 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-lg flex-grow lg:flex-shrink-0 max-h-[30vh] lg:max-h-none">
                 <div class="bg-sawer-red/10 text-sawer-red text-[10px] md:text-xs font-bold uppercase tracking-wider text-center py-2 md:py-3 border-b border-gray-800">Adivinanzas</div>
                 <div class="flex-grow p-2 md:p-3 overflow-y-auto flex flex-col gap-2 text-xs md:text-sm font-sans" id="caja-chat"></div>
                 
-                <!-- FORMULARIO DE CHAT ADAPTADO PARA MÓVIL (NUEVO) -->
+                <!-- FORMULARIO DE CHAT (NUEVO: Etiqueta <form> para forzar al teclado de celular a mostrar el botón Enviar) -->
                 <form id="form-chat" class="p-2 md:p-3 border-t border-gray-800 bg-black/50 m-0 flex gap-2" onsubmit="return false;">
-                    <input type="text" id="input-chat" class="flex-grow w-full bg-black border border-gray-700 rounded-lg p-2 text-white placeholder-gray-500 focus:border-sawer-red focus:outline-none focus:ring-1 focus:ring-sawer-red transition-all text-xs md:text-sm" placeholder="Escribe aquí...">
-                    <button type="submit" class="md:hidden bg-sawer-red hover:bg-sawer-red-hover text-white px-3 py-2 rounded-lg font-bold text-xs shadow-md">Enviar</button>
+                    <input type="text" id="input-chat" class="flex-grow w-full bg-black border border-gray-700 rounded-lg p-2 text-white placeholder-gray-500 focus:border-sawer-red focus:outline-none focus:ring-1 focus:ring-sawer-red transition-all text-xs md:text-sm" placeholder="Escribe aquí..." autocomplete="off">
+                    <!-- Botón forzado para móviles en caso de que el teclado falle -->
+                    <button type="submit" class="md:hidden bg-sawer-red hover:bg-sawer-red-hover text-white px-3 py-2 rounded-lg font-bold text-xs shadow-md flex-shrink-0">Enviar</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT FIREBASE Y MOTOR DE JUEGO EXPANDIDO -->
+    <!-- SCRIPT FIREBASE Y MOTOR DE JUEGO -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, push, onValue, get, onChildAdded, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -236,9 +241,7 @@
             "MALVAVISCO", "SIERRA", "ROBLOX", "SANGRE", "DISCORD", "ADMINISTRADOR", "MISTERIO", 
             "PIZARRA", "TIEMPO", "JUEGO", "COMPUTADORA", "AURICULARES", "TECLADO", "MURCIELAGO", 
             "FANTASMA", "ESPADA", "PIZZA", "HAMBURGUESA", "ESQUELETO", "PROGRAMADOR",
-            "SILLA GAMER", "MONITOR", "SUICIDIO", "PROYECTO SAWER", "HITLER", "JEFFREY EPSTEIN" , "PERÚ",
-            "SAWFUNTIME", "LENOIDE", "HIKARU", "MONTE EVEREST", "SANS", "GEOMETRY DASH", "MICHAEL JACKSON", "PALOMA",
-            "RADIO", "ACAMPAR", "RIÑÓN", "ISRAEL", "EMO", "MEWING", "SOPA", "TUN TUNG SAHUR", "GOKU", "PAYASO", "MANZANA"
+            "SILLA GAMER", "MONITOR", "PSICOLOGO", "UNIVERSIDAD", "COQUIMBO", "CALAMA"
         ];
 
         window.salaActualId = null; 
@@ -269,45 +272,28 @@
             gain.connect(audioCtx.destination);
             
             if(type === 'acierto') {
-                osc.type = 'square'; 
-                osc.frequency.setValueAtTime(440, audioCtx.currentTime); 
-                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                osc.start(); 
-                osc.stop(audioCtx.currentTime + 0.3);
+                osc.type = 'square'; osc.frequency.setValueAtTime(440, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
             } else if(type === 'tick') {
-                osc.type = 'triangle'; 
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-                osc.start(); 
-                osc.stop(audioCtx.currentTime + 0.1);
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
             } else if(type === 'turno') {
-                osc.type = 'square'; 
-                osc.frequency.setValueAtTime(300, audioCtx.currentTime); 
-                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.2);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
-                osc.start(); 
-                osc.stop(audioCtx.currentTime + 0.4);
+                osc.type = 'square'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.4);
             } else if(type === 'fin') {
-                osc.type = 'sawtooth'; 
-                osc.frequency.setValueAtTime(300, audioCtx.currentTime); 
-                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.5);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
-                osc.start(); 
-                osc.stop(audioCtx.currentTime + 0.5);
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.5);
             }
         }
 
         function archivoABase64(file) { 
             return new Promise((resolve, reject) => { 
-                const reader = new FileReader(); 
-                reader.readAsDataURL(file); 
-                reader.onload = () => resolve(reader.result); 
-                reader.onerror = error => reject(error); 
+                const reader = new FileReader(); reader.readAsDataURL(file); 
+                reader.onload = () => resolve(reader.result); reader.onerror = error => reject(error); 
             }); 
         }
 
@@ -377,6 +363,13 @@
             get(ref(db, `salas/${window.salaActualId}/configuracion/nombreSala`)).then((s) => entrarLobby(s.val() || "Sala Invitada"));
         };
 
+        // --- FUNCIONALIDAD PARA EL HOST: EXPULSAR JUGADORES ---
+        window.expulsarJugador = (idJugadorAEchar) => {
+            if (confirm("¿Estás seguro de que quieres expulsar a este jugador?")) {
+                remove(ref(db, `salas/${window.salaActualId}/jugadores/${idJugadorAEchar}`));
+            }
+        };
+
         function entrarLobby(nombreSala) {
             mostrarSeccion('sala-espera'); 
             document.getElementById('espera-titulo').innerText = `Sala: ${nombreSala}`; 
@@ -389,6 +382,16 @@
                 document.getElementById('btn-iniciar-ronda').classList.add('oculto'); 
                 document.getElementById('msg-esperando-host').classList.remove('oculto'); 
             }
+
+            // LISTENER PARA DETECTAR SI FUISTE EXPULSADO (Aplicado a tu propio nodo)
+            const refMiJugador = ref(db, `salas/${window.salaActualId}/jugadores/${window.miJugadorId}`);
+            onValue(refMiJugador, (snap) => {
+                if (!snap.exists() && window.salaActualId) {
+                    window.salaActualId = null; // Evitar spam de alertas
+                    alert("Has sido expulsado de la sala.");
+                    window.location.href = window.location.pathname;
+                }
+            });
 
             onValue(ref(db, `salas/${window.salaActualId}/jugadores`), (snapshot) => {
                 const jugadoresData = snapshot.val(); 
@@ -403,7 +406,12 @@
                     document.getElementById('espera-conteo').innerText = Object.keys(jugadoresData).length;
                     
                     jugadoresOrdenados.forEach(([id, jug], i) => {
-                        gridHtml.innerHTML += `<div class="bg-black/50 p-3 rounded-xl border border-gray-700 flex flex-col items-center justify-center text-center shadow-lg backdrop-blur-sm"><img src="${jug.foto}" class="foto-perfil mb-2"><span class="font-bold text-sm text-white truncate w-full">${jug.nombre}</span>${jug.isHost ? '<span class="text-xs text-sawer-red mt-1">HOST</span>' : ''}</div>`;
+                        // LOBBY: Añadir botón de expulsar si eres el host y no eres tú mismo
+                        let btnExpulsarHtml = (window.soyHost && id !== window.miJugadorId) 
+                            ? `<button onclick="expulsarJugador('${id}')" class="absolute top-2 right-2 bg-red-600 hover:bg-red-800 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-md" title="Expulsar">X</button>` 
+                            : '';
+
+                        gridHtml.innerHTML += `<div class="relative bg-black/50 p-3 rounded-xl border border-gray-700 flex flex-col items-center justify-center text-center shadow-lg backdrop-blur-sm">${btnExpulsarHtml}<img src="${jug.foto}" class="foto-perfil mb-2"><span class="font-bold text-sm text-white truncate w-full">${jug.nombre}</span>${jug.isHost ? '<span class="text-xs text-sawer-red mt-1">HOST</span>' : ''}</div>`;
                         
                         const colorPos = i === 0 && jug.puntos > 0 ? "border-yellow-500 text-yellow-500" : (i === 1 && jug.puntos > 0 ? "border-gray-300 text-gray-300" : (i === 2 && jug.puntos > 0 ? "border-orange-600 text-orange-600" : "border-gray-500 text-gray-500"));
                         panelHtml.innerHTML += `<div id="card-${id}" class="bg-black/60 p-1.5 md:p-2 rounded-lg flex items-center gap-2 border-l-2 lg:border-l-2 lg:border-b-0 border-b-2 lg:border-b-transparent ${colorPos} min-w-[120px] lg:min-w-0 flex-shrink-0 lg:flex-shrink relative"><div class="font-bold ${colorPos} text-xs md:text-lg w-auto lg:w-4 hidden lg:block">#${i+1}</div><img src="${jug.foto}" class="foto-perfil w-6 h-6 md:w-10 md:h-10 border"><div class="flex-grow min-w-0"><div class="font-bold text-xs md:text-sm text-white leading-tight truncate">${jug.nombre}</div><div class="text-[10px] md:text-xs text-gray-400">${jug.puntos} pts</div></div><div class="icono-lapiz oculto absolute top-1 right-1 text-[10px] bg-sawer-red rounded-full w-4 h-4 flex items-center justify-center" title="Dibujando">✏️</div></div>`;
@@ -490,17 +498,13 @@
                 
                 if(tRestante === Math.floor(window.tTotal * 0.5) && pistaIndex < pistasPosibles.length) { 
                     get(ref(db, `salas/${window.salaActualId}/estadoJuego/pistas`)).then(s => { 
-                        let arrPistas = s.val() || []; 
-                        arrPistas.push(pistasPosibles[pistaIndex++]); 
-                        update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
+                        let arrPistas = s.val() || []; arrPistas.push(pistasPosibles[pistaIndex++]); update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
                     }); 
                 }
                 
                 if(tRestante === Math.floor(window.tTotal * 0.25) && pistaIndex < pistasPosibles.length) { 
                     get(ref(db, `salas/${window.salaActualId}/estadoJuego/pistas`)).then(s => { 
-                        let arrPistas = s.val() || []; 
-                        arrPistas.push(pistasPosibles[pistaIndex++]); 
-                        update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
+                        let arrPistas = s.val() || []; arrPistas.push(pistasPosibles[pistaIndex++]); update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
                     }); 
                 }
 
@@ -529,7 +533,7 @@
             }, 6000);
         }
 
-        // --- SISTEMA DE PANTALLA DE JUEGO (CANVAS) ---
+        // --- SISTEMA DE PANTALLA DE JUEGO (CANVAS Y CHAT) ---
         let juegoIniciadoLocal = false; 
         let soyElDibujante = false;
         
@@ -553,23 +557,14 @@
             
             canvas = document.getElementById('pizarra'); 
             ctx = canvas.getContext('2d', { alpha: false }); 
-            ctx.lineCap = 'round'; 
-            ctx.lineJoin = 'round'; 
-            ctx.fillStyle = "#ffffff"; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            canvas.addEventListener('mousedown', iniciarTrazo); 
-            canvas.addEventListener('mouseup', terminarTrazo); 
-            canvas.addEventListener('mousemove', dibujar); 
-            canvas.addEventListener('mouseout', terminarTrazo);
-            
-            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); iniciarTrazo(e.touches[0]); }, { passive: false }); 
-            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); dibujar(e.touches[0]); }, { passive: false }); 
-            canvas.addEventListener('touchend', terminarTrazo);
+            canvas.addEventListener('mousedown', iniciarTrazo); canvas.addEventListener('mouseup', terminarTrazo); canvas.addEventListener('mousemove', dibujar); canvas.addEventListener('mouseout', terminarTrazo);
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); iniciarTrazo(e.touches[0]); }, { passive: false }); canvas.addEventListener('touchmove', (e) => { e.preventDefault(); dibujar(e.touches[0]); }, { passive: false }); canvas.addEventListener('touchend', terminarTrazo);
 
-            // LOGICA DE CHAT CON VALIDACION DE PUNTOS (ARREGLADO PARA MÓVIL Y PC)
+            // EVENTO SUBMIT DEL FORMULARIO DE CHAT (REPARADO PARA CELULARES)
             document.getElementById('form-chat').addEventListener('submit', async function(e) {
-                e.preventDefault();
+                e.preventDefault(); // Prevenir recarga de página al darle a enter/enviar en el móvil
                 const inputObj = document.getElementById('input-chat');
 
                 if (inputObj.value.trim() !== '') {
@@ -617,100 +612,34 @@
             });
         }
 
-        window.cambiarColor = (colorSeleccionado, elementoBtn) => { 
-            colorActual = colorSeleccionado; 
-            seleccionarHerramienta('lapiz'); 
-            document.querySelectorAll('.btn-color').forEach(b => b.classList.remove('color-activo')); 
-            if(elementoBtn) elementoBtn.classList.add('color-activo'); 
-        };
-        
-        window.seleccionarHerramienta = (herramientaStr) => { 
-            herramientaActual = herramientaStr; 
-            document.getElementById('btn-lapiz').classList.remove('herramienta-activa'); 
-            document.getElementById('btn-goma').classList.remove('herramienta-activa'); 
-            document.getElementById('btn-' + herramientaStr).classList.add('herramienta-activa'); 
-        };
-        
-        function obtenerC(eventoMouse) { 
-            const rect = canvas.getBoundingClientRect(); 
-            return { 
-                x: (eventoMouse.clientX - rect.left) * (canvas.width / rect.width), 
-                y: (eventoMouse.clientY - rect.top) * (canvas.height / rect.height) 
-            }; 
-        }
+        window.cambiarColor = (colorSeleccionado, elementoBtn) => { colorActual = colorSeleccionado; seleccionarHerramienta('lapiz'); document.querySelectorAll('.btn-color').forEach(b => b.classList.remove('color-activo')); if(elementoBtn) elementoBtn.classList.add('color-activo'); };
+        window.seleccionarHerramienta = (herramientaStr) => { herramientaActual = herramientaStr; document.getElementById('btn-lapiz').classList.remove('herramienta-activa'); document.getElementById('btn-goma').classList.remove('herramienta-activa'); document.getElementById('btn-' + herramientaStr).classList.add('herramienta-activa'); };
+        function obtenerC(eventoMouse) { const rect = canvas.getBoundingClientRect(); return { x: (eventoMouse.clientX - rect.left) * (canvas.width / rect.width), y: (eventoMouse.clientY - rect.top) * (canvas.height / rect.height) }; }
 
         function envTrazo(coordX, coordY, tipoM, opacidadGlobal) { 
             if(!window.salaActualId || !soyElDibujante || window.estadoGlobalJuego !== 'jugando') return; 
             const valorOpacidad = opacidadGlobal || document.getElementById('opacidad-lapiz').value;
-            
-            push(ref(db, `salas/${window.salaActualId}/trazos`), { 
-                uid: window.miJugadorId, 
-                x: Math.round(coordX), 
-                y: Math.round(coordY), 
-                c: herramientaActual === 'goma' ? "#ffffff" : colorActual, 
-                g: document.getElementById('grosor-lapiz').value, 
-                o: parseFloat(valorOpacidad), 
-                t: tipoM 
-            }); 
+            push(ref(db, `salas/${window.salaActualId}/trazos`), { uid: window.miJugadorId, x: Math.round(coordX), y: Math.round(coordY), c: herramientaActual === 'goma' ? "#ffffff" : colorActual, g: document.getElementById('grosor-lapiz').value, o: parseFloat(valorOpacidad), t: tipoM }); 
         }
         
         function iniciarTrazo(e) { 
             if(!soyElDibujante || window.estadoGlobalJuego !== 'jugando') return; 
-            pintando = true; 
-            const coord = obtenerC(e); 
-            const grosorSize = document.getElementById('grosor-lapiz').value; 
-            const opacidadVal = document.getElementById('opacidad-lapiz').value;
-            
-            ctx.globalAlpha = parseFloat(opacidadVal); 
-            ctx.fillStyle = herramientaActual === 'goma' ? "#ffffff" : colorActual; 
-            ctx.strokeStyle = ctx.fillStyle; 
-            ctx.lineWidth = grosorSize; 
-            
-            ctx.beginPath(); 
-            ctx.arc(coord.x, coord.y, grosorSize/2, 0, Math.PI*2); 
-            ctx.fill(); 
-            ctx.beginPath(); 
-            ctx.moveTo(coord.x, coord.y); 
-            
+            pintando = true; const coord = obtenerC(e); const grosorSize = document.getElementById('grosor-lapiz').value; const opacidadVal = document.getElementById('opacidad-lapiz').value;
+            ctx.globalAlpha = parseFloat(opacidadVal); ctx.fillStyle = herramientaActual === 'goma' ? "#ffffff" : colorActual; ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = grosorSize; 
+            ctx.beginPath(); ctx.arc(coord.x, coord.y, grosorSize/2, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(coord.x, coord.y); 
             envTrazo(coord.x, coord.y, 'ini', opacidadVal); 
         }
         
-        function dibujar(e) { 
-            if(pintando && soyElDibujante && window.estadoGlobalJuego === 'jugando') { 
-                const coord = obtenerC(e); 
-                ctx.lineTo(coord.x, coord.y); 
-                ctx.stroke(); 
-                ctx.beginPath(); 
-                ctx.moveTo(coord.x, coord.y); 
-                envTrazo(coord.x, coord.y, 'mov', null); 
-            } 
-        }
+        function dibujar(e) { if(pintando && soyElDibujante && window.estadoGlobalJuego === 'jugando') { const coord = obtenerC(e); ctx.lineTo(coord.x, coord.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(coord.x, coord.y); envTrazo(coord.x, coord.y, 'mov', null); } }
+        function terminarTrazo() { if(pintando){ pintando = false; ctx.beginPath(); envTrazo(0, 0, 'fin', null); } }
         
-        function terminarTrazo() { 
-            if(pintando){ 
-                pintando = false; 
-                ctx.beginPath(); 
-                envTrazo(0, 0, 'fin', null); 
-            } 
-        }
-        
-        window.limpiarPizarra = () => { 
-            if(window.salaActualId && soyElDibujante && window.estadoGlobalJuego === 'jugando') { 
-                ctx.globalAlpha = 1; 
-                ctx.fillStyle = "#ffffff"; 
-                ctx.fillRect(0, 0, canvas.width, canvas.height); 
-                set(ref(db, `salas/${window.salaActualId}/trazos`), null); 
-            } 
-        };
+        window.limpiarPizarra = () => { if(window.salaActualId && soyElDibujante && window.estadoGlobalJuego === 'jugando') { ctx.globalAlpha = 1; ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height); set(ref(db, `salas/${window.salaActualId}/trazos`), null); } };
 
-        window.elegirPalabra = (palabraSeleccionada) => {
-            update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { estadoLocal: 'jugando', palabraActual: palabraSeleccionada }); 
-        };
+        window.elegirPalabra = (palabraSeleccionada) => { update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { estadoLocal: 'jugando', palabraActual: palabraSeleccionada }); };
 
         function iniciarEscuchasFirebase() {
             onValue(ref(db, `salas/${window.salaActualId}/estadoJuego`), (snap) => {
-                const stateData = snap.val(); 
-                if (!stateData) return;
+                const stateData = snap.val(); if (!stateData) return;
                 
                 window.estadoGlobalJuego = stateData.estadoLocal;
                 window.palabraActualGlobal = stateData.palabraActual || "";
@@ -721,12 +650,7 @@
                 
                 if (stateData.tiempo !== undefined) { 
                     textReloj.innerText = stateData.tiempo; 
-                    if(stateData.tiempo <= 10 && stateData.tiempo > 0 && window.estadoGlobalJuego === 'jugando') { 
-                        textReloj.classList.add('text-red-500'); 
-                        playSound('tick'); 
-                    } else { 
-                        textReloj.classList.remove('text-red-500'); 
-                    } 
+                    if(stateData.tiempo <= 10 && stateData.tiempo > 0 && window.estadoGlobalJuego === 'jugando') { textReloj.classList.add('text-red-500'); playSound('tick'); } else { textReloj.classList.remove('text-red-500'); } 
                 }
 
                 const idDibujanteFirebase = stateData.dibujanteActual;
@@ -739,90 +663,45 @@
                 const inpCajaChat = document.getElementById('input-chat');
 
                 document.querySelectorAll('.icono-lapiz').forEach(icono => icono.classList.add('oculto'));
-                const iconUserDibujante = document.querySelector(`#card-${idDibujanteFirebase} .icono-lapiz`); 
-                if (iconUserDibujante) iconUserDibujante.classList.remove('oculto');
+                const iconUserDibujante = document.querySelector(`#card-${idDibujanteFirebase} .icono-lapiz`); if (iconUserDibujante) iconUserDibujante.classList.remove('oculto');
 
                 if (stateData.estadoLocal === 'seleccionando') {
-                    window.yaAdivineLocal = false; 
-                    window.tTotal = stateData.tiempo || 80; 
-                    divOverlayResult.classList.add('oculto'); 
-                    divHerramientas.classList.add('oculto'); 
-                    inpCajaChat.disabled = true; 
-                    inpCajaChat.placeholder = "Esperando elección..."; 
-                    pPalabraSec.innerText = "ESPERANDO";
+                    window.yaAdivineLocal = false; window.tTotal = stateData.tiempo || 80; divOverlayResult.classList.add('oculto'); divHerramientas.classList.add('oculto'); inpCajaChat.disabled = true; inpCajaChat.placeholder = "Esperando elección..."; pPalabraSec.innerText = "ESPERANDO";
                     
                     if (soyElDibujante) {
-                        playSound('turno'); 
-                        divOverlaySelect.classList.remove('oculto');
-                        document.getElementById('txt-seleccion-titulo').innerText = "¡Es tu turno!"; 
-                        document.getElementById('txt-seleccion-sub').innerText = "Elige una palabra para dibujar:";
-                        const cBotones = document.getElementById('botones-palabras'); 
-                        cBotones.innerHTML = "";
-                        
-                        (stateData.opcionesPalabras || []).forEach(opcionWord => { 
-                            cBotones.innerHTML += `<button onclick="elegirPalabra('${opcionWord}')" class="bg-gray-800 hover:bg-sawer-red text-white font-bold py-3 px-6 rounded border border-gray-600 hover:border-sawer-red transition-all">${opcionWord}</button>`; 
-                        });
+                        playSound('turno'); divOverlaySelect.classList.remove('oculto'); document.getElementById('txt-seleccion-titulo').innerText = "¡Es tu turno!"; document.getElementById('txt-seleccion-sub').innerText = "Elige una palabra para dibujar:";
+                        const cBotones = document.getElementById('botones-palabras'); cBotones.innerHTML = "";
+                        (stateData.opcionesPalabras || []).forEach(opcionWord => { cBotones.innerHTML += `<button onclick="elegirPalabra('${opcionWord}')" class="bg-gray-800 hover:bg-sawer-red text-white font-bold py-3 px-6 rounded border border-gray-600 hover:border-sawer-red transition-all">${opcionWord}</button>`; });
                     } else {
-                        divOverlaySelect.classList.remove('oculto'); 
-                        document.getElementById('txt-seleccion-titulo').innerText = "Preparando Ronda"; 
-                        document.getElementById('txt-seleccion-sub').innerText = "El dibujante está eligiendo una palabra..."; 
-                        document.getElementById('botones-palabras').innerHTML = "";
+                        divOverlaySelect.classList.remove('oculto'); document.getElementById('txt-seleccion-titulo').innerText = "Preparando Ronda"; document.getElementById('txt-seleccion-sub').innerText = "El dibujante está eligiendo una palabra..."; document.getElementById('botones-palabras').innerHTML = "";
                     }
                 } 
                 else if (stateData.estadoLocal === 'jugando') {
-                    divOverlaySelect.classList.add('oculto'); 
-                    divOverlayResult.classList.add('oculto');
-                    
-                    if(window.soyHost && !window.relojCorriendoLocal && window.palabraActualGlobal !== "") { 
-                        window.hostArrancarReloj(window.palabraActualGlobal); 
-                    }
+                    divOverlaySelect.classList.add('oculto'); divOverlayResult.classList.add('oculto');
+                    if(window.soyHost && !window.relojCorriendoLocal && window.palabraActualGlobal !== "") { window.hostArrancarReloj(window.palabraActualGlobal); }
 
                     if (soyElDibujante) {
-                        divHerramientas.classList.remove('oculto'); 
-                        divHerramientas.classList.add('flex'); 
-                        inpCajaChat.disabled = true; 
-                        inpCajaChat.placeholder = "¡Es tu turno! Dibuja la palabra."; 
-                        inpCajaChat.classList.add('opacity-50');
+                        divHerramientas.classList.remove('oculto'); divHerramientas.classList.add('flex'); inpCajaChat.disabled = true; inpCajaChat.placeholder = "¡Es tu turno! Dibuja la palabra."; inpCajaChat.classList.add('opacity-50');
                         pPalabraSec.innerText = window.palabraActualGlobal.split('').join(' ');
                     } else {
-                        divHerramientas.classList.add('oculto'); 
-                        divHerramientas.classList.remove('flex'); 
-                        inpCajaChat.disabled = window.yaAdivineLocal; 
-                        inpCajaChat.placeholder = window.yaAdivineLocal ? "¡Adivinaste! Espera a los demás." : "Escribe aquí..."; 
-                        inpCajaChat.classList.remove('opacity-50');
+                        divHerramientas.classList.add('oculto'); divHerramientas.classList.remove('flex'); inpCajaChat.disabled = window.yaAdivineLocal; inpCajaChat.placeholder = window.yaAdivineLocal ? "¡Adivinaste! Espera a los demás." : "Escribe aquí..."; inpCajaChat.classList.remove('opacity-50');
                         
                         let txtMascara = "";
                         for(let iter=0; iter<window.palabraActualGlobal.length; iter++) {
-                            if(window.palabraActualGlobal[iter] === " ") {
-                                txtMascara += "   ";
-                            } else if(stateData.pistas && stateData.pistas.includes(iter)) {
-                                txtMascara += window.palabraActualGlobal[iter] + " ";
-                            } else {
-                                txtMascara += "_ ";
-                            }
+                            if(window.palabraActualGlobal[iter] === " ") { txtMascara += "   "; } else if(stateData.pistas && stateData.pistas.includes(iter)) { txtMascara += window.palabraActualGlobal[iter] + " "; } else { txtMascara += "_ "; }
                         }
                         pPalabraSec.innerText = txtMascara;
                     }
                 }
                 else if (stateData.estadoLocal === 'resultados') {
-                    window.relojCorriendoLocal = false; 
-                    playSound('fin'); 
-                    divOverlaySelect.classList.add('oculto'); 
-                    divOverlayResult.classList.remove('oculto'); 
-                    document.getElementById('resultado-palabra').innerText = window.palabraActualGlobal;
-                    
-                    const copyPanelPts = document.getElementById('lista-jugadores-juego').innerHTML; 
-                    document.getElementById('lista-resultados').innerHTML = copyPanelPts;
-                    
-                    divHerramientas.classList.add('oculto'); 
-                    inpCajaChat.disabled = true;
+                    window.relojCorriendoLocal = false; playSound('fin'); divOverlaySelect.classList.add('oculto'); divOverlayResult.classList.remove('oculto'); document.getElementById('resultado-palabra').innerText = window.palabraActualGlobal;
+                    const copyPanelPts = document.getElementById('lista-jugadores-juego').innerHTML; document.getElementById('lista-resultados').innerHTML = copyPanelPts;
+                    divHerramientas.classList.add('oculto'); inpCajaChat.disabled = true;
                 }
             });
 
             onChildAdded(ref(db, `salas/${window.salaActualId}/chat`), (snap) => {
-                const infoMsg = snap.val(); 
-                const contChat = document.getElementById('caja-chat');
-                
+                const infoMsg = snap.val(); const contChat = document.getElementById('caja-chat');
                 if (infoMsg.msj === "MALVAVISCO_SECRETO_ACIERTO") {
                     contChat.innerHTML += `<div class="bg-green-900/40 p-2 rounded text-xs border-l-2 border-green-500 my-1"><span class="font-bold text-green-400">✅ ¡${infoMsg.nombre} adivinó! (+${infoMsg.pts} pts)</span></div>`;
                 } else {
@@ -833,38 +712,15 @@
 
             let cursorR = {x:0, y:0};
             onChildAdded(ref(db, `salas/${window.salaActualId}/trazos`), (snap) => {
-                const tr = snap.val(); 
-                if (tr.uid === window.miJugadorId) return; 
+                const tr = snap.val(); if (tr.uid === window.miJugadorId) return; 
+                ctx.strokeStyle = tr.c; ctx.fillStyle = tr.c; ctx.lineWidth = tr.g; ctx.globalAlpha = tr.o !== undefined ? tr.o : 1;
                 
-                ctx.strokeStyle = tr.c; 
-                ctx.fillStyle = tr.c; 
-                ctx.lineWidth = tr.g; 
-                ctx.globalAlpha = tr.o !== undefined ? tr.o : 1;
-                
-                if (tr.t === 'ini') { 
-                    ctx.beginPath(); 
-                    ctx.arc(tr.x, tr.y, tr.g/2, 0, Math.PI*2); 
-                    ctx.fill(); 
-                    ctx.beginPath(); 
-                    ctx.moveTo(tr.x, tr.y); 
-                    cursorR = {x: tr.x, y: tr.y}; 
-                } else if (tr.t === 'mov') { 
-                    ctx.beginPath(); 
-                    ctx.moveTo(cursorR.x, cursorR.y); 
-                    ctx.lineTo(tr.x, tr.y); 
-                    ctx.stroke(); 
-                    cursorR = {x: tr.x, y: tr.y}; 
-                } else if (tr.t === 'fin') { 
-                    ctx.beginPath(); 
-                }
+                if (tr.t === 'ini') { ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.g/2, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(tr.x, tr.y); cursorR = {x: tr.x, y: tr.y}; } 
+                else if (tr.t === 'mov') { ctx.beginPath(); ctx.moveTo(cursorR.x, cursorR.y); ctx.lineTo(tr.x, tr.y); ctx.stroke(); cursorR = {x: tr.x, y: tr.y}; } 
+                else if (tr.t === 'fin') { ctx.beginPath(); }
             });
 
-            onValue(ref(db, `salas/${window.salaActualId}/trazos`), (snap) => { 
-                if (!snap.exists()) { 
-                    ctx.fillStyle = "#ffffff"; 
-                    ctx.fillRect(0, 0, canvas.width, canvas.height); 
-                } 
-            });
+            onValue(ref(db, `salas/${window.salaActualId}/trazos`), (snap) => { if (!snap.exists()) { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height); } });
         }
     </script>
 </body>
