@@ -1,128 +1,869 @@
-<script type="module">
-    // Importar Firebase directamente desde el CDN oficial
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-    // Tu configuración exacta
-    const firebaseConfig = {
-      apiKey: "AIzaSyBdIrFO3dNXvWdeYMA7Ow6VmgzdRpS4FN8",
-      authDomain: "sawerillo-9cd39.firebaseapp.com",
-      databaseURL: "https://sawerillo-9cd39-default-rtdb.firebaseio.com",
-      projectId: "sawerillo-9cd39",
-      storageBucket: "sawerillo-9cd39.firebasestorage.app",
-      messagingSenderId: "1069109311615",
-      appId: "1:1069109311615:web:a5cce8a50eb8f63829e74a"
-    };
-
-    // Inicializar Firebase y la Base de Datos
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    // Función auxiliar para convertir la imagen subida a texto Base64
-    function archivoABase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    }
-
-    // Funciones de navegación visual
-    window.mostrarSeccion = (id) => {
-        document.getElementById('menu-principal').classList.add('oculto');
-        document.getElementById('crear-sala').classList.add('oculto');
-        document.getElementById('unirse-sala').classList.add('oculto');
-        document.getElementById(id).classList.remove('oculto');
-    };
-
-    // Lógica para CREAR LA SALA en Firebase
-    window.iniciarCreacionSala = async () => {
-        const nombreSala = document.getElementById('host-sala-nombre').value;
-        const nombreHost = document.getElementById('host-nombre').value;
-        const rondas = document.getElementById('host-rondas').value;
-        const tiempo = document.getElementById('host-tiempo').value;
-        const inputFoto = document.getElementById('host-foto');
-
-        if (!nombreSala || !nombreHost) {
-            alert("Por favor, llena el nombre de la sala y tu nombre.");
-            return;
-        }
-
-        let fotoBase64 = "";
-        if (inputFoto.files.length > 0) {
-            fotoBase64 = await archivoABase64(inputFoto.files[0]);
-        }
-
-        // Generar un ID único para la sala
-        const salasRef = ref(db, 'salas');
-        const nuevaSalaRef = push(salasRef);
-        const salaId = nuevaSalaRef.key;
-
-        // Estructura de datos a guardar
-        const datosSala = {
-            estado: "esperando",
-            configuracion: {
-                nombreSala: nombreSala,
-                hostId: "jugador_1", // El host siempre será el jugador 1
-                rondasTotales: parseInt(rondas),
-                tiempoPorTurno: parseInt(tiempo)
-            },
-            estadoJuego: {
-                rondaActual: 1,
-                jugadorDibujando: "",
-                palabraActual: "",
-                tiempoTerminaEn: 0
-            },
-            jugadores: {
-                "jugador_1": {
-                    nombre: nombreHost,
-                    foto: fotoBase64,
-                    puntos: 0,
-                    isHost: true
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sawerillo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sawer-bg': 'rgb(15, 15, 15)',
+                        'sawer-panel': 'rgb(30, 30, 30)',
+                        'sawer-red': 'rgb(155, 0, 0)',
+                        'sawer-red-hover': 'rgb(180, 20, 20)',
+                        'sawer-dark-red': 'rgb(90, 0, 0)'
+                    }
                 }
             }
+        }
+    </script>
+    <style>
+        .oculto { display: none !important; }
+        .foto-perfil { width: 45px; height: 45px; object-fit: cover; border-radius: 50%; border: 2px solid rgb(155, 0, 0); flex-shrink: 0; }
+        #pizarra { cursor: crosshair; touch-action: none; }
+        
+        .btn-color { width: 28px; height: 28px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.15s ease; flex-shrink: 0;}
+        .btn-color:hover { transform: scale(1.15); border-color: white; z-index: 10; box-shadow: 0 0 8px rgba(0,0,0,0.5); }
+        .color-activo { border-color: white; transform: scale(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+
+        .btn-herramienta {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 45px; height: 45px; border-radius: 8px;
+            background-color: rgb(40, 40, 40); border: 1px solid rgb(60, 60, 60);
+            color: gray; transition: all 0.2s; cursor: pointer; flex-shrink: 0;
+        }
+        .btn-herramienta:hover { background-color: rgb(60, 60, 60); color: white; }
+        .herramienta-activa { background-color: rgba(155, 0, 0, 0.2); border-color: rgb(155, 0, 0); color: rgb(255, 100, 100); }
+        
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: rgb(155, 0, 0); cursor: pointer; margin-top: -6px; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgb(60, 60, 60); border-radius: 2px; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgb(20,20,20); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgb(90,0,0); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgb(155,0,0); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .anim-fade { animation: fadeIn 0.3s ease forwards; }
+    </style>
+</head>
+<body class="bg-sawer-bg text-white h-screen flex flex-col items-center justify-center font-sans overflow-hidden selection:bg-sawer-red selection:text-white relative z-0" onclick="iniciarAudio()">
+
+    <!-- 2 FRANJAS ROJAS GRUESAS UNIFICADAS RESTAURADAS -->
+    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden flex justify-center items-center">
+        <div class="absolute w-[200vw] h-[150px] bg-sawer-dark-red shadow-[0_0_20px_rgba(90,0,0,0.5)]" style="transform: rotate(30deg) translateY(-320px);"></div>
+        <div class="absolute w-[200vw] h-[150px] bg-sawer-dark-red shadow-[0_0_20px_rgba(90,0,0,0.5)]" style="transform: rotate(30deg) translateY(320px);"></div>
+    </div>
+
+    <!-- MENÚ PRINCIPAL -->
+    <div id="menu-principal" class="text-center space-y-6 w-full max-w-md bg-black/80 p-6 md:p-8 rounded-2xl shadow-[0_0_25px_rgba(155,0,0,0.2)] border-2 border-sawer-red backdrop-blur-md m-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-sawer-red tracking-wider mb-8 drop-shadow-[0_0_10px_rgba(155,0,0,0.8)]">SAWERILLO</h1>
+        <button onclick="mostrarSeccion('crear-sala')" class="w-full bg-sawer-red hover:bg-sawer-red-hover text-white font-bold py-4 px-6 rounded-xl transition-all shadow-[0_0_15px_rgba(155,0,0,0.4)]">CREAR SALA</button>
+        <button onclick="mostrarSeccion('unirse-sala')" class="w-full bg-transparent hover:bg-white/5 text-sawer-red font-bold py-4 px-6 rounded-xl transition-all border border-sawer-red">UNIRSE A SALA</button>
+    </div>
+
+    <!-- FORMULARIO: CREAR SALA -->
+    <div id="crear-sala" class="oculto bg-black/80 p-6 md:p-8 rounded-2xl border-2 border-sawer-red w-full max-w-md shadow-[0_0_25px_rgba(155,0,0,0.2)] backdrop-blur-md m-4 max-h-[90vh] overflow-y-auto">
+        <h2 class="text-2xl font-bold mb-6 text-center text-sawer-red drop-shadow-md">Configurar Sala</h2>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-bold mb-1 text-white">Nombre de la Sala</label>
+                <input type="text" id="host-sala-nombre" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-white" placeholder="Ej: Sala Principal">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-1 text-white">Tu Nombre (Host)</label>
+                <input type="text" id="host-nombre" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-white">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-1 text-white">Foto de Perfil</label>
+                <input type="file" id="host-foto" accept="image/*" class="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-sawer-red file:text-white hover:file:bg-sawer-red-hover cursor-pointer">
+            </div>
+            <div class="flex gap-4">
+                <div class="w-1/2">
+                    <label class="block text-sm font-bold mb-1 text-white">Rondas</label>
+                    <input type="number" id="host-rondas" min="1" max="10" value="4" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-center text-white">
+                </div>
+                <div class="w-1/2">
+                    <label class="block text-sm font-bold mb-1 text-white">Tiempo (seg)</label>
+                    <input type="number" id="host-tiempo" min="30" max="120" value="80" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-center text-white">
+                </div>
+            </div>
+            <div class="pt-4 flex gap-2">
+                <button onclick="mostrarSeccion('menu-principal')" class="w-1/3 bg-gray-700 hover:bg-gray-600 border border-gray-500 text-white font-bold py-2 rounded transition-colors">Volver</button>
+                <button onclick="iniciarCreacionSala()" class="w-2/3 bg-sawer-red hover:bg-sawer-red-hover text-white font-bold py-2 rounded transition-colors shadow-[0_0_10px_rgba(155,0,0,0.5)]">Confirmar y Crear</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORMULARIO: UNIRSE A SALA -->
+    <div id="unirse-sala" class="oculto bg-black/80 p-6 md:p-8 rounded-2xl border-2 border-sawer-red w-full max-w-md shadow-[0_0_25px_rgba(155,0,0,0.2)] backdrop-blur-md m-4">
+        <h2 class="text-2xl font-bold mb-6 text-center text-sawer-red drop-shadow-md">Salas Disponibles</h2>
+        <div id="lista-salas" class="space-y-2 mb-6 max-h-40 overflow-y-auto pr-2"></div>
+        <div class="space-y-4 border-t border-sawer-red/50 pt-4">
+            <div>
+                <label class="block text-sm font-bold mb-1 text-white">Tu Nombre</label>
+                <input type="text" id="jugador-nombre" class="w-full bg-sawer-bg border border-sawer-red rounded p-2 focus:outline-none focus:ring-1 focus:ring-sawer-red text-white">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-1 text-white">Foto de Perfil</label>
+                <input type="file" id="jugador-foto" accept="image/*" class="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-sawer-red file:text-white hover:file:bg-sawer-red-hover cursor-pointer">
+            </div>
+            <div class="pt-2 flex gap-2">
+                <button onclick="mostrarSeccion('menu-principal')" class="w-1/3 bg-gray-700 hover:bg-gray-600 border border-gray-500 text-white font-bold py-2 rounded transition-colors">Volver</button>
+                <button onclick="unirseASalaSeleccionada()" class="w-2/3 bg-sawer-red hover:bg-sawer-red-hover text-white font-bold py-2 rounded transition-colors shadow-[0_0_10px_rgba(155,0,0,0.5)]">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SALA DE ESPERA (LOBBY) -->
+    <div id="sala-espera" class="oculto bg-black/90 p-6 md:p-8 rounded-2xl border-2 border-sawer-red w-full max-w-3xl shadow-[0_0_30px_rgba(155,0,0,0.3)] backdrop-blur-md m-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b border-sawer-red pb-4 gap-4 text-center md:text-left">
+            <div>
+                <h2 id="espera-titulo" class="text-2xl md:text-3xl font-bold text-white">Sala: ...</h2>
+                <button onclick="copiarEnlaceInvitacion()" id="btn-copiar" class="mt-2 text-xs md:text-sm bg-sawer-bg hover:bg-gray-800 border border-sawer-red px-3 py-1 rounded text-white transition-colors flex items-center justify-center gap-2">🔗 Copiar enlace de invitación</button>
+            </div>
+            <p class="text-gray-300 font-medium">Jugadores: <span id="espera-conteo" class="text-sawer-red font-bold text-2xl ml-1">1</span></p>
+        </div>
+        <div id="grid-jugadores" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8 min-h-[100px]"></div>
+        <div class="flex gap-2">
+            <button onclick="abandonarSala()" class="w-1/3 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-bold py-4 rounded-xl transition-all">Salir</button>
+            <button id="btn-iniciar-ronda" onclick="iniciarPartidaGlobal()" class="oculto w-2/3 bg-sawer-red hover:bg-sawer-red-hover text-white font-bold py-4 px-6 rounded-xl md:text-xl transition-all shadow-[0_0_20px_rgba(155,0,0,0.6)]">¡COMENZAR PARTIDA!</button>
+        </div>
+        <p id="msg-esperando-host" class="text-center text-gray-400 italic md:text-lg animate-pulse mt-4">Esperando a que el host inicie...</p>
+    </div>
+
+    <!-- PANTALLA DE JUEGO (MOTOR) -->
+    <div id="pantalla-juego" class="oculto w-full h-full max-w-[1600px] mx-auto flex flex-col gap-2 md:gap-4 p-2 relative z-10 overflow-y-auto lg:overflow-hidden">
+        
+        <div class="w-full bg-sawer-panel rounded-xl px-3 md:px-6 py-2 flex justify-between items-center shadow-lg border-b-2 border-sawer-red flex-shrink-0">
+            <div class="flex items-center gap-2 md:gap-4">
+                <span class="text-xs md:text-base text-gray-400 font-medium tracking-wide hidden sm:inline">RONDA <span class="text-white font-bold" id="ronda-ui">1/4</span></span>
+                <button onclick="abandonarSala()" class="bg-gray-800 hover:bg-sawer-red border border-gray-600 hover:border-sawer-red text-white text-xs md:text-sm px-2 py-1 rounded transition-colors flex items-center gap-1" title="Abandonar partida">🚪 <span class="hidden sm:inline">Salir</span></button>
+            </div>
+            
+            <div class="text-xl sm:text-2xl md:text-4xl tracking-[0.2em] md:tracking-[0.4em] font-mono font-bold text-white drop-shadow-md truncate max-w-[50%] text-center" id="palabra-secreta">ESPERANDO</div>
+            
+            <div class="flex items-center gap-1 md:gap-3">
+                <svg class="w-4 h-4 md:w-6 md:h-6 text-gray-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="text-xl md:text-3xl font-bold text-sawer-red transition-colors" id="reloj">0</span>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row w-full flex-grow gap-2 md:gap-4 min-h-0 relative">
+            
+            <!-- OVERLAY: SELECCIONAR PALABRA -->
+            <div id="overlay-seleccion" class="oculto absolute inset-0 bg-black/90 z-20 rounded-xl flex flex-col items-center justify-center anim-fade p-4 border border-sawer-red">
+                <h2 class="text-2xl md:text-4xl font-bold text-sawer-red mb-2 drop-shadow-md" id="txt-seleccion-titulo">Es tu turno de dibujar</h2>
+                <p class="text-gray-400 mb-8" id="txt-seleccion-sub">Elige una de estas opciones para la ronda:</p>
+                <div class="flex flex-col md:flex-row gap-4" id="botones-palabras"></div>
+            </div>
+
+            <!-- OVERLAY: RESULTADOS DE RONDA -->
+            <div id="overlay-resultados" class="oculto absolute inset-0 bg-black/90 z-20 rounded-xl flex flex-col items-center justify-center anim-fade p-4 border border-sawer-red">
+                <h2 class="text-xl md:text-3xl font-bold text-white mb-2">Fin del Turno</h2>
+                <p class="text-gray-400 mb-6">La palabra era: <span class="text-sawer-red font-bold text-2xl md:text-4xl uppercase" id="resultado-palabra">...</span></p>
+                <div class="w-full max-w-md bg-sawer-panel rounded-xl border border-gray-700 p-4 max-h-[50vh] overflow-y-auto" id="lista-resultados"></div>
+                <p class="text-gray-500 mt-4 animate-pulse text-sm">Preparando siguiente turno...</p>
+            </div>
+
+            <!-- PANEL JUGADORES -->
+            <div class="w-full lg:w-64 lg:h-full bg-sawer-panel border border-gray-800 rounded-xl p-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto shadow-lg flex-shrink-0 lg:flex-shrink max-h-[130px] lg:max-h-none" id="lista-jugadores-juego"></div>
+
+            <div class="flex-grow flex flex-col gap-2 md:gap-4 min-h-[400px]">
+                <div class="bg-white rounded-xl flex-grow relative overflow-hidden shadow-2xl border border-gray-800 touch-none">
+                    <canvas id="pizarra" width="900" height="600" class="absolute top-0 left-0 w-full h-full"></canvas>
+                </div>
+                
+                <div id="panel-herramientas" class="bg-sawer-panel border border-gray-800 rounded-xl p-2 md:p-4 flex flex-wrap lg:flex-nowrap justify-between items-center shadow-lg gap-2">
+                    <div class="flex gap-2 border-r border-gray-700 pr-2 md:pr-4">
+                        <button id="btn-lapiz" onclick="seleccionarHerramienta('lapiz')" class="btn-herramienta herramienta-activa" title="Lápiz"><svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                        <button id="btn-goma" onclick="seleccionarHerramienta('goma')" class="btn-herramienta" title="Goma de borrar"><svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                    </div>
+                    
+                    <div class="flex overflow-x-auto gap-1.5 px-2 md:px-4 py-1" id="paleta-colores" style="max-width: 100%;"></div>
+
+                    <div class="flex items-center gap-2 md:gap-6 lg:border-l lg:border-gray-700 pl-0 lg:pl-4 flex-wrap sm:flex-nowrap w-full sm:w-auto mt-2 sm:mt-0">
+                        <div class="flex flex-col flex-grow sm:flex-grow-0 min-w-[100px]">
+                            <div class="flex justify-between mb-1"><span class="text-[10px] md:text-xs text-gray-400 font-medium">Grosor</span><span id="lbl-grosor" class="text-[10px] md:text-xs text-white">5px</span></div>
+                            <input type="range" id="grosor-lapiz" min="1" max="50" value="5" class="w-full" oninput="document.getElementById('lbl-grosor').innerText = this.value + 'px'">
+                        </div>
+                        <div class="flex flex-col flex-grow sm:flex-grow-0 min-w-[100px]">
+                            <div class="flex justify-between mb-1"><span class="text-[10px] md:text-xs text-gray-400 font-medium">Opacidad</span><span id="lbl-opacidad" class="text-[10px] md:text-xs text-white">100%</span></div>
+                            <input type="range" id="opacidad-lapiz" min="0.05" max="1" step="0.05" value="1" class="w-full" oninput="document.getElementById('lbl-opacidad').innerText = Math.round(this.value * 100) + '%'">
+                        </div>
+                        <button onclick="limpiarPizarra()" class="bg-gray-800 hover:bg-sawer-red text-gray-300 hover:text-white p-2 md:p-3 rounded-lg transition-colors flex items-center justify-center h-full ml-auto" title="Limpiar lienzo"><svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-72 lg:h-full bg-sawer-panel border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-lg h-64 lg:h-auto flex-shrink-0 lg:flex-shrink">
+                <div class="bg-sawer-red/10 text-sawer-red text-[10px] md:text-xs font-bold uppercase tracking-wider text-center py-2 md:py-3 border-b border-gray-800">Adivinanzas</div>
+                <div class="flex-grow p-2 md:p-3 overflow-y-auto flex flex-col gap-2 text-xs md:text-sm font-sans" id="caja-chat"></div>
+                <div class="p-2 md:p-3 border-t border-gray-800 bg-black/30">
+                    <input type="text" id="input-chat" class="w-full bg-sawer-bg border border-gray-700 rounded-lg p-2 text-white placeholder-gray-500 focus:border-sawer-red focus:outline-none focus:ring-1 focus:ring-sawer-red transition-all text-xs md:text-sm" placeholder="Escribe aquí y presiona Enter...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT FIREBASE Y MOTOR DE JUEGO EXPANDIDO -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue, get, onChildAdded, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBdIrFO3dNXvWdeYMA7Ow6VmgzdRpS4FN8",
+          authDomain: "sawerillo-9cd39.firebaseapp.com",
+          databaseURL: "https://sawerillo-9cd39-default-rtdb.firebaseio.com",
+          projectId: "sawerillo-9cd39",
+          storageBucket: "sawerillo-9cd39.firebasestorage.app",
+          messagingSenderId: "1069109311615",
+          appId: "1:1069109311615:web:a5cce8a50eb8f63829e74a"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // BANCO DE PALABRAS MÁS GRANDE (Para opciones aleatorias)
+        const bancoPalabras = [
+            "MALVAVISCO", "SIERRA", "ROBLOX", "SANGRE", "DISCORD", "ADMINISTRADOR", "MISTERIO", 
+            "PIZARRA", "TIEMPO", "JUEGO", "COMPUTADORA", "AURICULARES", "TECLADO", "MURCIELAGO", 
+            "FANTASMA", "ESPADA", "PIZZA", "HAMBURGUESA", "ESQUELETO", "PROGRAMADOR",
+            "SILLA GAMER", "MONITOR", "PSICOLOGO", "UNIVERSIDAD", "COQUIMBO", "CALAMA"
+        ];
+
+        window.salaActualId = null; 
+        window.miJugadorId = null; 
+        window.miNombreGlobal = "Invitado"; 
+        window.soyHost = false; 
+        window.salaSeleccionadaParaUnirse = null;
+        
+        window.palabraActualGlobal = ""; 
+        window.estadoGlobalJuego = "esperando"; 
+        window.yaAdivineLocal = false;
+        window.cantidadAcertadosGlobal = 0; 
+        window.relojCorriendoLocal = false; 
+        window.tTotal = 80;
+        
+        // --- SINTETIZADOR 8-BIT AUDIO (Undertale Vibe) ---
+        let audioCtx;
+        window.iniciarAudio = () => { 
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
+            if(audioCtx.state === 'suspended') audioCtx.resume(); 
+        };
+        
+        function playSound(type) {
+            if(!audioCtx) return;
+            const osc = audioCtx.createOscillator(); 
+            const gain = audioCtx.createGain();
+            osc.connect(gain); 
+            gain.connect(audioCtx.destination);
+            
+            if(type === 'acierto') {
+                osc.type = 'square'; 
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.3);
+            } else if(type === 'tick') {
+                osc.type = 'triangle'; 
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if(type === 'turno') {
+                osc.type = 'square'; 
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.4);
+            } else if(type === 'fin') {
+                osc.type = 'sawtooth'; 
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.5);
+            }
+        }
+
+        // --- UTILIDADES ---
+        function archivoABase64(file) { 
+            return new Promise((resolve, reject) => { 
+                const reader = new FileReader(); 
+                reader.readAsDataURL(file); 
+                reader.onload = () => resolve(reader.result); 
+                reader.onerror = error => reject(error); 
+            }); 
+        }
+
+        window.mostrarSeccion = (id) => { 
+            ['menu-principal', 'crear-sala', 'unirse-sala', 'sala-espera', 'pantalla-juego'].forEach(sec => document.getElementById(sec).classList.add('oculto')); 
+            document.getElementById(id).classList.remove('oculto'); 
+            if(id === 'unirse-sala' && !window.salaSeleccionadaParaUnirse) window.cargarSalasDisponibles(); 
         };
 
-        try {
-            await set(nuevaSalaRef, datosSala);
-            alert(`¡Sala creada con éxito! ID: ${salaId}`);
-            // Aquí luego haremos la transición a la pantalla de dibujo/lobby
-        } catch (error) {
-            console.error("Error al crear la sala:", error);
-            alert("Hubo un error al conectar con Firebase.");
-        }
-    };
+        window.iniciarCreacionSala = async () => {
+            const nombreSala = document.getElementById('host-sala-nombre').value; 
+            window.miNombreGlobal = document.getElementById('host-nombre').value;
+            if (!nombreSala || !window.miNombreGlobal) return alert("Por favor, llena los campos correspondientes.");
+            
+            let fotoBase64 = "https://ui-avatars.com/api/?name=" + window.miNombreGlobal + "&background=9b0000&color=fff";
+            if (document.getElementById('host-foto').files.length > 0) fotoBase64 = await archivoABase64(document.getElementById('host-foto').files[0]);
+            
+            const nuevaSalaRef = push(ref(db, 'salas')); 
+            window.salaActualId = nuevaSalaRef.key; 
+            window.miJugadorId = "jugador_1"; 
+            window.soyHost = true;
+            
+            await set(nuevaSalaRef, {
+                estado: "esperando", 
+                configuracion: { nombreSala: nombreSala, hostId: window.miJugadorId, rondasTotales: parseInt(document.getElementById('host-rondas').value), tiempoPorTurno: parseInt(document.getElementById('host-tiempo').value) },
+                estadoJuego: { estadoLocal: 'esperando', rondaActual: 1, turnoIndex: 0, palabraActual: "", dibujanteActual: "", tiempo: 0, opcionesPalabras: [], pistas: [], acertaron: {} }, 
+                jugadores: { [window.miJugadorId]: { nombre: window.miNombreGlobal, foto: fotoBase64, puntos: 0, isHost: true } }
+            });
+            entrarLobby(nombreSala);
+        };
 
-    // Lógica para listar las salas disponibles al abrir la pestaña "Unirse"
-    window.cargarSalasDisponibles = () => {
-        const salasRef = ref(db, 'salas');
-        onValue(salasRef, (snapshot) => {
-            const salas = snapshot.val();
-            const listaHtml = document.getElementById('lista-salas');
-            listaHtml.innerHTML = ""; // Limpiar lista actual
+        window.cargarSalasDisponibles = () => { 
+            onValue(ref(db, 'salas'), (snapshot) => { 
+                const salas = snapshot.val(); 
+                const listaHtml = document.getElementById('lista-salas'); 
+                listaHtml.innerHTML = ""; 
+                if (salas) { 
+                    Object.keys(salas).forEach(id => { 
+                        if (salas[id].estado === "esperando") { 
+                            listaHtml.innerHTML += `<div class="p-3 mb-2 border border-sawer-red rounded bg-black/40 flex justify-between items-center cursor-pointer hover:bg-sawer-red/20 transition-colors" onclick="seleccionarSalaId('${id}')"><span>${salas[id].configuracion.nombreSala}</span><span class="text-sawer-red font-bold text-sm">UNIRSE</span></div>`; 
+                        } 
+                    }); 
+                } else { 
+                    listaHtml.innerHTML = "<p class='text-sm text-gray-400'>No hay salas disponibles.</p>"; 
+                } 
+            }); 
+        };
 
-            if (salas) {
-                Object.keys(salas).forEach(salaId => {
-                    const sala = salas[salaId];
-                    if (sala.estado === "esperando") {
-                        listaHtml.innerHTML += `
-                            <div class="p-3 border border-gray-600 rounded bg-black/20 flex justify-between items-center cursor-pointer hover:border-sawer-red transition-colors" onclick="seleccionarSala('${salaId}')">
-                                <span>${sala.configuracion.nombreSala}</span>
-                                <span class="text-sawer-red text-sm font-bold">SELECCIONAR</span>
-                            </div>
-                        `;
-                    }
-                });
-            } else {
-                listaHtml.innerHTML = "<p class='text-sm text-gray-400'>No hay salas disponibles.</p>";
+        window.seleccionarSalaId = (id) => { 
+            window.salaSeleccionadaParaUnirse = id; 
+            alert("Sala seleccionada. Pon tu nombre y dale a Entrar."); 
+        };
+
+        window.unirseASalaSeleccionada = async () => {
+            window.miNombreGlobal = document.getElementById('jugador-nombre').value;
+            if (!window.salaSeleccionadaParaUnirse || !window.miNombreGlobal) return alert("Faltan datos.");
+            
+            let fotoBase64 = "https://ui-avatars.com/api/?name=" + window.miNombreGlobal + "&background=9b0000&color=fff";
+            if (document.getElementById('jugador-foto').files.length > 0) fotoBase64 = await archivoABase64(document.getElementById('jugador-foto').files[0]);
+            
+            const nuevoJugadorRef = push(ref(db, `salas/${window.salaSeleccionadaParaUnirse}/jugadores`));
+            window.miJugadorId = nuevoJugadorRef.key; 
+            window.salaActualId = window.salaSeleccionadaParaUnirse; 
+            window.soyHost = false;
+            
+            await set(nuevoJugadorRef, { nombre: window.miNombreGlobal, foto: fotoBase64, puntos: 0, isHost: false });
+            get(ref(db, `salas/${window.salaActualId}/configuracion/nombreSala`)).then((s) => entrarLobby(s.val() || "Sala Invitada"));
+        };
+
+        function entrarLobby(nombreSala) {
+            mostrarSeccion('sala-espera'); 
+            document.getElementById('espera-titulo').innerText = `Sala: ${nombreSala}`; 
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            if(window.soyHost) { 
+                document.getElementById('btn-iniciar-ronda').classList.remove('oculto'); 
+                document.getElementById('msg-esperando-host').classList.add('oculto'); 
+            } else { 
+                document.getElementById('btn-iniciar-ronda').classList.add('oculto'); 
+                document.getElementById('msg-esperando-host').classList.remove('oculto'); 
             }
-        });
-    };
 
-    // Modificar el botón de unirse del menú principal para que cargue la lista
-    document.querySelector("button[onclick=\"mostrarSeccion('unirse-sala')\"]").onclick = () => {
-        window.mostrarSeccion('unirse-sala');
-        window.cargarSalasDisponibles();
-    };
-</script>
+            onValue(ref(db, `salas/${window.salaActualId}/jugadores`), (snapshot) => {
+                const jugadoresData = snapshot.val(); 
+                const gridHtml = document.getElementById('grid-jugadores'); 
+                const panelHtml = document.getElementById('lista-jugadores-juego');
+                
+                gridHtml.innerHTML = ""; 
+                panelHtml.innerHTML = `<h3 class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 md:mb-2 px-1 w-full flex-shrink-0 hidden lg:block">Jugadores</h3>`;
+                
+                if (jugadoresData) {
+                    const jugadoresOrdenados = Object.entries(jugadoresData).sort((a,b) => b[1].puntos - a[1].puntos);
+                    document.getElementById('espera-conteo').innerText = Object.keys(jugadoresData).length;
+                    
+                    jugadoresOrdenados.forEach(([id, jug], i) => {
+                        gridHtml.innerHTML += `<div class="bg-sawer-bg p-3 rounded-xl border border-gray-700 flex flex-col items-center justify-center text-center shadow-lg"><img src="${jug.foto}" class="foto-perfil mb-2"><span class="font-bold text-sm text-white truncate w-full">${jug.nombre}</span>${jug.isHost ? '<span class="text-xs text-sawer-red mt-1">HOST</span>' : ''}</div>`;
+                        
+                        const colorPos = i === 0 && jug.puntos > 0 ? "border-yellow-500 text-yellow-500" : (i === 1 && jug.puntos > 0 ? "border-gray-300 text-gray-300" : (i === 2 && jug.puntos > 0 ? "border-orange-600 text-orange-600" : "border-gray-500 text-gray-500"));
+                        panelHtml.innerHTML += `<div id="card-${id}" class="bg-black/40 p-1.5 md:p-2 rounded-lg flex items-center gap-2 border-l-2 lg:border-l-2 lg:border-b-0 border-b-2 lg:border-b-transparent ${colorPos} min-w-[120px] lg:min-w-0 flex-shrink-0 lg:flex-shrink relative"><div class="font-bold ${colorPos} text-xs md:text-lg w-auto lg:w-4 hidden lg:block">#${i+1}</div><img src="${jug.foto}" class="foto-perfil w-6 h-6 md:w-10 md:h-10 border"><div class="flex-grow min-w-0"><div class="font-bold text-xs md:text-sm text-white leading-tight truncate">${jug.nombre}</div><div class="text-[10px] md:text-xs text-gray-400">${jug.puntos} pts</div></div><div class="icono-lapiz oculto absolute top-1 right-1 text-[10px] bg-sawer-red rounded-full w-4 h-4 flex items-center justify-center" title="Dibujando">✏️</div></div>`;
+                    });
+                }
+            });
+
+            onValue(ref(db, `salas/${window.salaActualId}/estado`), (snapshot) => { 
+                if (snapshot.val() === "jugando") pasarAPantallaJuego(); 
+            });
+        }
+
+        window.abandonarSala = async () => { 
+            if (confirm("¿Abandonar sala?")) { 
+                if (window.salaActualId && window.miJugadorId) { 
+                    await remove(ref(db, `salas/${window.salaActualId}/jugadores/${window.miJugadorId}`)); 
+                } 
+                window.location.href = window.location.pathname; 
+            } 
+        };
+        
+        window.copiarEnlaceInvitacion = () => { 
+            const urlCompleta = window.location.origin + window.location.pathname + "?sala=" + window.salaActualId; 
+            navigator.clipboard.writeText(urlCompleta).then(() => alert("Copiado al portapapeles")); 
+        };
+
+        // --- SISTEMA HOST (CEREBRO DEL JUEGO) ---
+        let cronometroInterval; 
+        let tRestante = 0;
+        
+        window.iniciarPartidaGlobal = () => {
+            update(ref(db, `salas/${window.salaActualId}`), { estado: "jugando" });
+            avanzarTurnoHost(0, 1);
+        };
+
+        function avanzarTurnoHost(turnoIndex, rondaActual) {
+            window.relojCorriendoLocal = false;
+            
+            get(ref(db, `salas/${window.salaActualId}`)).then((snap) => {
+                const salaCompleta = snap.val(); 
+                const idsJugadores = Object.keys(salaCompleta.jugadores);
+                
+                if(turnoIndex >= idsJugadores.length) { 
+                    turnoIndex = 0; 
+                    rondaActual++; 
+                }
+                
+                if(rondaActual > salaCompleta.configuracion.rondasTotales) { 
+                    alert("¡FIN DE LA PARTIDA!"); 
+                    return; 
+                }
+
+                set(ref(db, `salas/${window.salaActualId}/trazos`), null);
+                
+                const arrayMezclado = bancoPalabras.sort(() => 0.5 - Math.random());
+                const opcionesElegidas = [arrayMezclado[0], arrayMezclado[1], arrayMezclado[2]];
+                window.tTotal = salaCompleta.configuracion.tiempoPorTurno || 80;
+
+                update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { 
+                    estadoLocal: 'seleccionando', 
+                    dibujanteActual: idsJugadores[turnoIndex], 
+                    opcionesPalabras: opcionesElegidas, 
+                    palabraActual: "", 
+                    tiempo: window.tTotal, 
+                    turnoIndex: turnoIndex, 
+                    rondaActual: rondaActual, 
+                    pistas: [], 
+                    acertaron: {} 
+                });
+            });
+        }
+
+        window.hostArrancarReloj = (palabraEscogida) => {
+            window.relojCorriendoLocal = true;
+            clearInterval(cronometroInterval); 
+            tRestante = window.tTotal;
+            
+            const arrayIndices = Array.from(Array(palabraEscogida.length).keys());
+            const pistasPosibles = arrayIndices.sort(() => 0.5 - Math.random());
+            let pistaIndex = 0;
+
+            cronometroInterval = setInterval(() => {
+                tRestante--;
+                
+                if(tRestante === Math.floor(window.tTotal * 0.5) && pistaIndex < pistasPosibles.length) { 
+                    get(ref(db, `salas/${window.salaActualId}/estadoJuego/pistas`)).then(s => { 
+                        let arrPistas = s.val() || []; 
+                        arrPistas.push(pistasPosibles[pistaIndex++]); 
+                        update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
+                    }); 
+                }
+                
+                if(tRestante === Math.floor(window.tTotal * 0.25) && pistaIndex < pistasPosibles.length) { 
+                    get(ref(db, `salas/${window.salaActualId}/estadoJuego/pistas`)).then(s => { 
+                        let arrPistas = s.val() || []; 
+                        arrPistas.push(pistasPosibles[pistaIndex++]); 
+                        update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { pistas: arrPistas }); 
+                    }); 
+                }
+
+                update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { tiempo: tRestante });
+                
+                if (tRestante <= 0) { 
+                    clearInterval(cronometroInterval); 
+                    terminarTurnoHost(); 
+                }
+            }, 1000);
+        };
+
+        window.hostForzarFinTurno = () => { 
+            window.relojCorriendoLocal = false; 
+            clearInterval(cronometroInterval); 
+            terminarTurnoHost(); 
+        };
+
+        function terminarTurnoHost() {
+            update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { estadoLocal: 'resultados' });
+            setTimeout(() => { 
+                get(ref(db, `salas/${window.salaActualId}/estadoJuego`)).then(s => { 
+                    const estado = s.val(); 
+                    avanzarTurnoHost(estado.turnoIndex + 1, estado.rondaActual); 
+                }); 
+            }, 6000);
+        }
+
+        // --- SISTEMA DE PANTALLA DE JUEGO (CANVAS) ---
+        let juegoIniciadoLocal = false; 
+        let soyElDibujante = false;
+        
+        window.pasarAPantallaJuego = () => { 
+            if(juegoIniciadoLocal) return; 
+            juegoIniciadoLocal = true; 
+            mostrarSeccion('pantalla-juego'); 
+            inicializarCanvas(); 
+            iniciarEscuchasFirebase(); 
+        };
+        
+        let canvas, ctx, pintando = false, colorActual = "#000000", herramientaActual = 'lapiz';
+        const paleta = [ "#000000", "#333333", "#777777", "#ffffff", "#9b0000", "#ff0000", "#ff6600", "#ffcc00", "#00cc00", "#006600", "#00cccc", "#0066cc", "#0000ff", "#6600cc", "#cc00cc", "#ff99cc", "#ffcccc", "#663300", "#996633", "#cc9966" ];
+
+        function inicializarCanvas() {
+            const containerPaleta = document.getElementById('paleta-colores'); 
+            containerPaleta.innerHTML = '';
+            paleta.forEach((colorP, index) => { 
+                containerPaleta.innerHTML += `<div class="btn-color ${index === 0 ? 'color-activo' : ''}" style="background-color: ${colorP};" onclick="cambiarColor('${colorP}', this)"></div>`; 
+            });
+            
+            canvas = document.getElementById('pizarra'); 
+            ctx = canvas.getContext('2d', { alpha: false }); 
+            ctx.lineCap = 'round'; 
+            ctx.lineJoin = 'round'; 
+            ctx.fillStyle = "#ffffff"; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            canvas.addEventListener('mousedown', iniciarTrazo); 
+            canvas.addEventListener('mouseup', terminarTrazo); 
+            canvas.addEventListener('mousemove', dibujar); 
+            canvas.addEventListener('mouseout', terminarTrazo);
+            
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); iniciarTrazo(e.touches[0]); }, { passive: false }); 
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); dibujar(e.touches[0]); }, { passive: false }); 
+            canvas.addEventListener('touchend', terminarTrazo);
+
+            // LOGICA DE CHAT CON VALIDACION DE PUNTOS
+            document.getElementById('input-chat').addEventListener('keypress', async function(e) {
+                if (e.key === 'Enter' && this.value.trim() !== '') {
+                    const mensajeLimpiado = this.value.trim().toUpperCase();
+                    
+                    if (window.estadoGlobalJuego === 'jugando' && !soyElDibujante && !window.yaAdivineLocal && mensajeLimpiado === window.palabraActualGlobal.toUpperCase()) {
+                        window.yaAdivineLocal = true;
+                        
+                        // Cálculo de puntos escalonados (Velocidad + Orden)
+                        const tiempoActual = parseInt(document.getElementById('reloj').innerText);
+                        const puntosPorTiempo = Math.floor((tiempoActual / (window.tTotal||80)) * 300);
+                        const numAcertados = window.cantidadAcertadosGlobal;
+                        let bonusPorOrden = numAcertados === 0 ? 200 : (numAcertados === 1 ? 100 : (numAcertados === 2 ? 50 : 0));
+                        const puntosTotalesGanados = puntosPorTiempo + bonusPorOrden + 50; 
+                        
+                        // Suma de puntos locales
+                        const refPuntosMios = ref(db, `salas/${window.salaActualId}/jugadores/${window.miJugadorId}/puntos`);
+                        get(refPuntosMios).then(s => set(refPuntosMios, (s.val()||0) + puntosTotalesGanados));
+                        
+                        // Premio para el dibujante
+                        const elemDibujante = document.querySelector('.icono-lapiz:not(.oculto)');
+                        if(elemDibujante) {
+                            const idDibujante = elemDibujante.parentElement.id.replace('card-', '');
+                            const refPuntosDib = ref(db, `salas/${window.salaActualId}/jugadores/${idDibujante}/puntos`);
+                            get(refPuntosDib).then(s => set(refPuntosDib, (s.val()||0) + 100));
+                        }
+
+                        update(ref(db, `salas/${window.salaActualId}/estadoJuego/acertaron`), { [window.miJugadorId]: true });
+                        playSound('acierto');
+
+                        push(ref(db, `salas/${window.salaActualId}/chat`), { uid: window.miJugadorId, nombre: window.miNombreGlobal, msj: "MALVAVISCO_SECRETO_ACIERTO", pts: puntosTotalesGanados });
+                        
+                        // Validar Fin de Turno automático si todos adivinan
+                        if(window.soyHost) {
+                            get(ref(db, `salas/${window.salaActualId}`)).then(s => {
+                                const dbSala = s.val(); 
+                                const totalJugadores = Object.keys(dbSala.jugadores).length; 
+                                const totalAcertaron = dbSala.estadoJuego.acertaron ? Object.keys(dbSala.estadoJuego.acertaron).length : 0;
+                                if(totalAcertaron >= totalJugadores - 1) {
+                                    window.hostForzarFinTurno();
+                                }
+                            });
+                        }
+                    } else {
+                        push(ref(db, `salas/${window.salaActualId}/chat`), { uid: window.miJugadorId, nombre: window.miNombreGlobal, msj: this.value });
+                    }
+                    this.value = '';
+                }
+            });
+        }
+
+        window.cambiarColor = (colorSeleccionado, elementoBtn) => { 
+            colorActual = colorSeleccionado; 
+            seleccionarHerramienta('lapiz'); 
+            document.querySelectorAll('.btn-color').forEach(b => b.classList.remove('color-activo')); 
+            if(elementoBtn) elementoBtn.classList.add('color-activo'); 
+        };
+        
+        window.seleccionarHerramienta = (herramientaStr) => { 
+            herramientaActual = herramientaStr; 
+            document.getElementById('btn-lapiz').classList.remove('herramienta-activa'); 
+            document.getElementById('btn-goma').classList.remove('herramienta-activa'); 
+            document.getElementById('btn-' + herramientaStr).classList.add('herramienta-activa'); 
+        };
+        
+        function obtenerC(eventoMouse) { 
+            const rect = canvas.getBoundingClientRect(); 
+            return { 
+                x: (eventoMouse.clientX - rect.left) * (canvas.width / rect.width), 
+                y: (eventoMouse.clientY - rect.top) * (canvas.height / rect.height) 
+            }; 
+        }
+
+        function envTrazo(coordX, coordY, tipoM, opacidadGlobal) { 
+            if(!window.salaActualId || !soyElDibujante || window.estadoGlobalJuego !== 'jugando') return; 
+            const valorOpacidad = opacidadGlobal || document.getElementById('opacidad-lapiz').value;
+            
+            push(ref(db, `salas/${window.salaActualId}/trazos`), { 
+                uid: window.miJugadorId, 
+                x: Math.round(coordX), 
+                y: Math.round(coordY), 
+                c: herramientaActual === 'goma' ? "#ffffff" : colorActual, 
+                g: document.getElementById('grosor-lapiz').value, 
+                o: parseFloat(valorOpacidad), 
+                t: tipoM 
+            }); 
+        }
+        
+        // CORRECCIÓN LOCAL DE DIBUJO
+        function iniciarTrazo(e) { 
+            if(!soyElDibujante || window.estadoGlobalJuego !== 'jugando') return; 
+            pintando = true; 
+            const coord = obtenerC(e); 
+            const grosorSize = document.getElementById('grosor-lapiz').value; 
+            const opacidadVal = document.getElementById('opacidad-lapiz').value;
+            
+            ctx.globalAlpha = parseFloat(opacidadVal); 
+            ctx.fillStyle = herramientaActual === 'goma' ? "#ffffff" : colorActual; 
+            ctx.strokeStyle = ctx.fillStyle; // <--- Arreglo crucial de color invisible
+            ctx.lineWidth = grosorSize; 
+            
+            ctx.beginPath(); 
+            ctx.arc(coord.x, coord.y, grosorSize/2, 0, Math.PI*2); 
+            ctx.fill(); 
+            ctx.beginPath(); 
+            ctx.moveTo(coord.x, coord.y); 
+            
+            envTrazo(coord.x, coord.y, 'ini', opacidadVal); 
+        }
+        
+        function dibujar(e) { 
+            if(pintando && soyElDibujante && window.estadoGlobalJuego === 'jugando') { 
+                const coord = obtenerC(e); 
+                ctx.lineTo(coord.x, coord.y); 
+                ctx.stroke(); 
+                ctx.beginPath(); 
+                ctx.moveTo(coord.x, coord.y); 
+                envTrazo(coord.x, coord.y, 'mov', null); 
+            } 
+        }
+        
+        function terminarTrazo() { 
+            if(pintando){ 
+                pintando = false; 
+                ctx.beginPath(); 
+                envTrazo(0, 0, 'fin', null); 
+            } 
+        }
+        
+        window.limpiarPizarra = () => { 
+            if(window.salaActualId && soyElDibujante && window.estadoGlobalJuego === 'jugando') { 
+                ctx.globalAlpha = 1; 
+                ctx.fillStyle = "#ffffff"; 
+                ctx.fillRect(0, 0, canvas.width, canvas.height); 
+                set(ref(db, `salas/${window.salaActualId}/trazos`), null); 
+            } 
+        };
+
+        window.elegirPalabra = (palabraSeleccionada) => {
+            update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { estadoLocal: 'jugando', palabraActual: palabraSeleccionada }); 
+        };
+
+        function iniciarEscuchasFirebase() {
+            onValue(ref(db, `salas/${window.salaActualId}/estadoJuego`), (snap) => {
+                const stateData = snap.val(); 
+                if (!stateData) return;
+                
+                window.estadoGlobalJuego = stateData.estadoLocal;
+                window.palabraActualGlobal = stateData.palabraActual || "";
+                window.cantidadAcertadosGlobal = stateData.acertaron ? Object.keys(stateData.acertaron).length : 0;
+
+                document.getElementById('ronda-ui').innerText = `${stateData.rondaActual}/4`;
+                const textReloj = document.getElementById('reloj');
+                
+                if (stateData.tiempo !== undefined) { 
+                    textReloj.innerText = stateData.tiempo; 
+                    if(stateData.tiempo <= 10 && stateData.tiempo > 0 && window.estadoGlobalJuego === 'jugando') { 
+                        textReloj.classList.add('text-red-500'); 
+                        playSound('tick'); 
+                    } else { 
+                        textReloj.classList.remove('text-red-500'); 
+                    } 
+                }
+
+                const idDibujanteFirebase = stateData.dibujanteActual;
+                soyElDibujante = (idDibujanteFirebase === window.miJugadorId);
+
+                const divOverlaySelect = document.getElementById('overlay-seleccion'); 
+                const divOverlayResult = document.getElementById('overlay-resultados');
+                const pPalabraSec = document.getElementById('palabra-secreta'); 
+                const divHerramientas = document.getElementById('panel-herramientas');
+                const inpCajaChat = document.getElementById('input-chat');
+
+                document.querySelectorAll('.icono-lapiz').forEach(icono => icono.classList.add('oculto'));
+                const iconUserDibujante = document.querySelector(`#card-${idDibujanteFirebase} .icono-lapiz`); 
+                if (iconUserDibujante) iconUserDibujante.classList.remove('oculto');
+
+                if (stateData.estadoLocal === 'seleccionando') {
+                    window.yaAdivineLocal = false; 
+                    window.tTotal = stateData.tiempo || 80; 
+                    divOverlayResult.classList.add('oculto'); 
+                    divHerramientas.classList.add('oculto'); 
+                    inpCajaChat.disabled = true; 
+                    inpCajaChat.placeholder = "Esperando elección..."; 
+                    pPalabraSec.innerText = "ESPERANDO";
+                    
+                    if (soyElDibujante) {
+                        playSound('turno'); 
+                        divOverlaySelect.classList.remove('oculto');
+                        document.getElementById('txt-seleccion-titulo').innerText = "¡Es tu turno!"; 
+                        document.getElementById('txt-seleccion-sub').innerText = "Elige una palabra para dibujar:";
+                        const cBotones = document.getElementById('botones-palabras'); 
+                        cBotones.innerHTML = "";
+                        
+                        (stateData.opcionesPalabras || []).forEach(opcionWord => { 
+                            cBotones.innerHTML += `<button onclick="elegirPalabra('${opcionWord}')" class="bg-gray-800 hover:bg-sawer-red text-white font-bold py-3 px-6 rounded border border-gray-600 hover:border-sawer-red transition-all">${opcionWord}</button>`; 
+                        });
+                    } else {
+                        divOverlaySelect.classList.remove('oculto'); 
+                        document.getElementById('txt-seleccion-titulo').innerText = "Preparando Ronda"; 
+                        document.getElementById('txt-seleccion-sub').innerText = "El dibujante está eligiendo una palabra..."; 
+                        document.getElementById('botones-palabras').innerHTML = "";
+                    }
+                } 
+                else if (stateData.estadoLocal === 'jugando') {
+                    divOverlaySelect.classList.add('oculto'); 
+                    divOverlayResult.classList.add('oculto');
+                    
+                    // --- DISPARADOR DEL HOST CORREGIDO ---
+                    if(window.soyHost && !window.relojCorriendoLocal && window.palabraActualGlobal !== "") { 
+                        window.hostArrancarReloj(window.palabraActualGlobal); 
+                    }
+
+                    if (soyElDibujante) {
+                        divHerramientas.classList.remove('oculto'); 
+                        divHerramientas.classList.add('flex'); 
+                        inpCajaChat.disabled = true; 
+                        inpCajaChat.placeholder = "¡Es tu turno! Dibuja la palabra."; 
+                        inpCajaChat.classList.add('opacity-50');
+                        pPalabraSec.innerText = window.palabraActualGlobal.split('').join(' ');
+                    } else {
+                        divHerramientas.classList.add('oculto'); 
+                        divHerramientas.classList.remove('flex'); 
+                        inpCajaChat.disabled = window.yaAdivineLocal; 
+                        inpCajaChat.placeholder = window.yaAdivineLocal ? "¡Adivinaste! Espera a los demás." : "Escribe aquí y presiona Enter..."; 
+                        inpCajaChat.classList.remove('opacity-50');
+                        
+                        let txtMascara = "";
+                        for(let iter=0; iter<window.palabraActualGlobal.length; iter++) {
+                            if(window.palabraActualGlobal[iter] === " ") {
+                                txtMascara += "   ";
+                            } else if(stateData.pistas && stateData.pistas.includes(iter)) {
+                                txtMascara += window.palabraActualGlobal[iter] + " ";
+                            } else {
+                                txtMascara += "_ ";
+                            }
+                        }
+                        pPalabraSec.innerText = txtMascara;
+                    }
+                }
+                else if (stateData.estadoLocal === 'resultados') {
+                    window.relojCorriendoLocal = false; 
+                    playSound('fin'); 
+                    divOverlaySelect.classList.add('oculto'); 
+                    divOverlayResult.classList.remove('oculto'); 
+                    document.getElementById('resultado-palabra').innerText = window.palabraActualGlobal;
+                    
+                    const copyPanelPts = document.getElementById('lista-jugadores-juego').innerHTML; 
+                    document.getElementById('lista-resultados').innerHTML = copyPanelPts;
+                    
+                    divHerramientas.classList.add('oculto'); 
+                    inpCajaChat.disabled = true;
+                }
+            });
+
+            onChildAdded(ref(db, `salas/${window.salaActualId}/chat`), (snap) => {
+                const infoMsg = snap.val(); 
+                const contChat = document.getElementById('caja-chat');
+                
+                if (infoMsg.msj === "MALVAVISCO_SECRETO_ACIERTO") {
+                    contChat.innerHTML += `<div class="bg-green-900/40 p-2 rounded text-xs border-l-2 border-green-500 my-1"><span class="font-bold text-green-400">✅ ¡${infoMsg.nombre} adivinó! (+${infoMsg.pts} pts)</span></div>`;
+                } else {
+                    contChat.innerHTML += `<div class="bg-black/30 p-2 rounded text-xs md:text-sm border-l-2 border-gray-600 mb-1"><span class="font-bold text-gray-400">${infoMsg.nombre}:</span> <span class="text-white">${infoMsg.msj}</span></div>`;
+                }
+                contChat.scrollTop = contChat.scrollHeight; 
+            });
+
+            let cursorR = {x:0, y:0};
+            onChildAdded(ref(db, `salas/${window.salaActualId}/trazos`), (snap) => {
+                const tr = snap.val(); 
+                if (tr.uid === window.miJugadorId) return; 
+                
+                ctx.strokeStyle = tr.c; 
+                ctx.fillStyle = tr.c; 
+                ctx.lineWidth = tr.g; 
+                ctx.globalAlpha = tr.o !== undefined ? tr.o : 1; // ARREGLO OPACIDAD REMOTA
+                
+                if (tr.t === 'ini') { 
+                    ctx.beginPath(); 
+                    ctx.arc(tr.x, tr.y, tr.g/2, 0, Math.PI*2); 
+                    ctx.fill(); 
+                    ctx.beginPath(); 
+                    ctx.moveTo(tr.x, tr.y); 
+                    cursorR = {x: tr.x, y: tr.y}; 
+                } else if (tr.t === 'mov') { 
+                    ctx.beginPath(); 
+                    ctx.moveTo(cursorR.x, cursorR.y); 
+                    ctx.lineTo(tr.x, tr.y); 
+                    ctx.stroke(); 
+                    cursorR = {x: tr.x, y: tr.y}; 
+                } else if (tr.t === 'fin') { 
+                    ctx.beginPath(); 
+                }
+            });
+
+            onValue(ref(db, `salas/${window.salaActualId}/trazos`), (snap) => { 
+                if (!snap.exists()) { 
+                    ctx.fillStyle = "#ffffff"; 
+                    ctx.fillRect(0, 0, canvas.width, canvas.height); 
+                } 
+            });
+        }
+    </script>
+</body>
+</html>
