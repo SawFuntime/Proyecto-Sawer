@@ -347,10 +347,14 @@ const bancoPalabras = [
         window.mostrarSeccion = (id) => { 
             ['menu-principal', 'crear-sala', 'unirse-sala', 'sala-espera', 'pantalla-juego'].forEach(sec => document.getElementById(sec).classList.add('oculto')); 
             document.getElementById(id).classList.remove('oculto'); 
+            
+            // Forzar carga de salas siempre que entramos a la sección
+            if(id === 'unirse-sala') {
+                window.cargarSalasDisponibles(); 
+            }
         };
 
-        // --- LECTURA DEL ENLACE DE INVITACIÓN (REPARADO PARA CELULARES) ---
-        // Este bloque se ejecuta directamente al cargar el script, evitando el race condition de window.onload
+        // ENLACE DE INVITACIÓN (Ejecutado directo al cargar)
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('sala')) {
             window.salaSeleccionadaParaUnirse = urlParams.get('sala');
@@ -412,14 +416,18 @@ const bancoPalabras = [
         };
 
         window.cargarSalasDisponibles = () => { 
+            const listaHtml = document.getElementById('lista-salas');
+            listaHtml.innerHTML = "<p class='text-sm text-gray-400'>Buscando salas...</p>"; 
+
             onValue(ref(db, 'salas'), (snapshot) => { 
                 const salas = snapshot.val(); 
-                const listaHtml = document.getElementById('lista-salas'); 
                 listaHtml.innerHTML = ""; 
                 
+                let salasEncontradas = false;
                 if (salas) { 
                     Object.keys(salas).forEach(id => { 
                         if (salas[id].estado === "esperando") { 
+                            salasEncontradas = true;
                             listaHtml.innerHTML += `
                                 <div class="p-3 mb-2 border border-sawer-red rounded bg-black/40 flex justify-between items-center cursor-pointer hover:bg-sawer-red/20 transition-colors" onclick="seleccionarSalaId('${id}')">
                                     <span>${salas[id].configuracion.nombreSala}</span>
@@ -428,7 +436,9 @@ const bancoPalabras = [
                             `; 
                         } 
                     }); 
-                } else { 
+                } 
+                
+                if (!salasEncontradas) { 
                     listaHtml.innerHTML = "<p class='text-sm text-gray-400'>No hay salas disponibles.</p>"; 
                 } 
             }); 
@@ -471,7 +481,6 @@ const bancoPalabras = [
             });
         };
 
-        // --- SISTEMA DE EXPULSIÓN DE JUGADORES ---
         window.expulsarJugador = (idJugadorAEchar) => {
             if (confirm("¿Estás seguro de que quieres expulsar a este jugador?")) {
                 remove(ref(db, `salas/${window.salaActualId}/jugadores/${idJugadorAEchar}`));
@@ -501,7 +510,6 @@ const bancoPalabras = [
                 }
             });
 
-            // ACTUALIZAR PANELES DE JUGADORES
             onValue(ref(db, `salas/${window.salaActualId}/jugadores`), (snapshot) => {
                 const jugadoresData = snapshot.val(); 
                 const gridHtml = document.getElementById('grid-jugadores'); 
@@ -588,7 +596,7 @@ const bancoPalabras = [
             
             get(ref(db, `salas/${window.salaActualId}`)).then((snap) => {
                 const salaCompleta = snap.val(); 
-                if(!salaCompleta) return; // Si la sala fue borrada
+                if(!salaCompleta) return; 
 
                 const idsJugadores = Object.keys(salaCompleta.jugadores || {});
                 
