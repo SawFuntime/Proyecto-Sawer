@@ -153,15 +153,16 @@
     <!-- PANTALLA DE JUEGO (MOTOR) -->
     <div id="pantalla-juego" class="oculto w-full h-[100dvh] max-w-[1600px] mx-auto flex flex-col gap-2 p-2 relative z-10">
         
+        <!-- HEADER CORREGIDO (Ajuste de text-wrap y remoción de truncate) -->
         <div class="w-full bg-sawer-panel/90 backdrop-blur-md rounded-xl px-3 md:px-6 py-2 flex justify-between items-center shadow-lg border-b-2 border-sawer-red flex-shrink-0">
-            <div class="flex items-center gap-2 md:gap-4">
+            <div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
                 <span class="text-xs md:text-base text-gray-400 font-medium tracking-wide hidden sm:inline">RONDA <span class="text-white font-bold" id="ronda-ui">1/4</span></span>
                 <button onclick="abandonarSala()" class="bg-gray-800 hover:bg-sawer-red border border-gray-600 hover:border-sawer-red text-white text-xs md:text-sm px-2 py-1 rounded transition-colors flex items-center gap-1" title="Abandonar partida">🚪 <span class="hidden sm:inline">Salir</span></button>
             </div>
             
-            <div class="text-xl sm:text-2xl md:text-4xl tracking-[0.2em] md:tracking-[0.4em] font-mono font-bold text-white drop-shadow-md truncate max-w-[50%] text-center" id="palabra-secreta">ESPERANDO</div>
+            <div class="flex-1 text-lg sm:text-xl md:text-3xl tracking-[0.1em] md:tracking-[0.2em] font-mono font-bold text-white drop-shadow-md text-center px-2 flex-wrap break-words leading-tight" id="palabra-secreta">ESPERANDO</div>
             
-            <div class="flex items-center gap-1 md:gap-3">
+            <div class="flex items-center gap-1 md:gap-3 flex-shrink-0">
                 <svg class="w-4 h-4 md:w-6 md:h-6 text-gray-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span class="text-xl md:text-3xl font-bold text-sawer-red transition-colors" id="reloj">0</span>
             </div>
@@ -184,10 +185,22 @@
                 <p class="text-gray-500 mt-4 animate-pulse text-sm">Preparando siguiente turno...</p>
             </div>
 
-            <!-- PANEL JUGADORES (CORREGIDO PARA PC) -->
+            <!-- OVERLAY: PODIO FINAL (NUEVO) -->
+            <div id="overlay-podio" class="oculto absolute inset-0 bg-black/95 z-30 rounded-xl flex flex-col items-center justify-center anim-fade p-4 border border-sawer-red">
+                <h2 class="text-3xl md:text-5xl font-bold text-yellow-500 mb-2 drop-shadow-md text-center">🏆 FIN DE LA PARTIDA 🏆</h2>
+                <p class="text-gray-400 mb-6">Puntuaciones finales:</p>
+                <div class="w-full max-w-md bg-sawer-panel rounded-xl border border-gray-700 p-4 max-h-[50vh] overflow-y-auto mb-6" id="podio-lista">
+                    <!-- Podio inyectado por JS -->
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="abandonarSala()" class="bg-gray-800 hover:bg-sawer-red text-white font-bold py-3 px-6 rounded-xl border border-gray-600 transition-all shadow-[0_0_15px_rgba(155,0,0,0.5)]">Volver al Menú</button>
+                </div>
+            </div>
+
+            <!-- PANEL JUGADORES -->
             <div class="w-full lg:w-56 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl p-2 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto shadow-lg flex-shrink-0 lg:flex-shrink-0 max-h-[80px] lg:max-h-none" id="lista-jugadores-juego"></div>
 
-            <!-- ÁREA CENTRAL (CANVAS - CORREGIDO PARA DARLE PRIORIDAD EN PC) -->
+            <!-- ÁREA CENTRAL (CANVAS) -->
             <div class="flex-grow flex flex-col gap-2 md:gap-4 min-h-[250px] lg:min-h-0 w-full lg:w-auto">
                 <div class="bg-white rounded-xl flex-grow relative overflow-hidden shadow-2xl border border-gray-800 touch-none">
                     <canvas id="pizarra" width="900" height="600" class="absolute top-0 left-0 w-full h-full"></canvas>
@@ -215,12 +228,10 @@
                 </div>
             </div>
 
-            <!-- CHAT (CORREGIDO PARA NO INVADIR EN PC) -->
+            <!-- CHAT -->
             <div class="w-full lg:w-72 lg:h-full bg-sawer-panel/90 backdrop-blur-md border border-gray-800 rounded-xl flex flex-col overflow-hidden shadow-lg flex-grow lg:flex-grow-0 lg:flex-shrink-0 max-h-[30vh] lg:max-h-none">
                 <div class="bg-sawer-red/10 text-sawer-red text-[10px] md:text-xs font-bold uppercase tracking-wider text-center py-2 md:py-3 border-b border-gray-800">Adivinanzas</div>
                 <div class="flex-grow p-2 md:p-3 overflow-y-auto flex flex-col gap-2 text-xs md:text-sm font-sans" id="caja-chat"></div>
-                
-                <!-- FORMULARIO DE CHAT -->
                 <form id="form-chat" class="p-2 md:p-3 border-t border-gray-800 bg-black/50 m-0 flex gap-2" onsubmit="return false;">
                     <input type="text" id="input-chat" class="flex-grow w-full bg-black border border-gray-700 rounded-lg p-2 text-white placeholder-gray-500 focus:border-sawer-red focus:outline-none focus:ring-1 focus:ring-sawer-red transition-all text-xs md:text-sm" placeholder="Escribe aquí..." autocomplete="off">
                     <button type="submit" class="md:hidden bg-sawer-red hover:bg-sawer-red-hover text-white px-3 py-2 rounded-lg font-bold text-xs shadow-md flex-shrink-0">Enviar</button>
@@ -250,13 +261,8 @@
             "MALVAVISCO", "SIERRA", "ROBLOX", "SANGRE", "DISCORD", "ADMINISTRADOR", "MISTERIO", 
             "PIZARRA", "TIEMPO", "JUEGO", "COMPUTADORA", "AURICULARES", "TECLADO", "MURCIELAGO", 
             "FANTASMA", "ESPADA", "PIZZA", "HAMBURGUESA", "ESQUELETO", "PROGRAMADOR",
-            "SILLA GAMER", "MONITOR", "SUICIDIO", "PROYECTO SAWER", "HITLER", "JEFFREY EPSTEIN" , "PERÚ",
-            "SAWFUNTIME", "LENOIDE", "HIKARU", "MONTE EVEREST", "SANS", "GEOMETRY DASH", "MICHAEL JACKSON", "PALOMA",
-            "RADIO", "ACAMPAR", "RIÑÓN", "ISRAEL", "EMO", "MEWING", "SOPA", "TUN TUNG SAHUR", "GOKU", "PAYASO", "MANZANA",
-            "ACUSETE", "PUENTE", "SEÑALAR", "DETECTIVE", "PANTALÓN", "CAMISA", "NOTEBOOK", "PARRILLA", "BARBERO", 
-            "PLAYA", "SIRENA", "CAMA", "CARCEL", "AK47", "CAMARA", "CONTROL REMOTO", "CAPORAL", "SOLDADO SAWER", "POSTRE",
-            "MARIACHI", "PIJAMA", "PERFUME"
-            
+            "SILLA GAMER", "MONITOR", "PSICOLOGO", "UNIVERSIDAD", "COQUIMBO", "CALAMA",
+            "HOSPITAL SAN PABLO", "PROYECTO SAWER", "HYUNDAI ELANTRA"
         ];
 
         window.salaActualId = null; 
@@ -470,7 +476,7 @@
                 document.getElementById('msg-esperando-host').classList.remove('oculto'); 
             }
 
-            // LISTENER DE EXPULSIÓN (Para el cliente que fue expulsado)
+            // LISTENER DE EXPULSIÓN
             const refMiJugador = ref(db, `salas/${window.salaActualId}/jugadores/${window.miJugadorId}`);
             onValue(refMiJugador, (snap) => {
                 if (!snap.exists() && window.salaActualId) {
@@ -480,7 +486,7 @@
                 }
             });
 
-            // ACTUALIZAR PANELES DE JUGADORES (LOBBY Y JUEGO)
+            // ACTUALIZAR PANELES DE JUGADORES
             onValue(ref(db, `salas/${window.salaActualId}/jugadores`), (snapshot) => {
                 const jugadoresData = snapshot.val(); 
                 const gridHtml = document.getElementById('grid-jugadores'); 
@@ -495,12 +501,10 @@
                     
                     jugadoresOrdenados.forEach(([id, jug], i) => {
                         
-                        // Botón Expulsar en Lobby
                         let btnExpHtml = (window.soyHost && id !== window.miJugadorId) 
                             ? `<button onclick="expulsarJugador('${id}')" class="absolute top-2 right-2 bg-red-600 hover:bg-red-800 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-md z-10" title="Expulsar">X</button>` 
                             : '';
                         
-                        // Botón Expulsar In-Game
                         let btnExpInGameHtml = (window.soyHost && id !== window.miJugadorId) 
                             ? `<button onclick="expulsarJugador('${id}')" class="absolute -top-1 -right-1 bg-red-600 hover:bg-red-800 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow-md z-10" title="Expulsar">X</button>` 
                             : '';
@@ -538,9 +542,13 @@
         }
 
         window.abandonarSala = async () => { 
-            if (confirm("¿Abandonar sala?")) { 
-                if (window.salaActualId && window.miJugadorId) { 
-                    await remove(ref(db, `salas/${window.salaActualId}/jugadores/${window.miJugadorId}`)); 
+            if (confirm("¿Estás seguro de que quieres salir?")) { 
+                if (window.salaActualId) { 
+                    if (window.soyHost) {
+                        await remove(ref(db, `salas/${window.salaActualId}`)); 
+                    } else if (window.miJugadorId) {
+                        await remove(ref(db, `salas/${window.salaActualId}/jugadores/${window.miJugadorId}`)); 
+                    }
                 } 
                 window.location.href = window.location.pathname; 
             } 
@@ -565,15 +573,18 @@
             
             get(ref(db, `salas/${window.salaActualId}`)).then((snap) => {
                 const salaCompleta = snap.val(); 
-                const idsJugadores = Object.keys(salaCompleta.jugadores);
+                if(!salaCompleta) return; // Si la sala fue borrada
+
+                const idsJugadores = Object.keys(salaCompleta.jugadores || {});
                 
                 if(turnoIndex >= idsJugadores.length) { 
                     turnoIndex = 0; 
                     rondaActual++; 
                 }
                 
-                if(rondaActual > salaCompleta.configuracion.rondasTotales) { 
-                    alert("¡FIN DE LA PARTIDA!"); 
+                // --- CORRECCIÓN: BUG RONDA 5/4 Y PODIO FINAL ---
+                if(rondaActual > parseInt(salaCompleta.configuracion.rondasTotales)) { 
+                    update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { estadoLocal: 'podio' }); 
                     return; 
                 }
 
@@ -628,8 +639,7 @@
                 update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { tiempo: tRestante });
                 
                 if (tRestante <= 0) { 
-                    clearInterval(cronometroInterval); 
-                    terminarTurnoHost(); 
+                    window.hostForzarFinTurno();
                 }
             }, 1000);
         };
@@ -645,12 +655,14 @@
             setTimeout(() => { 
                 get(ref(db, `salas/${window.salaActualId}/estadoJuego`)).then(s => { 
                     const estado = s.val(); 
-                    avanzarTurnoHost(estado.turnoIndex + 1, estado.rondaActual); 
+                    if(estado && estado.estadoLocal !== 'podio') {
+                        avanzarTurnoHost(estado.turnoIndex + 1, estado.rondaActual); 
+                    }
                 }); 
             }, 6000);
         }
 
-        // --- SISTEMA DE PANTALLA DE JUEGO (CANVAS Y CHAT) ---
+        // --- SISTEMA DE PANTALLA DE JUEGO (CANVAS) ---
         let juegoIniciadoLocal = false; 
         let soyElDibujante = false;
         
@@ -722,17 +734,6 @@
 
                         push(ref(db, `salas/${window.salaActualId}/chat`), { uid: window.miJugadorId, nombre: window.miNombreGlobal, msj: "MALVAVISCO_SECRETO_ACIERTO", pts: puntosTotalesGanados });
                         
-                        if(window.soyHost) {
-                            get(ref(db, `salas/${window.salaActualId}`)).then(s => {
-                                const dbSala = s.val(); 
-                                const totalJugadores = Object.keys(dbSala.jugadores).length; 
-                                const totalAcertaron = dbSala.estadoJuego.acertaron ? Object.keys(dbSala.estadoJuego.acertaron).length : 0;
-                                
-                                if(totalAcertaron >= totalJugadores - 1) {
-                                    window.hostForzarFinTurno();
-                                }
-                            });
-                        }
                     } else {
                         push(ref(db, `salas/${window.salaActualId}/chat`), { uid: window.miJugadorId, nombre: window.miNombreGlobal, msj: inputObj.value });
                     }
@@ -844,7 +845,17 @@
                 window.palabraActualGlobal = stateData.palabraActual || "";
                 window.cantidadAcertadosGlobal = stateData.acertaron ? Object.keys(stateData.acertaron).length : 0;
 
-                document.getElementById('ronda-ui').innerText = `${stateData.rondaActual}/4`;
+                // --- CORRECCIÓN: FIN PREMATURO SI TODOS ADIVINAN ---
+                if(window.soyHost && stateData.estadoLocal === 'jugando' && window.relojCorriendoLocal) {
+                    get(ref(db, `salas/${window.salaActualId}/jugadores`)).then(snapJ => {
+                        const totalJugadoresVal = Object.keys(snapJ.val()||{}).length;
+                        if(totalJugadoresVal > 1 && window.cantidadAcertadosGlobal >= totalJugadoresVal - 1) {
+                            window.hostForzarFinTurno();
+                        }
+                    });
+                }
+
+                document.getElementById('ronda-ui').innerText = `${stateData.rondaActual}/${document.getElementById('host-rondas').value || 4}`;
                 const textReloj = document.getElementById('reloj');
                 
                 if (stateData.tiempo !== undefined) { 
@@ -862,6 +873,7 @@
 
                 const divOverlaySelect = document.getElementById('overlay-seleccion'); 
                 const divOverlayResult = document.getElementById('overlay-resultados');
+                const divOverlayPodio = document.getElementById('overlay-podio');
                 const pPalabraSec = document.getElementById('palabra-secreta'); 
                 const divHerramientas = document.getElementById('panel-herramientas');
                 const inpCajaChat = document.getElementById('input-chat');
@@ -875,6 +887,7 @@
                     window.tTotal = stateData.tiempo || 80; 
                     
                     divOverlayResult.classList.add('oculto'); 
+                    divOverlayPodio.classList.add('oculto');
                     divHerramientas.classList.add('oculto'); 
                     
                     inpCajaChat.disabled = true; 
@@ -903,6 +916,7 @@
                 else if (stateData.estadoLocal === 'jugando') {
                     divOverlaySelect.classList.add('oculto'); 
                     divOverlayResult.classList.add('oculto');
+                    divOverlayPodio.classList.add('oculto');
                     
                     if(window.soyHost && !window.relojCorriendoLocal && window.palabraActualGlobal !== "") { 
                         window.hostArrancarReloj(window.palabraActualGlobal); 
@@ -915,7 +929,9 @@
                         inpCajaChat.disabled = true; 
                         inpCajaChat.placeholder = "¡Es tu turno! Dibuja la palabra."; 
                         inpCajaChat.classList.add('opacity-50');
-                        pPalabraSec.innerText = window.palabraActualGlobal.split('').join(' ');
+                        
+                        // --- CORRECCIÓN: ESPACIOS EN LA PALABRA PARA EL DIBUJANTE ---
+                        pPalabraSec.innerHTML = window.palabraActualGlobal.split('').map(c => c === ' ' ? '&nbsp;&nbsp;' : c).join(' ');
                     } else {
                         divHerramientas.classList.add('oculto'); 
                         divHerramientas.classList.remove('flex'); 
@@ -924,23 +940,25 @@
                         inpCajaChat.placeholder = window.yaAdivineLocal ? "¡Adivinaste! Espera a los demás." : "Escribe aquí..."; 
                         inpCajaChat.classList.remove('opacity-50');
                         
+                        // --- CORRECCIÓN: MASCARA PERFECTA CON ESPACIOS REALES ---
                         let txtMascara = "";
                         for(let iter=0; iter<window.palabraActualGlobal.length; iter++) {
                             if(window.palabraActualGlobal[iter] === " ") {
-                                txtMascara += "   ";
+                                txtMascara += "&nbsp;&nbsp;&nbsp;";
                             } else if(stateData.pistas && stateData.pistas.includes(iter)) {
                                 txtMascara += window.palabraActualGlobal[iter] + " ";
                             } else {
                                 txtMascara += "_ ";
                             }
                         }
-                        pPalabraSec.innerText = txtMascara;
+                        pPalabraSec.innerHTML = txtMascara.trim();
                     }
                 }
                 else if (stateData.estadoLocal === 'resultados') {
                     window.relojCorriendoLocal = false; 
                     playSound('fin'); 
                     divOverlaySelect.classList.add('oculto'); 
+                    divOverlayPodio.classList.add('oculto');
                     divOverlayResult.classList.remove('oculto'); 
                     document.getElementById('resultado-palabra').innerText = window.palabraActualGlobal;
                     
@@ -949,6 +967,39 @@
                     
                     divHerramientas.classList.add('oculto'); 
                     inpCajaChat.disabled = true;
+                }
+                else if (stateData.estadoLocal === 'podio') {
+                    // --- CORRECCIÓN: PANTALLA DE PODIO FINAL ---
+                    window.relojCorriendoLocal = false;
+                    playSound('fin');
+                    divOverlaySelect.classList.add('oculto');
+                    divOverlayResult.classList.add('oculto');
+                    divHerramientas.classList.add('oculto');
+                    inpCajaChat.disabled = true;
+                    
+                    divOverlayPodio.classList.remove('oculto');
+                    
+                    get(ref(db, `salas/${window.salaActualId}/jugadores`)).then(snapJ => {
+                        const jugadoresData = snapJ.val();
+                        if(jugadoresData) {
+                            const ordenados = Object.entries(jugadoresData).sort((a,b) => b[1].puntos - a[1].puntos);
+                            let htmlPodio = "";
+                            ordenados.forEach(([id, jug], i) => {
+                                let medalla = i===0 ? "🥇" : (i===1 ? "🥈" : (i===2 ? "🥉" : ""));
+                                let colorBorde = i===0 ? "border-yellow-500 text-yellow-500" : "border-gray-700 text-white";
+                                htmlPodio += `
+                                    <div class="flex justify-between items-center bg-black/50 p-3 rounded-lg mb-2 border ${colorBorde}">
+                                        <div class="flex items-center gap-3">
+                                            <img src="${jug.foto}" class="w-10 h-10 rounded-full border border-gray-600"> 
+                                            <span class="font-bold text-lg">${medalla} ${jug.nombre}</span>
+                                        </div> 
+                                        <span class="font-bold text-sawer-red text-xl">${jug.puntos} pts</span>
+                                    </div>
+                                `;
+                            });
+                            document.getElementById('podio-lista').innerHTML = htmlPodio;
+                        }
+                    });
                 }
             });
 
