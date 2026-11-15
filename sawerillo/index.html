@@ -153,7 +153,6 @@
     <!-- PANTALLA DE JUEGO (MOTOR) -->
     <div id="pantalla-juego" class="oculto w-full h-[100dvh] max-w-[1600px] mx-auto flex flex-col gap-2 p-2 relative z-10">
         
-        <!-- HEADER CORREGIDO (Ajuste de text-wrap y remoción de truncate) -->
         <div class="w-full bg-sawer-panel/90 backdrop-blur-md rounded-xl px-3 md:px-6 py-2 flex justify-between items-center shadow-lg border-b-2 border-sawer-red flex-shrink-0">
             <div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
                 <span class="text-xs md:text-base text-gray-400 font-medium tracking-wide hidden sm:inline">RONDA <span class="text-white font-bold" id="ronda-ui">1/4</span></span>
@@ -185,13 +184,11 @@
                 <p class="text-gray-500 mt-4 animate-pulse text-sm">Preparando siguiente turno...</p>
             </div>
 
-            <!-- OVERLAY: PODIO FINAL (NUEVO) -->
+            <!-- OVERLAY: PODIO FINAL -->
             <div id="overlay-podio" class="oculto absolute inset-0 bg-black/95 z-30 rounded-xl flex flex-col items-center justify-center anim-fade p-4 border border-sawer-red">
                 <h2 class="text-3xl md:text-5xl font-bold text-yellow-500 mb-2 drop-shadow-md text-center">🏆 FIN DE LA PARTIDA 🏆</h2>
                 <p class="text-gray-400 mb-6">Puntuaciones finales:</p>
-                <div class="w-full max-w-md bg-sawer-panel rounded-xl border border-gray-700 p-4 max-h-[50vh] overflow-y-auto mb-6" id="podio-lista">
-                    <!-- Podio inyectado por JS -->
-                </div>
+                <div class="w-full max-w-md bg-sawer-panel rounded-xl border border-gray-700 p-4 max-h-[50vh] overflow-y-auto mb-6" id="podio-lista"></div>
                 <div class="flex gap-4">
                     <button onclick="abandonarSala()" class="bg-gray-800 hover:bg-sawer-red text-white font-bold py-3 px-6 rounded-xl border border-gray-600 transition-all shadow-[0_0_15px_rgba(155,0,0,0.5)]">Volver al Menú</button>
                 </div>
@@ -240,7 +237,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT FIREBASE Y MOTOR DE JUEGO EXPANDIDO -->
+    <!-- SCRIPT FIREBASE Y MOTOR DE JUEGO -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, push, onValue, get, onChildAdded, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -257,7 +254,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        const bancoPalabras = [
+const bancoPalabras = [
             "MALVAVISCO", "SIERRA", "ROBLOX", "SANGRE", "DISCORD", "ADMINISTRADOR", "MISTERIO", 
             "PIZARRA", "TIEMPO", "JUEGO", "COMPUTADORA", "AURICULARES", "TECLADO", "MURCIELAGO", 
             "FANTASMA", "ESPADA", "PIZZA", "HAMBURGUESA", "ESQUELETO", "PROGRAMADOR",
@@ -350,17 +347,26 @@
         window.mostrarSeccion = (id) => { 
             ['menu-principal', 'crear-sala', 'unirse-sala', 'sala-espera', 'pantalla-juego'].forEach(sec => document.getElementById(sec).classList.add('oculto')); 
             document.getElementById(id).classList.remove('oculto'); 
-            if(id === 'unirse-sala' && !window.salaSeleccionadaParaUnirse) {
-                window.cargarSalasDisponibles(); 
-            }
         };
 
+        // --- LECTURA DEL ENLACE DE INVITACIÓN (REPARADO PARA CELULARES) ---
+        // Este bloque se ejecuta directamente al cargar el script, evitando el race condition de window.onload
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('sala')) {
+            window.salaSeleccionadaParaUnirse = urlParams.get('sala');
+            mostrarSeccion('unirse-sala');
+            document.getElementById('lista-salas').innerHTML = `
+                <div class="p-4 bg-sawer-red/20 border border-sawer-red rounded text-center">
+                    <p class="font-bold text-white">¡Has sido invitado a jugar!</p>
+                </div>`;
+        }
+
         window.iniciarCreacionSala = async () => {
-            const nombreSala = document.getElementById('host-sala-nombre').value; 
-            window.miNombreGlobal = document.getElementById('host-nombre').value;
+            const nombreSala = document.getElementById('host-sala-nombre').value.trim(); 
+            window.miNombreGlobal = document.getElementById('host-nombre').value.trim();
             
             if (!nombreSala || !window.miNombreGlobal) {
-                return alert("Por favor, llena los campos correspondientes.");
+                return alert("Por favor, llena el nombre de la sala y tu nombre.");
             }
             
             let fotoBase64 = "https://ui-avatars.com/api/?name=" + window.miNombreGlobal + "&background=9b0000&color=fff";
@@ -430,14 +436,17 @@
 
         window.seleccionarSalaId = (id) => { 
             window.salaSeleccionadaParaUnirse = id; 
-            alert("Sala seleccionada. Pon tu nombre y dale a Entrar."); 
+            alert("Sala seleccionada. Escribe tu nombre y dale a Entrar."); 
         };
 
         window.unirseASalaSeleccionada = async () => {
-            window.miNombreGlobal = document.getElementById('jugador-nombre').value;
+            window.miNombreGlobal = document.getElementById('jugador-nombre').value.trim();
             
-            if (!window.salaSeleccionadaParaUnirse || !window.miNombreGlobal) {
-                return alert("Faltan datos.");
+            if (!window.salaSeleccionadaParaUnirse) {
+                return alert("Falta seleccionar una sala. Haz clic en una de la lista.");
+            }
+            if (!window.miNombreGlobal) {
+                return alert("Por favor, escribe tu nombre.");
             }
             
             let fotoBase64 = "https://ui-avatars.com/api/?name=" + window.miNombreGlobal + "&background=9b0000&color=fff";
@@ -588,7 +597,6 @@
                     rondaActual++; 
                 }
                 
-                // --- CORRECCIÓN: BUG RONDA 5/4 Y PODIO FINAL ---
                 if(rondaActual > parseInt(salaCompleta.configuracion.rondasTotales)) { 
                     update(ref(db, `salas/${window.salaActualId}/estadoJuego`), { estadoLocal: 'podio' }); 
                     return; 
@@ -851,7 +859,7 @@
                 window.palabraActualGlobal = stateData.palabraActual || "";
                 window.cantidadAcertadosGlobal = stateData.acertaron ? Object.keys(stateData.acertaron).length : 0;
 
-                // --- CORRECCIÓN: FIN PREMATURO SI TODOS ADIVINAN ---
+                // VALIDACIÓN DE FIN DE RONDA AUTOMÁTICA
                 if(window.soyHost && stateData.estadoLocal === 'jugando' && window.relojCorriendoLocal) {
                     get(ref(db, `salas/${window.salaActualId}/jugadores`)).then(snapJ => {
                         const totalJugadoresVal = Object.keys(snapJ.val()||{}).length;
@@ -936,7 +944,6 @@
                         inpCajaChat.placeholder = "¡Es tu turno! Dibuja la palabra."; 
                         inpCajaChat.classList.add('opacity-50');
                         
-                        // --- CORRECCIÓN: ESPACIOS EN LA PALABRA PARA EL DIBUJANTE ---
                         pPalabraSec.innerHTML = window.palabraActualGlobal.split('').map(c => c === ' ' ? '&nbsp;&nbsp;' : c).join(' ');
                     } else {
                         divHerramientas.classList.add('oculto'); 
@@ -946,7 +953,6 @@
                         inpCajaChat.placeholder = window.yaAdivineLocal ? "¡Adivinaste! Espera a los demás." : "Escribe aquí..."; 
                         inpCajaChat.classList.remove('opacity-50');
                         
-                        // --- CORRECCIÓN: MASCARA PERFECTA CON ESPACIOS REALES ---
                         let txtMascara = "";
                         for(let iter=0; iter<window.palabraActualGlobal.length; iter++) {
                             if(window.palabraActualGlobal[iter] === " ") {
@@ -975,7 +981,6 @@
                     inpCajaChat.disabled = true;
                 }
                 else if (stateData.estadoLocal === 'podio') {
-                    // --- CORRECCIÓN: PANTALLA DE PODIO FINAL ---
                     window.relojCorriendoLocal = false;
                     playSound('fin');
                     divOverlaySelect.classList.add('oculto');
