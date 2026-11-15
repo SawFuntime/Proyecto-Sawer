@@ -114,7 +114,11 @@
     <!-- FORMULARIO: UNIRSE A SALA -->
     <div id="unirse-sala" class="oculto bg-black/80 p-6 md:p-8 rounded-2xl border-2 border-sawer-red w-full max-w-md shadow-[0_0_25px_rgba(155,0,0,0.2)] backdrop-blur-md m-4">
         <h2 class="text-2xl font-bold mb-6 text-center text-sawer-red drop-shadow-md">Salas Disponibles</h2>
-        <div id="lista-salas" class="space-y-2 mb-6 max-h-40 overflow-y-auto pr-2"></div>
+        
+        <div id="lista-salas" class="space-y-2 mb-6 max-h-40 overflow-y-auto pr-2">
+            <!-- La lista se inyecta aquí -->
+        </div>
+        
         <div class="space-y-4 border-t border-sawer-red/50 pt-4">
             <div>
                 <label class="block text-sm font-bold mb-1 text-white">Tu Nombre</label>
@@ -126,7 +130,7 @@
             </div>
             <div class="pt-2 flex gap-2">
                 <button onclick="mostrarSeccion('menu-principal')" class="w-1/3 bg-gray-700 hover:bg-gray-600 border border-gray-500 text-white font-bold py-2 rounded transition-colors">Volver</button>
-                <button onclick="unirseASalaSeleccionada()" class="w-2/3 bg-sawer-red hover:bg-sawer-red-hover text-white font-bold py-2 rounded transition-colors shadow-[0_0_10px_rgba(155,0,0,0.5)]">Entrar</button>
+                <button id="btn-entrar-sala" onclick="unirseASalaSeleccionada()" class="w-2/3 bg-sawer-red hover:bg-sawer-red-hover text-white font-bold py-2 rounded transition-colors shadow-[0_0_10px_rgba(155,0,0,0.5)]">Entrar</button>
             </div>
         </div>
     </div>
@@ -237,10 +241,11 @@
         </div>
     </div>
 
-    <!-- SCRIPT FIREBASE Y MOTOR DE JUEGO -->
+    <!-- SCRIPT FIREBASE Y MOTOR DE JUEGO EXPANDIDO -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue, get, onChildAdded, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        // IMPORTANTE: Se añadieron 'query' y 'limitToLast' para evitar descargas masivas de salas basura.
+        import { getDatabase, ref, set, push, onValue, get, onChildAdded, remove, update, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBdIrFO3dNXvWdeYMA7Ow6VmgzdRpS4FN8",
@@ -334,7 +339,6 @@ const bancoPalabras = [
             }
         }
 
-        // --- FUNCIONES DE NAVEGACIÓN Y CONFIGURACIÓN ---
         function archivoABase64(file) { 
             return new Promise((resolve, reject) => { 
                 const reader = new FileReader(); 
@@ -348,20 +352,26 @@ const bancoPalabras = [
             ['menu-principal', 'crear-sala', 'unirse-sala', 'sala-espera', 'pantalla-juego'].forEach(sec => document.getElementById(sec).classList.add('oculto')); 
             document.getElementById(id).classList.remove('oculto'); 
             
-            // Forzar carga de salas siempre que entramos a la sección
-            if(id === 'unirse-sala') {
+            // Si entra de forma manual, cargamos la lista de salas
+            if(id === 'unirse-sala' && !window.salaSeleccionadaParaUnirse) {
                 window.cargarSalasDisponibles(); 
             }
         };
 
-        // ENLACE DE INVITACIÓN (Ejecutado directo al cargar)
+        // --- SISTEMA DE INVITACIÓN DIRECTA BLINDADA ---
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('sala')) {
             window.salaSeleccionadaParaUnirse = urlParams.get('sala');
-            mostrarSeccion('unirse-sala');
+            
+            // Ocultamos todo excepto la pestaña de unirse
+            ['menu-principal', 'crear-sala', 'sala-espera', 'pantalla-juego'].forEach(sec => document.getElementById(sec).classList.add('oculto')); 
+            document.getElementById('unirse-sala').classList.remove('oculto');
+            
+            // Inyectamos el mensaje directamente sobre la lista para evitar que Firebase descargue las salas zombis
             document.getElementById('lista-salas').innerHTML = `
-                <div class="p-4 bg-sawer-red/20 border border-sawer-red rounded text-center">
-                    <p class="font-bold text-white">¡Has sido invitado a jugar!</p>
+                <div class="p-5 bg-sawer-red/20 border-2 border-sawer-red rounded-xl text-center shadow-lg">
+                    <p class="font-bold text-white text-lg">¡Te invitaron a una sala!</p>
+                    <p class="text-sm text-gray-300 mt-2">Escribe tu nombre abajo y presiona Entrar.</p>
                 </div>`;
         }
 
@@ -417,9 +427,12 @@ const bancoPalabras = [
 
         window.cargarSalasDisponibles = () => { 
             const listaHtml = document.getElementById('lista-salas');
-            listaHtml.innerHTML = "<p class='text-sm text-gray-400'>Buscando salas...</p>"; 
+            listaHtml.innerHTML = "<p class='text-sm text-gray-400 text-center p-4'>Buscando salas activas...</p>"; 
 
-            onValue(ref(db, 'salas'), (snapshot) => { 
+            // FIX CRÍTICO ANTI-COLAPSO MÓVIL: Limitamos a las últimas 15 salas creadas
+            const salasQuery = query(ref(db, 'salas'), limitToLast(15));
+
+            onValue(salasQuery, (snapshot) => { 
                 const salas = snapshot.val(); 
                 listaHtml.innerHTML = ""; 
                 
@@ -439,14 +452,14 @@ const bancoPalabras = [
                 } 
                 
                 if (!salasEncontradas) { 
-                    listaHtml.innerHTML = "<p class='text-sm text-gray-400'>No hay salas disponibles.</p>"; 
+                    listaHtml.innerHTML = "<p class='text-sm text-gray-400 text-center p-4'>No hay salas disponibles.</p>"; 
                 } 
             }); 
         };
 
         window.seleccionarSalaId = (id) => { 
             window.salaSeleccionadaParaUnirse = id; 
-            alert("Sala seleccionada. Escribe tu nombre y dale a Entrar."); 
+            alert("Sala seleccionada. Escribe tu nombre abajo y dale a Entrar."); 
         };
 
         window.unirseASalaSeleccionada = async () => {
@@ -459,26 +472,34 @@ const bancoPalabras = [
                 return alert("Por favor, escribe tu nombre.");
             }
             
-            let fotoBase64 = "https://ui-avatars.com/api/?name=" + window.miNombreGlobal + "&background=9b0000&color=fff";
-            if (document.getElementById('jugador-foto').files.length > 0) {
-                fotoBase64 = await archivoABase64(document.getElementById('jugador-foto').files[0]);
+            const btnEntrar = document.getElementById('btn-entrar-sala');
+            if(btnEntrar) { btnEntrar.innerText = "Entrando..."; btnEntrar.disabled = true; }
+            
+            try {
+                let fotoBase64 = "https://ui-avatars.com/api/?name=" + window.miNombreGlobal + "&background=9b0000&color=fff";
+                if (document.getElementById('jugador-foto').files.length > 0) {
+                    fotoBase64 = await archivoABase64(document.getElementById('jugador-foto').files[0]);
+                }
+                
+                const nuevoJugadorRef = push(ref(db, `salas/${window.salaSeleccionadaParaUnirse}/jugadores`));
+                window.miJugadorId = nuevoJugadorRef.key; 
+                window.salaActualId = window.salaSeleccionadaParaUnirse; 
+                window.soyHost = false;
+                
+                await set(nuevoJugadorRef, { 
+                    nombre: window.miNombreGlobal, 
+                    foto: fotoBase64, 
+                    puntos: 0, 
+                    isHost: false 
+                });
+                
+                get(ref(db, `salas/${window.salaActualId}/configuracion/nombreSala`)).then((s) => {
+                    entrarLobby(s.val() || "Sala Invitada");
+                });
+            } catch (error) {
+                alert("Error al entrar a la sala. Es posible que el Host la haya borrado.");
+                if(btnEntrar) { btnEntrar.innerText = "Entrar"; btnEntrar.disabled = false; }
             }
-            
-            const nuevoJugadorRef = push(ref(db, `salas/${window.salaSeleccionadaParaUnirse}/jugadores`));
-            window.miJugadorId = nuevoJugadorRef.key; 
-            window.salaActualId = window.salaSeleccionadaParaUnirse; 
-            window.soyHost = false;
-            
-            await set(nuevoJugadorRef, { 
-                nombre: window.miNombreGlobal, 
-                foto: fotoBase64, 
-                puntos: 0, 
-                isHost: false 
-            });
-            
-            get(ref(db, `salas/${window.salaActualId}/configuracion/nombreSala`)).then((s) => {
-                entrarLobby(s.val() || "Sala Invitada");
-            });
         };
 
         window.expulsarJugador = (idJugadorAEchar) => {
@@ -500,7 +521,6 @@ const bancoPalabras = [
                 document.getElementById('msg-esperando-host').classList.remove('oculto'); 
             }
 
-            // LISTENER DE EXPULSIÓN
             const refMiJugador = ref(db, `salas/${window.salaActualId}/jugadores/${window.miJugadorId}`);
             onValue(refMiJugador, (snap) => {
                 if (!snap.exists() && window.salaActualId) {
@@ -684,7 +704,7 @@ const bancoPalabras = [
             }, 6000);
         }
 
-        // --- SISTEMA DE PANTALLA DE JUEGO (CANVAS) ---
+        // --- SISTEMA DE PANTALLA DE JUEGO (CANVAS Y EVENTOS) ---
         let juegoIniciadoLocal = false; 
         let soyElDibujante = false;
         
@@ -723,7 +743,6 @@ const bancoPalabras = [
             canvas.addEventListener('touchmove', (e) => { e.preventDefault(); dibujar(e.touches[0]); }, { passive: false }); 
             canvas.addEventListener('touchend', terminarTrazo);
 
-            // EVENTO SUBMIT DEL FORMULARIO DE CHAT
             document.getElementById('form-chat').addEventListener('submit', async function(e) {
                 e.preventDefault(); 
                 const inputObj = document.getElementById('input-chat');
@@ -867,7 +886,6 @@ const bancoPalabras = [
                 window.palabraActualGlobal = stateData.palabraActual || "";
                 window.cantidadAcertadosGlobal = stateData.acertaron ? Object.keys(stateData.acertaron).length : 0;
 
-                // VALIDACIÓN DE FIN DE RONDA AUTOMÁTICA
                 if(window.soyHost && stateData.estadoLocal === 'jugando' && window.relojCorriendoLocal) {
                     get(ref(db, `salas/${window.salaActualId}/jugadores`)).then(snapJ => {
                         const totalJugadoresVal = Object.keys(snapJ.val()||{}).length;
