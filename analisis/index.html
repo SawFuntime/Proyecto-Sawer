@@ -82,24 +82,25 @@
         <!-- ZONA DE ANÁLISIS -->
         <main class="flex-1 p-4 md:p-8 overflow-hidden relative z-10 flex flex-col min-h-0 w-full bg-[#0d0d0d]">
             
-            <div class="flex-col w-full h-full max-w-7xl mx-auto overflow-y-auto custom-scroll pb-10 md:pb-0 pr-2">
-                <header class="mb-6 md:mb-10">
-                    <h1 class="text-2xl md:text-3xl font-black tracking-wide">MÉTRICAS Y ANÁLISIS</h1>
-                    <p class="text-gray-400 mt-1 text-sm">Visualización de datos de Discord, Roblox y Web en tiempo real.</p>
+            <div class="flex-col w-full h-full max-w-7xl mx-auto overflow-y-auto custom-scroll pb-10 pr-2">
+                <header class="mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-2">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-black tracking-wide">MÉTRICAS Y ANÁLISIS</h1>
+                        <p class="text-gray-400 mt-1 text-sm">Visualización de datos de Discord, Roblox y Web en tiempo real.</p>
+                    </div>
+                    <span id="badge-mes-actual" class="self-start md:self-auto text-xs font-bold uppercase tracking-widest bg-sawerGrey border border-sawerRed/40 text-gray-300 px-3 py-1.5 rounded-lg">
+                        Mes Actual
+                    </span>
                 </header>
 
-                <!-- 4 PANELES GRANDES (Estilo Vercel) -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full pb-10">
+                <!-- 4 PANELES GRANDES (MES ACTUAL - Estilo Vercel) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full pb-8">
                     
                     <!-- PANEL 1: DISCORD -->
                     <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl shadow-xl relative overflow-hidden group h-[220px] md:h-[260px] hover:border-blue-500/50 transition-all">
-                        
-                        <!-- Canvas anclado al fondo absoluto -->
                         <div class="absolute bottom-0 left-0 w-full h-[65%] z-0 pointer-events-none">
                             <canvas id="chartDiscord"></canvas>
                         </div>
-                        
-                        <!-- Contenido Texto -->
                         <div class="relative z-10 p-5 md:p-6 flex flex-col h-full pointer-events-none">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -125,11 +126,9 @@
 
                     <!-- PANEL 2: CHAT -->
                     <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl shadow-xl relative overflow-hidden group h-[220px] md:h-[260px] hover:border-purple-500/50 transition-all">
-                        
                         <div class="absolute bottom-0 left-0 w-full h-[65%] z-0 pointer-events-none">
                             <canvas id="chartChat"></canvas>
                         </div>
-                        
                         <div class="relative z-10 p-5 md:p-6 flex flex-col h-full pointer-events-none">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -148,11 +147,9 @@
 
                     <!-- PANEL 3: ROBLOX -->
                     <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl shadow-xl relative overflow-hidden group h-[220px] md:h-[260px] hover:border-red-500/50 transition-all">
-                        
                         <div class="absolute bottom-0 left-0 w-full h-[65%] z-0 pointer-events-none">
                             <canvas id="chartRoblox"></canvas>
                         </div>
-                        
                         <div class="relative z-10 p-5 md:p-6 flex flex-col h-full pointer-events-none">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -178,11 +175,9 @@
 
                     <!-- PANEL 4: WEB -->
                     <div class="bg-sawerGrey border border-sawerRed/20 rounded-2xl shadow-xl relative overflow-hidden group h-[220px] md:h-[260px] hover:border-orange-500/50 transition-all">
-                        
                         <div class="absolute bottom-0 left-0 w-full h-[65%] z-0 pointer-events-none">
                             <canvas id="chartWeb"></canvas>
                         </div>
-                        
                         <div class="relative z-10 p-5 md:p-6 flex flex-col h-full pointer-events-none">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -195,11 +190,92 @@
                                     </div>
                                     <span class="text-[10px] text-gray-400 font-bold uppercase mt-1 block">Visitas Históricas Totales</span>
                                 </div>
+                                <div class="text-right bg-sawerDark/70 p-2 rounded-lg border border-gray-800 backdrop-blur-sm">
+                                    <p class="text-gray-400 text-[9px] uppercase font-bold mb-1">Este Mes</p>
+                                    <span class="text-orange-400 text-sm md:text-base font-bold" id="val-web-mes">0</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
+
+                <!-- ========================================== -->
+                <!-- SECCIÓN: MES ANTERIOR (COMPARATIVA)        -->
+                <!-- ========================================== -->
+                <section class="border-t border-gray-800 pt-8 pb-10">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
+                        <div>
+                            <h2 class="text-lg md:text-xl font-black tracking-wide uppercase flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-sawerRed inline-block"></span>
+                                Mes Anterior
+                            </h2>
+                            <p class="text-gray-500 text-xs mt-0.5">Registro guardado del cierre mensual pasado para comparar rendimiento.</p>
+                        </div>
+                        <span id="badge-mes-anterior" class="self-start sm:self-auto text-[11px] font-bold uppercase tracking-widest bg-sawerDark border border-gray-800 text-gray-400 px-3 py-1 rounded-lg">
+                            --
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        
+                        <!-- Anterior 1: Discord Joins / Leaves -->
+                        <div class="bg-sawerGrey/70 border border-gray-800 rounded-xl p-4 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Discord (Neto)</span>
+                                <span id="diff-discord" class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-800 text-gray-400">--</span>
+                            </div>
+                            <div class="flex items-baseline gap-4">
+                                <div>
+                                    <p class="text-[9px] uppercase text-gray-500 font-bold">Joins</p>
+                                    <p class="text-xl font-black text-green-400/80" id="prev-joins">+0</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] uppercase text-gray-500 font-bold">Leaves</p>
+                                    <p class="text-xl font-black text-red-500/80" id="prev-leaves">-0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Anterior 2: Chat -->
+                        <div class="bg-sawerGrey/70 border border-gray-800 rounded-xl p-4 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Mensajes Chat</span>
+                                <span id="diff-mensajes" class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-800 text-gray-400">--</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-black text-gray-200" id="prev-mensajes">0</p>
+                                <p class="text-[9px] uppercase text-gray-500 font-bold mt-1">Total mes pasado</p>
+                            </div>
+                        </div>
+
+                        <!-- Anterior 3: Roblox -->
+                        <div class="bg-sawerGrey/70 border border-gray-800 rounded-xl p-4 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Visitas Roblox</span>
+                                <span id="diff-roblox" class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-800 text-gray-400">--</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-black text-gray-200" id="prev-visitas">0</p>
+                                <p class="text-[9px] uppercase text-gray-500 font-bold mt-1">Total mes pasado</p>
+                            </div>
+                        </div>
+
+                        <!-- Anterior 4: Web Mensual -->
+                        <div class="bg-sawerGrey/70 border border-gray-800 rounded-xl p-4 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Visitas Web</span>
+                                <span id="diff-web" class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-800 text-gray-400">--</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-black text-gray-200" id="prev-web">0</p>
+                                <p class="text-[9px] uppercase text-gray-500 font-bold mt-1">Total mes pasado</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
             </div>
         </main>
     </div>
@@ -220,9 +296,66 @@
         const auth = firebase.auth();
         const rtdb = firebase.database();
 
+        const NOMBRES_MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
         function getMesActual() {
             const d = new Date();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        function getMesAnterior() {
+            const d = new Date();
+            d.setDate(1); // Evita errores en días 29-31
+            d.setMonth(d.getMonth() - 1);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        function formatearMes(claveMes) {
+            const [anio, mes] = claveMes.split('-');
+            return `${NOMBRES_MESES[parseInt(mes, 10) - 1]} ${anio}`;
+        }
+
+        // Estado local para calcular porcentajes de comparación en vivo
+        const stats = {
+            actual: { joins: 0, leaves: 0, mensajes: 0, roblox: 0, web: 0 },
+            anterior: { joins: 0, leaves: 0, mensajes: 0, roblox: 0, web: 0 }
+        };
+
+        function pintarDiferencia(elementId, actual, anterior) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            if (anterior === 0 && actual === 0) {
+                el.innerText = "0%";
+                el.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-800 text-gray-400";
+                return;
+            }
+            if (anterior === 0 && actual > 0) {
+                el.innerText = "+100%";
+                el.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-green-900/40 text-green-400";
+                return;
+            }
+
+            const pct = Math.round(((actual - anterior) / Math.abs(anterior)) * 100);
+            if (pct > 0) {
+                el.innerText = `+${pct}%`;
+                el.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-green-900/40 text-green-400";
+            } else if (pct < 0) {
+                el.innerText = `${pct}%`;
+                el.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-red-900/40 text-red-400";
+            } else {
+                el.innerText = "0%";
+                el.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-gray-800 text-gray-400";
+            }
+        }
+
+        function actualizarComparativas() {
+            const netoActual = stats.actual.joins - stats.actual.leaves;
+            const netoAnterior = stats.anterior.joins - stats.anterior.leaves;
+            pintarDiferencia('diff-discord', netoActual, netoAnterior);
+            pintarDiferencia('diff-mensajes', stats.actual.mensajes, stats.anterior.mensajes);
+            pintarDiferencia('diff-roblox', stats.actual.roblox, stats.anterior.roblox);
+            pintarDiferencia('diff-web', stats.actual.web, stats.anterior.web);
         }
 
         auth.onAuthStateChanged(user => {
@@ -232,21 +365,79 @@
                 app.classList.remove('hidden');
                 app.classList.add('flex');
                 
-                const mes = getMesActual();
+                const mesActual = getMesActual();
+                const mesAnterior = getMesAnterior();
+
+                document.getElementById('badge-mes-actual').innerText = formatearMes(mesActual);
+                document.getElementById('badge-mes-anterior').innerText = formatearMes(mesAnterior);
                 
-                // Conexiones a Firebase para actualizar los números
+                // --- 1. TRÁFICO WEB (Histórico + Mensual) ---
                 rtdb.ref('EstadisticasWeb/VisitasTotales').on('value', snap => {
                     document.getElementById('val-web').innerText = (snap.val() || 0).toLocaleString();
                 });
+                rtdb.ref(`EstadisticasWeb/${mesActual}/Visitas`).on('value', snap => {
+                    stats.actual.web = snap.val() || 0;
+                    document.getElementById('val-web-mes').innerText = stats.actual.web.toLocaleString();
+                    actualizarComparativas();
+                });
+                rtdb.ref(`EstadisticasWeb/${mesAnterior}/Visitas`).on('value', snap => {
+                    stats.anterior.web = snap.val() || 0;
+                    document.getElementById('prev-web').innerText = stats.anterior.web.toLocaleString();
+                    actualizarComparativas();
+                });
                 
+                // --- 2. DISCORD (Mes Actual y Anterior) ---
                 const discordRef = rtdb.ref('Analisis/Discord');
-                discordRef.child('TotalMiembros').on('value', snap => document.getElementById('val-miembros').innerText = snap.val() || 0);
-                discordRef.child(`${mes}/Joins`).on('value', snap => document.getElementById('val-joins').innerText = `+${snap.val() || 0}`);
-                discordRef.child(`${mes}/Leaves`).on('value', snap => document.getElementById('val-leaves').innerText = `-${snap.val() || 0}`);
-                discordRef.child(`${mes}/Mensajes`).on('value', snap => document.getElementById('val-mensajes').innerText = (snap.val() || 0).toLocaleString());
+                discordRef.child('TotalMiembros').on('value', snap => {
+                    document.getElementById('val-miembros').innerText = snap.val() || 0;
+                });
 
+                discordRef.child(`${mesActual}/Joins`).on('value', snap => {
+                    stats.actual.joins = snap.val() || 0;
+                    document.getElementById('val-joins').innerText = `+${stats.actual.joins}`;
+                    actualizarComparativas();
+                });
+                discordRef.child(`${mesActual}/Leaves`).on('value', snap => {
+                    stats.actual.leaves = snap.val() || 0;
+                    document.getElementById('val-leaves').innerText = `-${stats.actual.leaves}`;
+                    actualizarComparativas();
+                });
+                discordRef.child(`${mesActual}/Mensajes`).on('value', snap => {
+                    stats.actual.mensajes = snap.val() || 0;
+                    document.getElementById('val-mensajes').innerText = stats.actual.mensajes.toLocaleString();
+                    actualizarComparativas();
+                });
+
+                // Lectura Mes Anterior Discord
+                discordRef.child(`${mesAnterior}/Joins`).on('value', snap => {
+                    stats.anterior.joins = snap.val() || 0;
+                    document.getElementById('prev-joins').innerText = `+${stats.anterior.joins}`;
+                    actualizarComparativas();
+                });
+                discordRef.child(`${mesAnterior}/Leaves`).on('value', snap => {
+                    stats.anterior.leaves = snap.val() || 0;
+                    document.getElementById('prev-leaves').innerText = `-${stats.anterior.leaves}`;
+                    actualizarComparativas();
+                });
+                discordRef.child(`${mesAnterior}/Mensajes`).on('value', snap => {
+                    stats.anterior.mensajes = snap.val() || 0;
+                    document.getElementById('prev-mensajes').innerText = stats.anterior.mensajes.toLocaleString();
+                    actualizarComparativas();
+                });
+
+                // --- 3. ROBLOX (Mes Actual y Anterior) ---
                 const robloxRef = rtdb.ref('Analisis/Roblox');
-                robloxRef.child(`${mes}/Visitas`).on('value', snap => document.getElementById('val-visitas').innerText = snap.val() || 0);
+                robloxRef.child(`${mesActual}/Visitas`).on('value', snap => {
+                    stats.actual.roblox = snap.val() || 0;
+                    document.getElementById('val-visitas').innerText = stats.actual.roblox.toLocaleString();
+                    actualizarComparativas();
+                });
+                robloxRef.child(`${mesAnterior}/Visitas`).on('value', snap => {
+                    stats.anterior.roblox = snap.val() || 0;
+                    document.getElementById('prev-visitas').innerText = stats.anterior.roblox.toLocaleString();
+                    actualizarComparativas();
+                });
+
                 robloxRef.child('UltimoIngreso').on('value', snap => {
                     const data = snap.val();
                     if (data) {
@@ -264,8 +455,6 @@
                     }
                 });
 
-                // Iniciar las gráficas Chart.js 
-                // Un pequeño retardo asegura que las tarjetas ya tienen su tamaño definitivo
                 setTimeout(() => {
                     inicializarGraficas();
                 }, 100);
@@ -282,32 +471,30 @@
            Estilo Minimalista (Vercel Style)
            ========================================== */
         function inicializarGraficas() {
-            
             function crearGrafico(idCanvas, colorLinea, colorFondo, datos) {
                 const canvas = document.getElementById(idCanvas);
                 if (!canvas) return; 
                 const ctx = canvas.getContext('2d');
                 
-                // Asegurar que leemos la altura del contenedor para el degradado
                 const alturaContenedor = canvas.parentElement.clientHeight || 150;
                 
                 let gradient = ctx.createLinearGradient(0, 0, 0, alturaContenedor);
                 gradient.addColorStop(0, colorFondo); 
-                gradient.addColorStop(1, 'rgba(25, 25, 25, 0)'); // Se funde con el sawerGrey del fondo
+                gradient.addColorStop(1, 'rgba(25, 25, 25, 0)');
 
                 new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: ['1', '2', '3', '4', '5', '6', '7'], // Etiquetas invisibles
+                        labels: ['1', '2', '3', '4', '5', '6', '7'],
                         datasets: [{
                             data: datos,
                             borderColor: colorLinea,
                             backgroundColor: gradient,
                             fill: true,
                             borderWidth: 3,
-                            pointRadius: 0,       // Sin puntos visibles
-                            pointHoverRadius: 0,  // Sin puntos al pasar el mouse
-                            tension: 0.4          // Curva muy suave
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            tension: 0.4
                         }]
                     },
                     options: {
@@ -315,19 +502,18 @@
                         maintainAspectRatio: false,
                         plugins: { 
                             legend: { display: false },
-                            tooltip: { enabled: false } // Desactivamos el popup para que sea puramente estético
+                            tooltip: { enabled: false }
                         },
                         scales: {
-                            x: { display: false }, // Ocultamos líneas y textos del eje X
-                            y: { display: false, min: 0 } // Ocultamos líneas y textos del eje Y
+                            x: { display: false },
+                            y: { display: false, min: 0 }
                         },
                         layout: { padding: 0 },
-                        animation: { duration: 1500, easing: 'easeOutQuart' } // Animación de entrada fluida
+                        animation: { duration: 1500, easing: 'easeOutQuart' }
                     }
                 });
             }
 
-            // Datos temporales para dibujar la forma de las gráficas
             crearGrafico('chartDiscord', '#3b82f6', 'rgba(59, 130, 246, 0.4)', [10, 15, 12, 25, 22, 30, 28]); 
             crearGrafico('chartChat', '#a855f7', 'rgba(168, 85, 247, 0.4)', [50, 120, 80, 200, 160, 300, 250]); 
             crearGrafico('chartRoblox', '#c20000', 'rgba(194, 0, 0, 0.4)', [2, 5, 3, 10, 7, 15, 12]); 
