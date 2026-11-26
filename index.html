@@ -915,6 +915,9 @@
     
     // Sumamos +1 a las visitas
     const visitasRef = firebase.database().ref('EstadisticasWeb/VisitasTotales');
+    const d = new Date();
+const mesActual = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+firebase.database().ref(`EstadisticasWeb/${mesActual}/Visitas`).transaction(v => (v || 0) + 1);
     visitasRef.transaction(function(visitasActuales) {
         return (visitasActuales || 0) + 1;
     }).catch(function(error) {
